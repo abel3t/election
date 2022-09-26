@@ -1,125 +1,50 @@
-import { Layout, Table } from 'antd';
-import type { ColumnsType, TableProps } from 'antd/es/table';
+import { Col, Input, Layout, Row } from 'antd';
 import React from 'react';
+import AppLayout from '../components/app-layout';
+import ElectionCard from '../components/election-card';
+import styled from 'styled-components';
+import PaginationCard from '../components/pagination';
 
-interface DataType {
-  key: React.Key;
-  name: string;
-  age: number;
-  address: string;
-}
+const StyledSearchAndCreateButton = styled(Row)`
+  margin-bottom: 15px;
+`;
 
-const columns: ColumnsType<DataType> = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    filters: [
-      {
-        text: 'Joe',
-        value: 'Joe',
-      },
-      {
-        text: 'Category 1',
-        value: 'Category 1',
-        children: [
-          {
-            text: 'Yellow',
-            value: 'Yellow',
-          },
-          {
-            text: 'Pink',
-            value: 'Pink',
-          },
-        ],
-      },
-      {
-        text: 'Category 2',
-        value: 'Category 2',
-        children: [
-          {
-            text: 'Green',
-            value: 'Green',
-          },
-          {
-            text: 'Black',
-            value: 'Black',
-          },
-        ],
-      },
-    ],
-    filterMode: 'tree',
-    filterSearch: true,
-    onFilter: (value: string, record) => record.name.includes(value),
-    width: '30%',
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age',
-    sorter: (a, b) => a.age - b.age,
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-    filters: [
-      {
-        text: 'London',
-        value: 'London',
-      },
-      {
-        text: 'New York',
-        value: 'New York',
-      },
-    ],
-    onFilter: (value: string, record) => record.address.startsWith(value),
-    filterSearch: true,
-    width: '40%',
-  },
-];
-
-const data: DataType[] = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-  },
-  {
-    key: '4',
-    name: 'Jim Red',
-    age: 32,
-    address: 'London No. 2 Lake Park',
-  },
-];
-
-const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
-  console.log('params', pagination, filters, sorter, extra);
-};
-
-
-const { Header, Footer, Sider, Content } = Layout;
+const StyledPagination = styled(Row)`
+  margin-top: 15px;
+  .ant-col {
+    display: flex;
+    justify-content: flex-end;
+  }
+`
 
 const App: React.FC = () => (
-  <>
-    <Layout>
-      <Header>Header</Header>
-      <Content>
-      <Table columns={columns} dataSource={data} onChange={onChange} />
-      </Content>
-      <Footer>Footer</Footer>
-    </Layout>
+  <AppLayout>
+    <>
+      <StyledSearchAndCreateButton>
+        <Col span={8} offset={10}>
+          <Input placeholder="Basic usage" />
+        </Col>
+        <Col span={4} offset={2}>
+          col-8
+        </Col>
+      </StyledSearchAndCreateButton>
+
+      <div>
+
+        <ElectionCard title="Lễ tối 23/01/129" href={"/election/1234"}/>
+        <ElectionCard title="Lễ sáng 23/0123121/129" href={"/election/1234"}/>
+        <ElectionCard title="Lễ tối 23/01/12123123" href={"/election/1234"}/>
+        <ElectionCard title="Lễ trưa 12313 23/01/129" href={"/election/1234"}/>
+        <ElectionCard title="Lễ sáng afasfasd 23/01/129" href={"/election/1234"}/>
+      </div>
+
+      <StyledPagination justify="end">
+        <Col span={10}>
+          <PaginationCard currentPage={1} total={50} />
+        </Col>
+      </StyledPagination>
     </>
+  </AppLayout>
 );
 
 export default App;
