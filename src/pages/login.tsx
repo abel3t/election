@@ -1,53 +1,70 @@
-import { Button, Checkbox, Form, Input } from 'antd';
 import React from 'react';
+import styled from 'styled-components';
+import { Form, Input, Button, Checkbox } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+
+
+const StyledFromWrap = styled.div`
+  padding: 20px;
+  margin: 100px auto;
+  width: 50%;
+  background: floralwhite;
+`;
 
 const Login: React.FC = () => {
-    const onFinish = (values: any) => {
-      console.log('Success:', values);
-    };
-  
-    const onFinishFailed = (errorInfo: any) => {
-      console.log('Failed:', errorInfo);
-    };
-  
-    return (
+  const onFinish = (values: any) => {
+    console.log('Received values of form: ', values);
+  };
+
+  return (
+    <StyledFromWrap>
       <Form
-        name="basic"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        initialValues={{ remember: true }}
+        initialValues={{
+          remember: true
+        }}
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete="off"
       >
         <Form.Item
-          label="Username"
           name="username"
-          rules={[{ required: true, message: 'Please input your username!' }]}
+          rules={[
+            {
+              required: true,
+              message: 'Please input your Username!'
+            }
+          ]}
         >
-          <Input />
+          <Input prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="Username"/>
         </Form.Item>
-  
         <Form.Item
-          label="Password"
           name="password"
-          rules={[{ required: true, message: 'Please input your password!' }]}
+          rules={[
+            {
+              required: true,
+              message: 'Please input your Password!'
+            }
+          ]}
         >
-          <Input.Password />
+          <Input
+            prefix={<LockOutlined className="site-form-item-icon"/>}
+            type="password"
+            placeholder="Password"
+          />
         </Form.Item>
-  
-        <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
-          <Checkbox>Remember me</Checkbox>
+        <Form.Item>
+          <Form.Item name="remember" valuePropName="checked" noStyle>
+            <Checkbox>Remember me</Checkbox>
+          </Form.Item>
         </Form.Item>
-  
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
-            Submit
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" className="login-form-button">
+            Log in
           </Button>
         </Form.Item>
       </Form>
-    );
-  };
-  
-  export default Login;
+    </StyledFromWrap>
+  );
+};
+
+export default Login;
   
