@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
+    "@apollo/client": "^3.6.9",
     "@types/styled-components": "^5.1.26",
     "antd": "^4.23.2",
+    "graphql": "^16.6.0",
     "next": "12.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",

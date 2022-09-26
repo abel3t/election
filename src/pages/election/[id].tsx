@@ -2,6 +2,7 @@ import { Layout, Table, Tabs } from 'antd';
 import type { ColumnsType, TableProps } from 'antd/es/table';
 import React from 'react';
 import AppLayout from '../../components/app-layout';
+import { getCountries } from '../../apollo-client';
 
 interface DataType {
   key: React.Key;
@@ -116,7 +117,6 @@ const onChange: TableProps<DataType>['onChange'] = (
 const { Header, Footer, Content } = Layout;
 
 const App: React.FC = () => (
-
   <AppLayout>
     <Tabs defaultActiveKey="1">
       <Tabs.TabPane tab="Người ứng cử" key="1">
