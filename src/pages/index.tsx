@@ -4,6 +4,8 @@ import AppLayout from '../components/app-layout';
 import ElectionCard from '../components/election-card';
 import styled from 'styled-components';
 import PaginationCard from '../components/pagination';
+import { selectAuthState, setAuthState } from "slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const StyledSearchAndCreateButton = styled(Row)`
   margin-bottom: 15px;
@@ -18,6 +20,10 @@ const StyledPagination = styled(Row)`
 `
 
 const App: React.FC = () => {
+  const authState = useSelector(selectAuthState);
+  const dispatch = useDispatch();
+
+
   return (
     <AppLayout>
       <>
@@ -26,7 +32,18 @@ const App: React.FC = () => {
             <Input placeholder="Basic usage" />
           </Col>
           <Col span={4} offset={2}>
-            col-8
+            <div>
+              <div>{authState ? "Logged in" : "Not Logged In"}</div>
+              <button
+                onClick={() =>
+                  authState
+                    ? dispatch(setAuthState(false))
+                    : dispatch(setAuthState(true))
+                }
+              >
+                {authState ? "Logout" : "LogIn"}
+              </button>
+            </div>
           </Col>
         </StyledSearchAndCreateButton>
 
