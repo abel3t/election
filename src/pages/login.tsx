@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { login } from '../apollo-client';
+import { useMutation } from '@apollo/client';
+import { LOGIN } from '../mutation';
 
 
 const StyledFromWrap = styled.div`
@@ -15,6 +18,20 @@ const Login: React.FC = () => {
   const onFinish = (values: any) => {
     console.log('Received values of form: ', values);
   };
+
+  const [login, { data, loading, error }] = useMutation(LOGIN);
+
+  useEffect(() => {
+    login({ variables: { input: { email: 'abeltran.develop@gmail.com', password: '12345@bC' } }})
+      .then(data => console.log(data))
+      .catch(error => console.log(error))
+
+  }, [])
+
+  //
+  // const onLogin = (email: string, password: string) => {
+  //   login(email, password).then(data => console.log(data)).catch(error => console.log(error));
+  // }
 
   return (
     <StyledFromWrap>

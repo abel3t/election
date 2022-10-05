@@ -4,8 +4,8 @@ import AppLayout from '../components/app-layout';
 import ElectionCard from '../components/election-card';
 import styled from 'styled-components';
 import PaginationCard from '../components/pagination';
-import { selectAuthState, setAuthState } from "slices/authSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { selectAuthState, setAuthState } from 'slices/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const StyledSearchAndCreateButton = styled(Row)`
   margin-bottom: 15px;
@@ -13,27 +13,27 @@ const StyledSearchAndCreateButton = styled(Row)`
 
 const StyledPagination = styled(Row)`
   margin-top: 15px;
+
   .ant-col {
     display: flex;
     justify-content: flex-end;
   }
-`
+`;
 
 const App: React.FC = () => {
   const authState = useSelector(selectAuthState);
   const dispatch = useDispatch();
-
 
   return (
     <AppLayout>
       <>
         <StyledSearchAndCreateButton>
           <Col span={8} offset={10}>
-            <Input placeholder="Basic usage" />
+            <Input placeholder="Basic usage"/>
           </Col>
           <Col span={4} offset={2}>
             <div>
-              <div>{authState ? "Logged in" : "Not Logged In"}</div>
+              <div>{authState ? 'Logged in' : 'Not Logged In'}</div>
               <button
                 onClick={() =>
                   authState
@@ -41,7 +41,7 @@ const App: React.FC = () => {
                     : dispatch(setAuthState(true))
                 }
               >
-                {authState ? "Logout" : "LogIn"}
+                {authState ? 'Logout' : 'LogIn'}
               </button>
             </div>
           </Col>
@@ -49,21 +49,21 @@ const App: React.FC = () => {
 
         <div>
 
-          <ElectionCard title="Lễ tối 23/01/129" href={"/election/1234"}/>
-          <ElectionCard title="Lễ sáng 23/0123121/129" href={"/election/1234"}/>
-          <ElectionCard title="Lễ tối 23/01/12123123" href={"/election/1234"}/>
-          <ElectionCard title="Lễ trưa 12313 23/01/129" href={"/election/1234"}/>
-          <ElectionCard title="Lễ sáng afasfasd 23/01/129" href={"/election/1234"}/>
+          <ElectionCard title="Lễ tối 23/01/129" href={'/election/1234'}/>
+          <ElectionCard title="Lễ sáng 23/0123121/129" href={'/election/1234'}/>
+          <ElectionCard title="Lễ tối 23/01/12123123" href={'/election/1234'}/>
+          <ElectionCard title="Lễ trưa 12313 23/01/129" href={'/election/1234'}/>
+          <ElectionCard title="Lễ sáng afasfasd 23/01/129" href={'/election/1234'}/>
         </div>
 
         <StyledPagination justify="end">
           <Col span={10}>
-            <PaginationCard currentPage={1} total={50} />
+            <PaginationCard currentPage={1} total={50}/>
           </Col>
         </StyledPagination>
       </>
     </AppLayout>
-  )
+  );
 };
 
 export default App;
