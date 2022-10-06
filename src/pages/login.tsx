@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { login } from '../apollo-client';
-import { useMutation } from '@apollo/client';
-import { LOGIN } from '../mutation';
+import { useRouter } from 'next/router';
+import { login } from '../operation/auth.mutation';
 
 
 const StyledFromWrap = styled.div`
@@ -15,23 +14,15 @@ const StyledFromWrap = styled.div`
 `;
 
 const Login: React.FC = () => {
+  const router = useRouter();
   const onFinish = (values: any) => {
-    console.log('Received values of form: ', values);
+    login(values.email, values.password).then((data) => {
+      localStorage.setItem('token', data.login?.token);
+      localStorage.setItem('refreshToken', data.login?.token);
+      router.push('/');
+    })
+      .catch((error: Error) => message.error(error.message || 'Oops! Please try again!'));
   };
-
-  const [login, { data, loading, error }] = useMutation(LOGIN);
-
-  useEffect(() => {
-    login({ variables: { input: { email: 'abeltran.develop@gmail.com', password: '12345@bC' } }})
-      .then(data => console.log(data))
-      .catch(error => console.log(error))
-
-  }, [])
-
-  //
-  // const onLogin = (email: string, password: string) => {
-  //   login(email, password).then(data => console.log(data)).catch(error => console.log(error));
-  // }
 
   return (
     <StyledFromWrap>
@@ -42,7 +33,7 @@ const Login: React.FC = () => {
         onFinish={onFinish}
       >
         <Form.Item
-          name="username"
+          name="email"
           rules={[
             {
               required: true,
@@ -67,12 +58,6 @@ const Login: React.FC = () => {
             placeholder="Password"
           />
         </Form.Item>
-        <Form.Item>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item>
-        </Form.Item>
-
         <Form.Item>
           <Button type="primary" htmlType="submit" className="login-form-button">
             Log in

@@ -8,7 +8,8 @@ type IElectionProps = {
   href: string
 }
 
-const StyledSpace = styled(Space)`
+const StyledSpace = styled.div`
+  display: flex;
   min-width: 100%;
   padding: 20px;
   border-radius: 5px;
@@ -23,7 +24,6 @@ const ElectionCard = ({ title, href }: IElectionProps) => {
       <StyledSpace>
         <Row>
           <Col flex={2}>{title}</Col>
-          <Col flex={3}>3 / 5</Col>
         </Row>
       </StyledSpace>
     </Link>

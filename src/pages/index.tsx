@@ -1,11 +1,11 @@
-import { Col, Input, Layout, Row } from 'antd';
-import React from 'react';
+import { Col, Input, message, Row } from 'antd';
+import React, { useEffect, useState } from 'react';
 import AppLayout from '../components/app-layout';
 import ElectionCard from '../components/election-card';
 import styled from 'styled-components';
 import PaginationCard from '../components/pagination';
-import { selectAuthState, setAuthState } from 'slices/authSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
+import { getElections } from '../operation/election.query';
 
 const StyledSearchAndCreateButton = styled(Row)`
   margin-bottom: 15px;
@@ -21,8 +21,24 @@ const StyledPagination = styled(Row)`
 `;
 
 const App: React.FC = () => {
-  const authState = useSelector(selectAuthState);
-  const dispatch = useDispatch();
+  const [elections, setElections] = useState([]);
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
+
+  useEffect(() => {
+    getElections().then((data: any) => setElections(data.getElections || [])).catch((error: Error) => message.error(error?.message));
+  }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/login')
+    }
+  }, [isAuthenticated]);
+
+  const onSignOut = () => {
+    // signOut();
+    router.push('/login');
+  };
 
   return (
     <AppLayout>
@@ -33,27 +49,23 @@ const App: React.FC = () => {
           </Col>
           <Col span={4} offset={2}>
             <div>
-              <div>{authState ? 'Logged in' : 'Not Logged In'}</div>
               <button
                 onClick={() =>
-                  authState
-                    ? dispatch(setAuthState(false))
-                    : dispatch(setAuthState(true))
+                  isAuthenticated
+                    ? onSignOut()
+                    : router.push('/login')
                 }
               >
-                {authState ? 'Logout' : 'LogIn'}
+                {isAuthenticated ? 'Logout' : 'LogIn'}
               </button>
             </div>
           </Col>
         </StyledSearchAndCreateButton>
 
         <div>
-
-          <ElectionCard title="Lễ tối 23/01/129" href={'/election/1234'}/>
-          <ElectionCard title="Lễ sáng 23/0123121/129" href={'/election/1234'}/>
-          <ElectionCard title="Lễ tối 23/01/12123123" href={'/election/1234'}/>
-          <ElectionCard title="Lễ trưa 12313 23/01/129" href={'/election/1234'}/>
-          <ElectionCard title="Lễ sáng afasfasd 23/01/129" href={'/election/1234'}/>
+          {
+            elections?.map((election: any) => <ElectionCard key={election.id} title={election.name} href={`/elections/${election.id}`}/>)
+          }
         </div>
 
         <StyledPagination justify="end">

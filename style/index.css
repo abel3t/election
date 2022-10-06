@@ -6,3 +6,7 @@
 .ant-layout-content {
     min-height: 85vh;
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
