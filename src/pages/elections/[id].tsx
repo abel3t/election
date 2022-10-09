@@ -1,9 +1,10 @@
-import { message, Table, Tabs } from 'antd';
+import { Button, message, Table, Tabs } from 'antd';
 import type { ColumnsType, TableProps } from 'antd/es/table';
 import React, { useEffect, useState } from 'react';
 import AppLayout from '../../components/app-layout';
 import { getCandidates, getCodes } from '../../operation/election.query';
 import { useRouter } from 'next/router';
+import { generateCodes } from '../../operation/election.mutation';
 
 interface DataType {
   key: React.Key;
@@ -74,11 +75,12 @@ const onChange: TableProps<DataType>['onChange'] = (
   console.log('params', pagination, filters, sorter, extra);
 };
 
-
 const ElectionDetailPage: React.FC = () => {
   const [electionId, setElectionId] = useState('');
   const [candidates, setCandidates] = useState([]);
   const [codes, setCodes] = useState([]);
+  const [isLoadCode, setIsLoadCode] = useState(true);
+  const [isLoadCandidate, setIsLoadCandidate] = useState(true);
 
   const router = useRouter();
 
@@ -88,30 +90,65 @@ const ElectionDetailPage: React.FC = () => {
 
   useEffect(() => {
     if (electionId) {
-      getCandidates(electionId).then((data) => {
-        const newCandidates = (data.getCandidates || []).map((candidate: any, index: number) => ({ index: index + 1, ...candidate }));
-        setCandidates(newCandidates);
-      }).catch((error: Error) => message.error(error.message));
-
       getCodes(electionId).then((data) => {
-        const newCodes = (data.getCodes || []).map((code: any, index: number) => ({ index: index + 1, ...code }));
+        const newCodes = (data?.getCodes || []).map((code: any, index: number) => ({ index: index + 1, ...code }));
         setCodes(newCodes);
       }).catch((error: Error) => message.error(error.message));
     }
-  }, [electionId]);
+  }, [isLoadCode, electionId]);
 
+  useEffect(() => {
+    if (electionId) {
+      getCandidates(electionId).then((data) => {
+        const newCandidates = (data?.getCandidates || []).map(
+          (candidate: any, index: number) => ({ index: index + 1, ...candidate }));
+        setCandidates(newCandidates);
+      }).catch((error: Error) => message.error(error.message));
+    }
+  }, [isLoadCandidate, electionId]);
 
   const items = [
-    { label: 'Người ứng cử', key: '1', children: <Table columns={columns} dataSource={candidates} onChange={onChange}/> }, // remember to pass the key prop
-    { label: 'Mã bầu cử', key: '2', children: <Table columns={codeColumns} dataSource={codes}/> },
-    { label: 'Kết quả', key: '3', children: 'Kết quả  ' },
+    {
+      label: 'Người ứng cử',
+      key: '1',
+      children: <Table columns={columns} dataSource={candidates} onChange={onChange}/>
+    }, // remember to pass the key prop
+    {
+      label: 'Mã bầu cử',
+      key: '2',
+      children: <CodeComponent electionId={electionId} codes={codes} isLoadCode={isLoadCode}
+                               setIsLoadCode={setIsLoadCode}/>
+    },
+    { label: 'Kết quả', key: '3', children: 'Kết quả  ' }
   ];
 
   return (<AppLayout>
     <>
-      <Tabs items={items} />
+      <Tabs items={items}/>
     </>
-    </AppLayout>)
+  </AppLayout>);
+};
+
+const CodeComponent = ({ electionId, codes, isLoadCode, setIsLoadCode }: any) => {
+  const handleGenerateCodes = () => {
+    const amountText = prompt('Nhập số lượng mã bạn muốn tạo thêm!');
+
+    const amount = Number.parseInt(amountText ?? '');
+    if (amount) {
+      generateCodes(electionId, amount)
+        .then(() => setIsLoadCode(!isLoadCode))
+        .catch((error: Error) => message.error(error.message));
+    } else {
+      message.error('Bạn phải nhập vào một số tự nhiên!');
+    }
+  };
+
+  return (
+    <div>
+      <Button onClick={handleGenerateCodes}>Generate</Button>
+      <Table columns={codeColumns} dataSource={codes}/>
+    </div>
+  );
 };
 
 export default ElectionDetailPage;

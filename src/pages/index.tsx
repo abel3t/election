@@ -5,8 +5,9 @@ import ElectionCard from '../components/election-card';
 import styled from 'styled-components';
 import PaginationCard from '../components/pagination';
 import { useRouter } from 'next/router';
-import { createElection, getElections } from '../operation/election.query';
+import { getElections } from '../operation/election.query';
 import { NextPage } from 'next';
+import { createElection } from '../operation/election.mutation';
 
 const StyledSearchAndCreateButton = styled(Row)`
   margin-bottom: 15px;
@@ -29,10 +30,7 @@ const App: NextPage = () => {
 
   useEffect(() => {
     getElections()
-      .then((data: any) => {
-        setElections(data.getElections || [])
-        console.log('fetched', data.getElections)
-      })
+      .then((data: any) => setElections(data?.getElections || []))
       .catch((error: Error) => message.error(error?.message));
   }, [isLoad]);
 
