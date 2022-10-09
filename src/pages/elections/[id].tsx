@@ -1,10 +1,11 @@
-import { Button, message, Table, Tabs } from 'antd';
+import { Button, Form, Input, message, Modal, Table, Tabs, Upload } from 'antd';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import type { ColumnsType, TableProps } from 'antd/es/table';
 import React, { useEffect, useState } from 'react';
 import AppLayout from '../../components/app-layout';
 import { getCandidates, getCodes } from '../../operation/election.query';
 import { useRouter } from 'next/router';
-import { generateCodes } from '../../operation/election.mutation';
+import { createCandidate, generateCodes } from '../../operation/election.mutation';
 
 interface DataType {
   key: React.Key;
@@ -66,15 +67,6 @@ const codeColumns: ColumnsType<DataType> = [
   }
 ];
 
-const onChange: TableProps<DataType>['onChange'] = (
-  pagination,
-  filters,
-  sorter,
-  extra
-) => {
-  console.log('params', pagination, filters, sorter, extra);
-};
-
 const ElectionDetailPage: React.FC = () => {
   const [electionId, setElectionId] = useState('');
   const [candidates, setCandidates] = useState([]);
@@ -111,7 +103,8 @@ const ElectionDetailPage: React.FC = () => {
     {
       label: 'Người ứng cử',
       key: '1',
-      children: <Table columns={columns} dataSource={candidates} onChange={onChange}/>
+      children: <CandidateComponent electionId={electionId} candidates={candidates} isLoadCandidate={isLoadCandidate}
+                                    setIsLoadCandidate={setIsLoadCandidate}/>
     }, // remember to pass the key prop
     {
       label: 'Mã bầu cử',
@@ -127,6 +120,88 @@ const ElectionDetailPage: React.FC = () => {
       <Tabs items={items}/>
     </>
   </AppLayout>);
+};
+
+const CandidateComponent = ({ electionId, candidates, isLoadCandidate, setIsLoadCandidate }: any) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const [form] = Form.useForm();
+
+  const onFinish = ({ name }: any) => {
+    createCandidate(electionId, name)
+      .then(() => setIsLoadCandidate(!isLoadCandidate))
+      .catch((error: Error) => message.error(error.message));
+
+    setIsModalOpen(false);
+
+    form.resetFields();
+    setFileList([]);
+  };
+
+
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+  const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+  };
+
+  const onPreview = async (file: UploadFile) => {
+    let src = file.url as string;
+    if (!src) {
+      src = await new Promise(resolve => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj as RcFile);
+        reader.onload = () => resolve(reader.result as string);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
+  };
+
+  return (
+    <>
+      <Button type="primary" onClick={showModal}>
+        Create
+      </Button>
+      <Modal title="Basic Modal" open={isModalOpen} onCancel={handleCancel}
+             footer={[
+               <Button form="myForm" key="submit" htmlType="submit">
+                 Submit
+               </Button>
+             ]}
+      >
+        <Form {...{ labelCol: { span: 8 }, wrapperCol: { span: 16 } }} form={form} name="control-hooks" id="myForm"
+              onFinish={onFinish}>
+          <Form.Item name="name" label="Họ và tên" rules={[{ required: true }]}>
+            <Input/>
+          </Form.Item>
+          <Form.Item name="image" label="Hình">
+            <Upload
+              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              listType="picture-card"
+              fileList={fileList}
+              onChange={onChange}
+              onPreview={onPreview}
+            >
+              {fileList.length < 1 && '+ Upload'}
+            </Upload>
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      <Table columns={columns} dataSource={candidates}/>
+    </>
+  );
 };
 
 const CodeComponent = ({ electionId, codes, isLoadCode, setIsLoadCode }: any) => {
