@@ -109,7 +109,7 @@ const ElectionDetailPage: React.FC = () => {
 
   return (<AppLayout>
     <>
-      <Tabs items={items} />;
+      <Tabs items={items} />
     </>
     </AppLayout>)
 };

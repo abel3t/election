@@ -34,7 +34,26 @@ export const GET_CODES = gql`
   }
 `;
 
+export const CREATE_ELECTION = gql`
+    mutation createElection($input: CreateElectionInput!) {
+      createElection(input: $input) {
+        id,
+        name
+      }
+    }
+`;
+
+export const CREATE_CANDIDATE = gql`
+  mutation createCandidate($input: CreateCandidateInput!) {
+    createCandidate(input: $input) {
+      name
+    }
+  }
+`;
+
+
 export const getElections = async () => {
+  console.log('test nè')
   const result = await apolloClient.query({
     query: GET_ELECTIONS
   });
@@ -55,6 +74,25 @@ export const getCodes = async (electionId: string) => {
   const result = await apolloClient.query({
     query: GET_CODES,
     variables: { electionId }
+  });
+
+  return result.data;
+}
+
+
+export const createElection = async (name: string) => {
+  const result = await apolloClient.mutate({
+    mutation: CREATE_ELECTION,
+    variables: { input: { name } }
+  });
+
+  return result.data;
+}
+
+export const createCandidate = async (name: string, electionId: string) => {
+  const result = await apolloClient.mutate({
+    mutation: CREATE_CANDIDATE,
+    variables: { input: { name, electionId } }
   });
 
   return result.data;
