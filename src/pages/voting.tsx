@@ -1,72 +1,77 @@
-import { Button, Table } from 'antd';
-import React, { useState } from 'react';
+import { Button, message, Table } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { getVotingCandidates } from '../operation/vote.query';
+import { createVotes } from '../operation/vote.mutation';
+
 const columns = [
   {
-    title: 'Name',
-    dataIndex: 'name',
+    title: 'STT',
+    dataIndex: 'index'
   },
   {
-    title: 'Age',
-    dataIndex: 'age',
+    title: 'Ảnh',
+    dataIndex: 'imageUrl',
+    render: (url: string) => <img src={url} alt={'N/A'} width={80} height={80}/>
   },
   {
-    title: 'Address',
-    dataIndex: 'address',
-  },
+    title: 'Tên',
+    dataIndex: 'name'
+  }
 ];
-const data: any = [];
-
-for (let i = 0; i < 46; i++) {
-  data.push({
-    key: i,
-    name: `Edward King ${i}`,
-    age: 32,
-    address: `London, Park Lane no. ${i}`,
-  });
-}
 
 const VotingPage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [loading, setLoading] = useState(false);
 
-  const start = () => {
-    setLoading(true); // ajax request after empty completing
+  const [candidates, setCandidates]: [any, any] = useState([]);
 
-    setTimeout(() => {
-      setSelectedRowKeys([]);
-      setLoading(false);
-    }, 1000);
+  useEffect(() => {
+    getVotingCandidates('cl8af12c500218moi076khipf', 'cl8af25rp00828moinx9a4w3i')
+      .then((data) => {
+        const newCandidates = (data?.getCandidates || []).map(
+          (code: any, index: number) => ({ index: index + 1, key: index, ...code }));
+        console.log(newCandidates);
+        setCandidates(newCandidates);
+      }).catch((error: Error) => message.error(error.message));
+  }, []);
+
+  const onSelectChange = (newSelectedRowKeys: any) => {
+    if (newSelectedRowKeys.length > 2) {
+      message.error('Bạn chỉ có thể chọn tối đa 2 người!');
+    } else {
+      setSelectedRowKeys(newSelectedRowKeys);
+    }
   };
 
-  const onSelectChange = (newSelectedRowKeys) => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
+  const onSubmitData = () => {
+    const selectedCandidateIds = selectedRowKeys.map(rowKey => candidates[rowKey].id);
+
+    createVotes('cl8af12c500218moi076khipf', 'cl8af25rp00828moinx9a4w3i', selectedCandidateIds)
+      .then(data => console.log(data))
+      .catch(error => console.log(error));
+  }
 
   const rowSelection = {
     selectedRowKeys,
-    onChange: onSelectChange,
+    onChange: onSelectChange
   };
   const hasSelected = selectedRowKeys.length > 0;
   return (
     <div>
+      <Button onClick={onSubmitData} disabled={selectedRowKeys.length!==2}>Gửi phiếu bầu</Button>
       <div
         style={{
-          marginBottom: 16,
+          marginBottom: 16
         }}
       >
-        <Button type="primary" onClick={start} disabled={!hasSelected} loading={loading}>
-          Reload
-        </Button>
         <span
           style={{
-            marginLeft: 8,
+            marginLeft: 8
           }}
         >
-          {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
+          {hasSelected ? `Bạn đã bầu cho ${selectedRowKeys.length} người` : ''}
         </span>
       </div>
-      <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+      <Table rowSelection={rowSelection} columns={columns} dataSource={candidates}/>
     </div>
   );
 };
