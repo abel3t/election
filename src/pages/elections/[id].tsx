@@ -1,25 +1,27 @@
 import { Button, Form, Input, message, Modal, Table, Tabs, Upload } from 'antd';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import type { ColumnsType, TableProps } from 'antd/es/table';
+import type { ColumnsType } from 'antd/es/table';
 import React, { useEffect, useState } from 'react';
 import AppLayout from '../../components/app-layout';
-import { getCandidates, getCodes } from '../../operation/election.query';
+import { getCandidates, getCodes, getElectionResult } from '../../operation/election.query';
 import { useRouter } from 'next/router';
 import { createCandidate, generateCodes } from '../../operation/election.mutation';
+import axios from 'axios';
 
 interface DataType {
   key: React.Key;
   index?: number;
+  isUsed?: boolean;
   imageUrl?: string;
   name: string;
 }
 
-interface CodeDataType {
+interface ResultDataType {
   key: React.Key;
   index?: number;
-  isActive: boolean;
-  downloaded: number;
-  isUsed: boolean;
+  imageUrl?: string;
+  votes?: number;
+  totalVotes?: number;
   name: string;
 }
 
@@ -30,9 +32,9 @@ const columns: ColumnsType<DataType> = [
     width: '30%'
   },
   {
-    title: 'Image',
+    title: 'Ảnh',
     dataIndex: 'imageUrl',
-    width: '30%'
+    render: (url: string) => <img src={url} alt={'N/A'} width={80} height={80}/>
   },
   {
     title: 'Name',
@@ -57,12 +59,40 @@ const codeColumns: ColumnsType<DataType> = [
   },
   {
     title: 'Trạng Thái',
-    dataIndex: 'isActive',
-    width: '30%'
+    dataIndex: 'isUsed',
+    width: '30%',
+    render: (isUsed) => <span>{isUsed ? 'Đã sử dụng' : 'Chưa sửa dụng'}</span>
   },
   {
     title: 'Lượt tải xuống',
     dataIndex: 'downloaded',
+    width: '30%'
+  }
+];
+
+const resultColumns: ColumnsType<ResultDataType> = [
+  {
+    title: 'ID',
+    dataIndex: 'index',
+    width: '30%'
+  },
+  {
+    title: 'Ảnh',
+    dataIndex: 'imageUrl',
+    render: (url: string) => <img src={url} alt={'N/A'} width={80} height={80}/>
+  },
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    filterMode: 'tree',
+    filterSearch: true,
+    onFilter: (value: string, record) => record.name.includes(value),
+    width: '30%'
+  },
+  {
+    title: 'Số phiếu',
+    dataIndex: ['votes', 'totalCodes'],
+    render: (text, record) => <span>{record.votes}/{record.totalCodes}</span>,
     width: '30%'
   }
 ];
@@ -77,8 +107,10 @@ const ElectionDetailPage: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    setElectionId(router.query?.id as any);
-  }, []);
+    if (router.isReady) {
+      setElectionId(router.query?.id as any);
+    }
+  }, [router.isReady]);
 
   useEffect(() => {
     if (electionId) {
@@ -112,7 +144,7 @@ const ElectionDetailPage: React.FC = () => {
       children: <CodeComponent electionId={electionId} codes={codes} isLoadCode={isLoadCode}
                                setIsLoadCode={setIsLoadCode}/>
     },
-    { label: 'Kết quả', key: '3', children: 'Kết quả  ' }
+    { label: 'Kết quả', key: '3', children: <ResultComponent electionId={electionId} />}
   ];
 
   return (<AppLayout>
@@ -124,6 +156,18 @@ const ElectionDetailPage: React.FC = () => {
 
 const CandidateComponent = ({ electionId, candidates, isLoadCandidate, setIsLoadCandidate }: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [headers, setHeaders] = useState({});
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      setHeaders({
+        authorization: `Bearer ${token}`
+      });
+    }
+
+  }, []);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -136,16 +180,28 @@ const CandidateComponent = ({ electionId, candidates, isLoadCandidate, setIsLoad
   const [form] = Form.useForm();
 
   const onFinish = ({ name }: any) => {
-    createCandidate(electionId, name)
-      .then(() => setIsLoadCandidate(!isLoadCandidate))
-      .catch((error: Error) => message.error(error.message));
+  const fmData = new FormData();
+    const config = {
+      headers
+    };
 
-    setIsModalOpen(false);
+    fmData.append("file", fileList[0].originFileObj as RcFile);
+    return axios
+      .post("http://localhost:8080/election/uploadFile", fmData, config)
+      .then(res => {
+        createCandidate(electionId, name, res.data.link)
+          .then(() => setIsLoadCandidate(!isLoadCandidate))
+          .catch((error: Error) => message.error(error.message));
 
-    form.resetFields();
-    setFileList([]);
+        setIsModalOpen(false);
+
+        form.resetFields();
+        setFileList([]);
+      })
+      .catch(err=>{
+        const error = new Error('Some error');
+      });
   };
-
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
@@ -187,7 +243,7 @@ const CandidateComponent = ({ electionId, candidates, isLoadCandidate, setIsLoad
           </Form.Item>
           <Form.Item name="image" label="Hình">
             <Upload
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              beforeUpload={() => false}
               listType="picture-card"
               fileList={fileList}
               onChange={onChange}
@@ -225,5 +281,24 @@ const CodeComponent = ({ electionId, codes, isLoadCode, setIsLoadCode }: any) =>
     </div>
   );
 };
+
+const ResultComponent = ({ electionId }: any) => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    getElectionResult(electionId)
+      .then((data) => {
+        const newData = data.getElectionResult?.map((election: any, index: number) => ({ index: index + 1, ...election }));
+        setData(newData|| [])
+      })
+      .catch((error: Error) => message.error(error.message));
+  }, []);
+
+  return (
+    <div>
+      <Table columns={resultColumns} dataSource={data}/>
+    </div>
+  );
+}
 
 export default ElectionDetailPage;

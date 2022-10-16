@@ -5,7 +5,6 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import { login } from '../operation/auth.mutation';
 
-
 const StyledFromWrap = styled.div`
   padding: 20px;
   margin: 100px auto;
@@ -18,7 +17,13 @@ const Login: React.FC = () => {
   const onFinish = (values: any) => {
     login(values.email, values.password).then((data) => {
       localStorage.setItem('token', data.login?.token);
-      localStorage.setItem('refreshToken', data.login?.token);
+      localStorage.setItem('refreshToken', data.login?.refreshToken);
+
+      const date = new Date();
+
+      date.setHours(date.getHours() + 1);
+      localStorage.setItem('expiredTime', date.toISOString());
+
       router.push('/');
     })
       .catch((error: Error) => message.error(error.message || 'Oops! Please try again!'));

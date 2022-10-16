@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 import apolloClient from '../apollo-client';
 
 export const GET_VOTING_CANDIDATES = gql`
-  query getCandidates($electionId: String!, $codeId: String!) {
+  query getVotingCandidates($electionId: String!, $codeId: String!) {
     getCandidates(electionId: $electionId, codeId: $codeId) {
       id
       name

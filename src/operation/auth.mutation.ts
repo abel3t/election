@@ -11,6 +11,16 @@ export const LOGIN = gql`
   }
 `;
 
+export const REFRESH_TOKEN = gql`
+  mutation refreshToken($input: RefreshTokenInput!) {
+    refreshToken(input: $input) {
+      token
+      refreshToken
+      accessToken
+    }
+  }
+`;
+
 export const login = async (email: string, password: string) => {
   const { data } = await apolloClient.mutate({
     mutation: LOGIN,

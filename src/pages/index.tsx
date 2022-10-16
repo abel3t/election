@@ -29,6 +29,13 @@ const App: NextPage = () => {
   const [isLoad, setIsLoad] = useState(true);
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setIsAuthenticated(false);
+    }
+  }, []);
+
+  useEffect(() => {
     getElections()
       .then((data: any) => setElections(data?.getElections || []))
       .catch((error: Error) => message.error(error?.message));

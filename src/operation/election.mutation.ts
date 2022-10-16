@@ -39,10 +39,10 @@ export const createElection = async (name: string) => {
   return result.data;
 }
 
-export const createCandidate = async (electionId: string, name: string) => {
+export const createCandidate = async (electionId: string, name: string, imageUrl: string) => {
   const result = await apolloClient.mutate({
     mutation: CREATE_CANDIDATE,
-    variables: { input: { name, electionId } }
+    variables: { input: { name, electionId, imageUrl } }
   });
 
   return result.data;
