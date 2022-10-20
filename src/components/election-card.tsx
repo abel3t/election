@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Col, Form, Input, InputNumber, message, Modal, Popconfirm, Row } from 'antd';
-import Link from 'next/link';
+import { Button, Form, Input, InputNumber, message, Modal, Popconfirm } from 'antd';
 import { cloneElection, updateElection } from '../operation/election.mutation';
+import Link from 'next/link';
 
 const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,7 +12,7 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
     maxSelected: defaultMaxSelected
   } = election;
 
-  const href = `/election/${election.id}`;
+  const href = `/elections/${election.id}`;
 
   const showModal = () => {
     form.resetFields();
@@ -53,22 +53,30 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
   };
 
   return (
-    <Row justify="space-around" align="middle">
-      <Link href={href}>
-        <Col span={8}>
-          {title}
-        </Col>
-      </Link>
-      <Col span={4}>
-        <Popconfirm title="Bạn chắc chắn sao chép？" okText="Sao chép" cancelText="Trở lại"
-                    onConfirm={handleCloneElection}>
-          <Button>Sao chép</Button>
-        </Popconfirm>
+    <li className="mt-4 mb-2">
+      <div className="flex justify-between">
+        <Link href={href} className="grow h-14">
+          <div className="font-bold text-4xl text-gray-900 cursor-pointer">
+            {title}
+          </div>
+        </Link>
 
-      </Col>
-      <Col span={4}>
-        <Button onClick={showModal}>Chỉnh sửa</Button>
-      </Col>
+        <div className="flex grow w-14">
+          <div className="text-sm text-gray-500 truncate dark:text-gray-400">
+            <Popconfirm title="Bạn chắc chắn sao chép？" okText="Sao chép" cancelText="Trở lại"
+                        onConfirm={handleCloneElection}
+                        cancelButtonProps={{ className: 'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded' }}
+                        okButtonProps={{ className: 'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded' }}>
+              <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded">Sao chép</Button>
+            </Popconfirm>
+          </div>
+
+          <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+            <Button onClick={showModal} className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded">Chỉnh
+              sửa</Button>
+          </div>
+        </div>
+      </div>
 
       <Modal title="Basic Modal" open={isModalOpen} onCancel={handleCancel}
              footer={[
@@ -87,7 +95,7 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
           </Form.Item>
         </Form>
       </Modal>
-    </Row>
+    </li>
   );
 };
 

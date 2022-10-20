@@ -103,7 +103,7 @@ const VotingPage = () => {
 
       {
         isValidPage && <div>
-          <Button onClick={onSubmitData} disabled={selectedRowKeys.length !== 2}>Gửi phiếu bầu</Button>
+          <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded" onClick={onSubmitData} disabled={selectedRowKeys.length !== 2}>Gửi phiếu bầu</Button>
           <div
             style={{
               marginBottom: 16

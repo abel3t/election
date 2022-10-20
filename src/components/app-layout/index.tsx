@@ -1,6 +1,5 @@
 import { Layout } from 'antd';
 import React from 'react';
-import styled from 'styled-components';
 
 const { Header, Footer, Content } = Layout;
 
@@ -8,21 +7,17 @@ type Props = {
   children: JSX.Element,
 };
 
-const StyledContent = styled(Content)`
-  padding: 10px 50px;
-`
-
 const AppLayout = ({ children }: Props) => (
-  <Layout>
+  <Layout >
     <Header>
       Bầu Cử
     </Header>
 
-    <StyledContent>
+    <div className="px-32 min-h-full" style={{minHeight: '84vh'}}>
       {
         children
       }
-    </StyledContent>
+    </div>
 
     <Footer>
       © 2022 - Bản quyền thuộc về LEC

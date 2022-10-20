@@ -79,7 +79,6 @@ export const getCodes = async (electionId: string) => {
 }
 
 export const getElectionResult = async (electionId: string) => {
-  console.log(electionId, 'electionId')
   const result = await apolloClient.query({
     query: GET_ELECTION_RESULT,
     variables: { electionId }

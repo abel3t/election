@@ -2,24 +2,11 @@ import { Button, Col, Form, Input, InputNumber, message, Modal, Row, Upload } fr
 import React, { useEffect, useState } from 'react';
 import AppLayout from '../components/app-layout';
 import ElectionCard from '../components/election-card';
-import styled from 'styled-components';
 import PaginationCard from '../components/pagination';
 import { useRouter } from 'next/router';
 import { getElections } from '../operation/election.query';
 import { NextPage } from 'next';
 import { createElection } from '../operation/election.mutation';
-const StyledSearchAndCreateButton = styled(Row)`
-  margin-bottom: 15px;
-`;
-
-const StyledPagination = styled(Row)`
-  margin-top: 15px;
-
-  .ant-col {
-    display: flex;
-    justify-content: flex-end;
-  }
-`;
 
 const App: NextPage = () => {
   const [elections, setElections] = useState([]);
@@ -78,46 +65,49 @@ const App: NextPage = () => {
 
   return (
     <AppLayout>
-      <>
-        <StyledSearchAndCreateButton>
-          <Col span={8} offset={10}>
-            <Input placeholder="Basic usage"/>
-          </Col>
-          <Col span={4} offset={2}>
-            <Button type="primary" onClick={showModal}>Create</Button>
-          </Col>
-        </StyledSearchAndCreateButton>
+      <div>
+        <div className="w-full max-w-full px-32 mt-6 md:w-full md:flex-none">
+          <div
+            className="relative flex flex-col min-w-0 break-words bg-white border-0 shadow-soft-xl rounded-2xl bg-clip-border">
+            <div className="p-6 px-4 pb-0 mb-0 bg-white border-b-0 rounded-t-2xl">
+              <Button type="primary" onClick={showModal} className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded">
+                Tạo bầu cử
+              </Button>
+            </div>
 
-        <Modal title="Basic Modal" open={isModalOpen} onCancel={handleCancel}
-               footer={[
-                 <Button form="CreateForm" key="submit" htmlType="submit">
-                   Submit
-                 </Button>
-               ]}
-        >
-          <Form {...{ labelCol: { span: 8 }, wrapperCol: { span: 16 } }} form={form} name="control-hooks" id="CreateForm"
-                onFinish={onFinish}>
-            <Form.Item name="name" label="Tên cuộc bầu cử" rules={[{ required: true }]}>
-              <Input/>
-            </Form.Item>
-            <Form.Item name="maxSelected" label="Số lượng được chọn" rules={[{ required: true }]}>
-              <InputNumber min={1} max={10} defaultValue={5} />
-            </Form.Item>
-          </Form>
-        </Modal>
+            <Modal title="Basic Modal" open={isModalOpen} onCancel={handleCancel}
+                   footer={[
+                     <Button form="CreateForm" key="submit" htmlType="submit">
+                       Submit
+                     </Button>
+                   ]}
+            >
+              <Form {...{ labelCol: { span: 8 }, wrapperCol: { span: 16 } }} form={form} name="control-hooks" id="CreateForm"
+                    onFinish={onFinish}>
+                <Form.Item name="name" label="Tên cuộc bầu cử" rules={[{ required: true }]}>
+                  <Input/>
+                </Form.Item>
+                <Form.Item name="maxSelected" label="Số lượng được chọn" rules={[{ required: true }]}>
+                  <InputNumber min={1} max={10} defaultValue={5} />
+                </Form.Item>
+              </Form>
+            </Modal>
 
-        <div>
-          {
-            elections?.map((election: any) => <ElectionCard key={election.id} isLoad={isLoad} setIsLoad={setIsLoad} election={election}/>)
-          }
+            <div className="flex-auto p-4 pt-6">
+              <ul className="flex flex-col pl-0 mb-0 rounded-lg">
+                {
+                  elections?.map((election: any) => <ElectionCard key={election.id} isLoad={isLoad} setIsLoad={setIsLoad} election={election}/>)
+                }
+              </ul>
+            </div>
+          </div>
         </div>
-
-        <StyledPagination justify="end">
-          <Col span={10}>
+        <div className="mt-5 px-32">
+          <div>
             <PaginationCard currentPage={1} total={50}/>
-          </Col>
-        </StyledPagination>
-      </>
+          </div>
+        </div>
+      </div>
     </AppLayout>
   );
 };

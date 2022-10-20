@@ -6,7 +6,7 @@ import AppLayout from '../../components/app-layout';
 import { getCandidates, getCodes, getElectionResult } from '../../operation/election.query';
 import { useRouter } from 'next/router';
 import { createCandidate, deleteCandidate, generateCodes } from '../../operation/election.mutation';
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { LoadingOutlined } from '@ant-design/icons';
 
 interface CandidateDataType {
@@ -246,12 +246,14 @@ const CandidateComponent = ({ electionId, candidates, isLoadCandidate, setIsLoad
 
   return (
     <>
-      <Button type="primary" onClick={showModal}>
-        Create
+      <Button type="primary" onClick={showModal}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mb-2">
+        Tạo ứng cử viên
       </Button>
-      <Modal title="Basic Modal" open={isModalOpen} onCancel={handleCancel}
+      <Modal title="Tạo ứng cử viên" open={isModalOpen} onCancel={handleCancel}
              footer={[
-               <Button form="CreateCandidateForm" key="submit" htmlType="submit">
+               <Button form="CreateCandidateForm" key="submit" htmlType="submit"
+                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded">
                  {
                    isSubmitting && <Spin indicator={antIcon}/>
                  }
@@ -261,12 +263,13 @@ const CandidateComponent = ({ electionId, candidates, isLoadCandidate, setIsLoad
                </Button>
              ]}
       >
-        <Form {...{ labelCol: { span: 8 }, wrapperCol: { span: 16 } }} form={form} name="control-hooks" id="CreateCandidateForm"
+        <Form {...{ labelCol: { span: 8 }, wrapperCol: { span: 16 } }} form={form} name="control-hooks"
+              id="CreateCandidateForm"
               onFinish={onFinish}>
           <Form.Item name="name" label="Họ và tên" rules={[{ required: true }]}>
             <Input/>
           </Form.Item>
-          <Form.Item name="image" label="Hình">
+          <Form.Item name="image" label="Hình Ảnh">
             <Upload
               beforeUpload={() => false}
               listType="picture-card"
@@ -299,9 +302,33 @@ const CodeComponent = ({ electionId, codes, isLoadCode, setIsLoadCode }: any) =>
     }
   };
 
+  const config: AxiosRequestConfig = {
+    headers: {
+      authorization: `Bearer ${localStorage.getItem('token')}`
+    },
+    responseType: 'blob'
+  };
+
+  const handleDownloadCodes = () => {
+    axios
+      .get(`http://localhost:8080/election/${electionId}/codes/download`, config)
+      .then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'QR-Codes.pdf'); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+      });
+  };
+
   return (
     <div>
-      <Button onClick={handleGenerateCodes}>Generate</Button>
+      <Button onClick={handleGenerateCodes}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mb-2">Tạo mã bầu cử</Button>
+
+      <Button onClick={handleDownloadCodes}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mb-2">Tải xuống</Button>
       <Table columns={codeColumns} dataSource={codes}/>
     </div>
   );
@@ -342,7 +369,10 @@ const DeleteComponent = ({ record, setIsLoadCandidate, isLoadCandidate }: any) =
 
   return <>
     <Popconfirm title="Bạn chắc chắn xoá ứng cử viên？" okText="Xoá" cancelText="Trở lại"
-                onConfirm={handleDeleteCandidate}>
+                onConfirm={handleDeleteCandidate}
+                cancelButtonProps={{ className: 'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded' }}
+                okButtonProps={{ className: 'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded' }}
+    >
       <a href="#">Delete</a>
     </Popconfirm>
   </>;

@@ -2,8 +2,8 @@ import { ApolloLink, ApolloClient, concat, HttpLink, InMemoryCache, DefaultOptio
 import { REFRESH_TOKEN } from './operation/auth.mutation';
 import jwtDecode from "jwt-decode";
 
-const API_URL = 'http://138.2.71.128:8080/graphql';
-// const API_URL = 'http://localhost:8080/graphql';
+// const API_URL = 'http://138.2.71.128:8080/graphql';
+const API_URL = 'http://localhost:8080/graphql';
 
 const httpLink = new HttpLink({ uri: API_URL });
 
