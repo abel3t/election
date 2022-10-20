@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { checkCode, getMaxSelectedCandidate, getVotingCandidates } from '../operation/vote.query';
 import { createVotes } from '../operation/vote.mutation';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 const columns = [
   {
@@ -12,7 +13,7 @@ const columns = [
   {
     title: 'Ảnh',
     dataIndex: 'imageUrl',
-    render: (url: string) => <img src={url} alt={'N/A'} width={80} height={80}/>
+    render: (url: string) => <Image src={url} alt={'N/A'} width={80} height={80}/>
   },
   {
     title: 'Tên',
@@ -31,12 +32,14 @@ const VotingPage = () => {
   const [candidates, setCandidates]: [any, any] = useState([]);
 
   useEffect(() => {
-    if (!router.isReady) {
+    if (!router.isReady || router.query) {
       return;
     }
 
-    const election: string = `${router.query?.election || ''}`;
-    const code: string = `${router.query?.code || ''}`;
+    const query: any = router.query || {};
+
+    const election: string = query.election?.toString() || '';
+    const code: string = query.code?.toString() || '';
 
     if (!election || !code) {
       setIsValidPage(false);
@@ -66,8 +69,7 @@ const VotingPage = () => {
           }).catch((error: Error) => message.error(error.message));
       });
 
-
-  }, [router.isReady]);
+  }, [router.isReady, router.query]);
 
   const onSelectChange = (newSelectedRowKeys: any) => {
     if (newSelectedRowKeys.length > maxSelected) {

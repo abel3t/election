@@ -8,6 +8,7 @@ export const GET_ELECTIONS = gql`
       name
       createdAt
       accountId
+      maxSelected
     }
   }
 `;
@@ -17,6 +18,7 @@ export const GET_CANDIDATES = gql`
       getCandidates(electionId: $electionId) {
         id
         name
+        electionId
         imageUrl
         createdAt
       }

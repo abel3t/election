@@ -1,4 +1,4 @@
-import { Button, Col, Input, message, Row } from 'antd';
+import { Button, Col, Form, Input, InputNumber, message, Modal, Row, Upload } from 'antd';
 import React, { useEffect, useState } from 'react';
 import AppLayout from '../components/app-layout';
 import ElectionCard from '../components/election-card';
@@ -8,7 +8,6 @@ import { useRouter } from 'next/router';
 import { getElections } from '../operation/election.query';
 import { NextPage } from 'next';
 import { createElection } from '../operation/election.mutation';
-
 const StyledSearchAndCreateButton = styled(Row)`
   margin-bottom: 15px;
 `;
@@ -24,6 +23,7 @@ const StyledPagination = styled(Row)`
 
 const App: NextPage = () => {
   const [elections, setElections] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [isLoad, setIsLoad] = useState(true);
@@ -52,15 +52,29 @@ const App: NextPage = () => {
     router.push('/login');
   };
 
-  const createNewElection = () => {
-    const text = prompt('Nhập tên cuộc bầu cử!');
-
-    if (text) {
-      createElection(text)
-        .then(() => setIsLoad(!isLoad))
-        .catch((error: Error) => message.error(error?.message));
-    }
+  const showModal = () => {
+    setIsModalOpen(true);
   };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+
+  const [form] = Form.useForm();
+
+  const onFinish = ({ name, maxSelected }: any) => {
+    createElection(name, maxSelected)
+      .then(() => {
+        setIsModalOpen(false);
+
+        form.resetFields();
+        setIsLoad(!isLoad);
+
+      })
+      .catch((error: Error) => message.error(error?.message));
+  };
+
 
   return (
     <AppLayout>
@@ -70,14 +84,31 @@ const App: NextPage = () => {
             <Input placeholder="Basic usage"/>
           </Col>
           <Col span={4} offset={2}>
-            <Button type="primary" onClick={createNewElection}>Create</Button>
+            <Button type="primary" onClick={showModal}>Create</Button>
           </Col>
         </StyledSearchAndCreateButton>
 
+        <Modal title="Basic Modal" open={isModalOpen} onCancel={handleCancel}
+               footer={[
+                 <Button form="CreateForm" key="submit" htmlType="submit">
+                   Submit
+                 </Button>
+               ]}
+        >
+          <Form {...{ labelCol: { span: 8 }, wrapperCol: { span: 16 } }} form={form} name="control-hooks" id="CreateForm"
+                onFinish={onFinish}>
+            <Form.Item name="name" label="Tên cuộc bầu cử" rules={[{ required: true }]}>
+              <Input/>
+            </Form.Item>
+            <Form.Item name="maxSelected" label="Số lượng được chọn" rules={[{ required: true }]}>
+              <InputNumber min={1} max={10} defaultValue={5} />
+            </Form.Item>
+          </Form>
+        </Modal>
+
         <div>
           {
-            elections?.map((election: any) => <ElectionCard key={election.id} title={election.name}
-                                                            href={`/elections/${election.id}`}/>)
+            elections?.map((election: any) => <ElectionCard key={election.id} isLoad={isLoad} setIsLoad={setIsLoad} election={election}/>)
           }
         </div>
 

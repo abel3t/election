@@ -1,12 +1,22 @@
-import { Button, Form, Input, message, Modal, Table, Tabs, Upload } from 'antd';
+import { Button, Form, Input, message, Modal, Popconfirm, Spin, Table, Tabs, Upload } from 'antd';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import type { ColumnsType } from 'antd/es/table';
 import React, { useEffect, useState } from 'react';
 import AppLayout from '../../components/app-layout';
 import { getCandidates, getCodes, getElectionResult } from '../../operation/election.query';
 import { useRouter } from 'next/router';
-import { createCandidate, generateCodes } from '../../operation/election.mutation';
+import { createCandidate, deleteCandidate, generateCodes } from '../../operation/election.mutation';
 import axios from 'axios';
+import { LoadingOutlined } from '@ant-design/icons';
+
+interface CandidateDataType {
+  key: React.Key;
+  index?: number;
+  imageUrl?: string;
+  name: string;
+  id?: string;
+  electionId?: string;
+}
 
 interface DataType {
   key: React.Key;
@@ -21,30 +31,9 @@ interface ResultDataType {
   index?: number;
   imageUrl?: string;
   votes?: number;
-  totalVotes?: number;
+  totalCodes?: number;
   name: string;
 }
-
-const columns: ColumnsType<DataType> = [
-  {
-    title: 'ID',
-    dataIndex: 'index',
-    width: '30%'
-  },
-  {
-    title: 'Ảnh',
-    dataIndex: 'imageUrl',
-    render: (url: string) => <img src={url} alt={'N/A'} width={80} height={80}/>
-  },
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    filterMode: 'tree',
-    filterSearch: true,
-    onFilter: (value: string, record) => record.name.includes(value),
-    width: '30%'
-  }
-];
 
 const codeColumns: ColumnsType<DataType> = [
   {
@@ -86,7 +75,6 @@ const resultColumns: ColumnsType<ResultDataType> = [
     dataIndex: 'name',
     filterMode: 'tree',
     filterSearch: true,
-    onFilter: (value: string, record) => record.name.includes(value),
     width: '30%'
   },
   {
@@ -144,7 +132,7 @@ const ElectionDetailPage: React.FC = () => {
       children: <CodeComponent electionId={electionId} codes={codes} isLoadCode={isLoadCode}
                                setIsLoadCode={setIsLoadCode}/>
     },
-    { label: 'Kết quả', key: '3', children: <ResultComponent electionId={electionId} />}
+    { label: 'Kết quả', key: '3', children: <ResultComponent electionId={electionId}/> }
   ];
 
   return (<AppLayout>
@@ -157,6 +145,34 @@ const ElectionDetailPage: React.FC = () => {
 const CandidateComponent = ({ electionId, candidates, isLoadCandidate, setIsLoadCandidate }: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [headers, setHeaders] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const columns: ColumnsType<CandidateDataType> = [
+    {
+      title: 'ID',
+      dataIndex: 'index',
+      width: '30%'
+    },
+    {
+      title: 'Ảnh',
+      dataIndex: 'imageUrl',
+      render: (url: string) => <img src={url} alt={'N/A'} width={80} height={80}/>
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      filterMode: 'tree',
+      filterSearch: true,
+      width: '30%'
+    },
+    {
+      title: 'Action',
+      dataIndex: '',
+      key: 'x',
+      render: (_, record) => <DeleteComponent record={record} setIsLoadCandidate={setIsLoadCandidate}
+                                              isLoadCandidate={isLoadCandidate}/>
+    }
+  ];
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -180,26 +196,29 @@ const CandidateComponent = ({ electionId, candidates, isLoadCandidate, setIsLoad
   const [form] = Form.useForm();
 
   const onFinish = ({ name }: any) => {
-  const fmData = new FormData();
+    setIsSubmitting(true);
+    const fmData = new FormData();
     const config = {
       headers
     };
 
-    fmData.append("file", fileList[0].originFileObj as RcFile);
+    fmData.append('file', fileList[0].originFileObj as RcFile);
     return axios
-      .post("http://localhost:8080/election/uploadFile", fmData, config)
+      .post('http://localhost:8080/election/uploadFile', fmData, config)
       .then(res => {
         createCandidate(electionId, name, res.data.link)
           .then(() => setIsLoadCandidate(!isLoadCandidate))
           .catch((error: Error) => message.error(error.message));
 
         setIsModalOpen(false);
+        setIsSubmitting(false);
 
         form.resetFields();
         setFileList([]);
       })
-      .catch(err=>{
+      .catch(err => {
         const error = new Error('Some error');
+        setIsSubmitting(false);
       });
   };
 
@@ -223,6 +242,7 @@ const CandidateComponent = ({ electionId, candidates, isLoadCandidate, setIsLoad
     const imgWindow = window.open(src);
     imgWindow?.document.write(image.outerHTML);
   };
+  const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin/>;
 
   return (
     <>
@@ -231,12 +251,17 @@ const CandidateComponent = ({ electionId, candidates, isLoadCandidate, setIsLoad
       </Button>
       <Modal title="Basic Modal" open={isModalOpen} onCancel={handleCancel}
              footer={[
-               <Button form="myForm" key="submit" htmlType="submit">
-                 Submit
+               <Button form="CreateCandidateForm" key="submit" htmlType="submit">
+                 {
+                   isSubmitting && <Spin indicator={antIcon}/>
+                 }
+                 {
+                   !isSubmitting && 'Submit'
+                 }
                </Button>
              ]}
       >
-        <Form {...{ labelCol: { span: 8 }, wrapperCol: { span: 16 } }} form={form} name="control-hooks" id="myForm"
+        <Form {...{ labelCol: { span: 8 }, wrapperCol: { span: 16 } }} form={form} name="control-hooks" id="CreateCandidateForm"
               onFinish={onFinish}>
           <Form.Item name="name" label="Họ và tên" rules={[{ required: true }]}>
             <Input/>
@@ -288,8 +313,9 @@ const ResultComponent = ({ electionId }: any) => {
   useEffect(() => {
     getElectionResult(electionId)
       .then((data) => {
-        const newData = data.getElectionResult?.map((election: any, index: number) => ({ index: index + 1, ...election }));
-        setData(newData|| [])
+        const newData = data.getElectionResult?.map(
+          (election: any, index: number) => ({ index: index + 1, ...election }));
+        setData(newData || []);
       })
       .catch((error: Error) => message.error(error.message));
   }, []);
@@ -299,6 +325,27 @@ const ResultComponent = ({ electionId }: any) => {
       <Table columns={resultColumns} dataSource={data}/>
     </div>
   );
-}
+};
+
+const DeleteComponent = ({ record, setIsLoadCandidate, isLoadCandidate }: any) => {
+  const handleDeleteCandidate = () => {
+    deleteCandidate(record.electionId, record.id)
+      .then(() => {
+        message.success('Xoá ứng cử viên thành công!');
+        setIsLoadCandidate(!isLoadCandidate);
+      })
+      .catch((error: Error) => {
+        console.log(error);
+        message.error('Xoá ứng cử viên thất bại!');
+      });
+  };
+
+  return <>
+    <Popconfirm title="Bạn chắc chắn xoá ứng cử viên？" okText="Xoá" cancelText="Trở lại"
+                onConfirm={handleDeleteCandidate}>
+      <a href="#">Delete</a>
+    </Popconfirm>
+  </>;
+};
 
 export default ElectionDetailPage;
