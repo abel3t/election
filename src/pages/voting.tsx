@@ -1,6 +1,6 @@
 import { Button, message, Result, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { checkCode, getVotingCandidates } from '../operation/vote.query';
+import { checkCode, getMaxSelectedCandidate, getVotingCandidates } from '../operation/vote.query';
 import { createVotes } from '../operation/vote.mutation';
 import { useRouter } from 'next/router';
 
@@ -22,24 +22,13 @@ const columns = [
 
 const VotingPage = () => {
   const router = useRouter();
+  const [maxSelected, setMaxSelected] = useState(0);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [codeId, setCodeId] = useState('');
   const [electionId, setElectionId] = useState('');
   const [isValidPage, setIsValidPage] = useState(true);
 
   const [candidates, setCandidates]: [any, any] = useState([]);
-
-  useEffect(() => {
-    if (electionId && codeId) {
-      getVotingCandidates(electionId, codeId)
-        .then((data) => {
-          const newCandidates = (data?.getCandidates || []).map(
-            (code: any, index: number) => ({ index: index + 1, key: index, ...code }));
-          console.log(newCandidates);
-          setCandidates(newCandidates);
-        }).catch((error: Error) => message.error(error.message));
-    }
-  }, [router.isReady]);
 
   useEffect(() => {
     if (!router.isReady) {
@@ -61,14 +50,28 @@ const VotingPage = () => {
         }
 
         setIsValidPage(!!data.checkCode?.isValid);
+
+        getVotingCandidates(election, code)
+          .then((data) => {
+            const newCandidates = (data?.getVotingCandidates || []).map(
+              (code: any, index: number) => ({ index: index + 1, key: index, ...code }));
+            setCandidates(newCandidates);
+          }).catch((error: Error) => message.error(error.message));
+
+        getMaxSelectedCandidate(election, code)
+          .then((data) => {
+            if (data.getMaxSelectedCandidate?.maxSelected) {
+              setMaxSelected(data.getMaxSelectedCandidate?.maxSelected);
+            }
+          }).catch((error: Error) => message.error(error.message));
       });
 
 
   }, [router.isReady]);
 
   const onSelectChange = (newSelectedRowKeys: any) => {
-    if (newSelectedRowKeys.length > 2) {
-      message.error('Bạn chỉ có thể chọn tối đa 2 người!');
+    if (newSelectedRowKeys.length > maxSelected) {
+      message.error(`Bạn chỉ có thể chọn tối đa ${maxSelected} người!`);
     } else {
       setSelectedRowKeys(newSelectedRowKeys);
     }
