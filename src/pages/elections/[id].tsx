@@ -204,7 +204,7 @@ const CandidateComponent = ({ electionId, candidates, isLoadCandidate, setIsLoad
 
     fmData.append('file', fileList[0].originFileObj as RcFile);
     return axios
-      .post('http://localhost:8080/election/uploadFile', fmData, config)
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/election/uploadFile`, fmData, config)
       .then(res => {
         createCandidate(electionId, name, res.data.link)
           .then(() => setIsLoadCandidate(!isLoadCandidate))
@@ -311,7 +311,7 @@ const CodeComponent = ({ electionId, codes, isLoadCode, setIsLoadCode }: any) =>
 
   const handleDownloadCodes = () => {
     axios
-      .get(`http://localhost:8080/election/${electionId}/codes/download`, config)
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/election/${electionId}/codes/download`, config)
       .then(response => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
