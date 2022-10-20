@@ -39,12 +39,12 @@ const codeColumns: ColumnsType<DataType> = [
   {
     title: 'ID',
     dataIndex: 'index',
-    width: '30%'
+    width: '10%'
   },
   {
     title: 'Mã Bầu Cử',
     dataIndex: 'id',
-    width: '30%'
+    width: '40%'
   },
   {
     title: 'Trạng Thái',
@@ -55,7 +55,7 @@ const codeColumns: ColumnsType<DataType> = [
   {
     title: 'Lượt tải xuống',
     dataIndex: 'downloaded',
-    width: '30%'
+    width: '20%'
   }
 ];
 
@@ -63,25 +63,26 @@ const resultColumns: ColumnsType<ResultDataType> = [
   {
     title: 'ID',
     dataIndex: 'index',
-    width: '30%'
+    width: '10%'
   },
   {
     title: 'Ảnh',
     dataIndex: 'imageUrl',
+    width: '20%',
     render: (url: string) => <img src={url} alt={'N/A'} width={80} height={80}/>
   },
   {
-    title: 'Name',
+    title: 'Họ và Tên',
     dataIndex: 'name',
     filterMode: 'tree',
     filterSearch: true,
-    width: '30%'
+    width: '40%'
   },
   {
     title: 'Số phiếu',
     dataIndex: ['votes', 'totalCodes'],
     render: (text, record) => <span>{record.votes}/{record.totalCodes}</span>,
-    width: '30%'
+    width: '10%'
   }
 ];
 
@@ -151,24 +152,26 @@ const CandidateComponent = ({ electionId, candidates, isLoadCandidate, setIsLoad
     {
       title: 'ID',
       dataIndex: 'index',
-      width: '30%'
+      width: '10%'
     },
     {
       title: 'Ảnh',
+      width: '20%',
       dataIndex: 'imageUrl',
       render: (url: string) => <img src={url} alt={'N/A'} width={80} height={80}/>
     },
     {
-      title: 'Name',
+      title: 'Họ và Tên',
       dataIndex: 'name',
       filterMode: 'tree',
       filterSearch: true,
-      width: '30%'
+      width: '40%'
     },
     {
-      title: 'Action',
+      title: 'Hành Động',
       dataIndex: '',
       key: 'x',
+      width: '20%',
       render: (_, record) => <DeleteComponent record={record} setIsLoadCandidate={setIsLoadCandidate}
                                               isLoadCandidate={isLoadCandidate}/>
     }
@@ -373,7 +376,7 @@ const DeleteComponent = ({ record, setIsLoadCandidate, isLoadCandidate }: any) =
                 cancelButtonProps={{ className: 'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded' }}
                 okButtonProps={{ className: 'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded' }}
     >
-      <a href="#">Delete</a>
+      <a href="#">Xoá</a>
     </Popconfirm>
   </>;
 };
