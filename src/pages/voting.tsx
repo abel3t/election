@@ -146,7 +146,7 @@ const VotingPage = () => {
           <div className="flex my-2">
             <Button className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
                     onClick={onSubmitData}
-                    disabled={selectedRowKeys.length !== 2}>
+                    disabled={selectedRowKeys.length !== maxSelected}>
               {
                 isSubmitting && <Spin indicator={antIcon}/>
               }
