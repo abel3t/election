@@ -19,6 +19,8 @@ const Login: React.FC = () => {
 
       date.setHours(date.getHours() + 1);
       localStorage.setItem('expiredTime', date.toISOString());
+      localStorage.removeItem('logIn');
+
 
       router.push('/');
     })
