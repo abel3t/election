@@ -1,4 +1,4 @@
-import { Button, Form, Input, message, Modal, Popconfirm, Spin, Table, Tabs, Upload } from 'antd';
+import { Button, Form, Input, message, Modal, Popconfirm, Spin, Table, Tabs, Tag, Upload } from 'antd';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import type { ColumnsType } from 'antd/es/table';
 import React, { useEffect, useState } from 'react';
@@ -50,7 +50,7 @@ const codeColumns: ColumnsType<DataType> = [
     title: 'Trạng Thái',
     dataIndex: 'isUsed',
     width: '30%',
-    render: (isUsed) => <span>{isUsed ? 'Đã sử dụng' : 'Chưa sửa dụng'}</span>
+    render: (isUsed) => <span>{isUsed ?  <Tag color="orange">Đã sử dụng</Tag> : <Tag color="green">Chưa sửa dụng</Tag>}</span>
   },
   {
     title: 'Lượt tải xuống',
