@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Input, Button, message } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import { login } from '../operation/auth.mutation';
 
 const Login: React.FC = () => {
   const router = useRouter();
+
+  useEffect(() => {
+    localStorage.setItem('logIn', 'true');
+  }, []);
+
   const onFinish = (values: any) => {
     login(values.email, values.password).then((data) => {
       localStorage.setItem('token', data.login?.token);

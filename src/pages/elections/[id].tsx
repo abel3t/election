@@ -81,8 +81,10 @@ const resultColumns: ColumnsType<ResultDataType> = [
   {
     title: 'Số phiếu',
     dataIndex: ['votes', 'totalCodes'],
-    render: (text, record) => <span>{record.votes}/{record.totalCodes}</span>,
-    width: '10%'
+    render: (text, record) => <p><span className="text-green-700 text-4xl font-bold">{record.votes}</span>
+      <span className="font-bold">/</span>
+      <span className="text-yellow-700 text-2xl font-bold">{record.totalCodes}</span></p>,
+    width: '15%'
   }
 ];
 
@@ -322,6 +324,7 @@ const CodeComponent = ({ electionId, codes, isLoadCode, setIsLoadCode }: any) =>
         link.setAttribute('download', 'QR-Codes.pdf'); //or any other extension
         document.body.appendChild(link);
         link.click();
+        setIsLoadCode(!isLoadCode);
       });
   };
 
@@ -343,7 +346,7 @@ const ResultComponent = ({ electionId }: any) => {
   useEffect(() => {
     getElectionResult(electionId)
       .then((data) => {
-        const newData = data.getElectionResult?.map(
+        const newData = data?.getElectionResult?.map(
           (election: any, index: number) => ({ index: index + 1, ...election }));
         setData(newData || []);
       })
