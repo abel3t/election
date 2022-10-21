@@ -40,6 +40,10 @@ const VotingPage = () => {
   const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin/>;
 
   useEffect(() => {
+    localStorage.setItem('guest', 'true');
+  }, []);
+
+  useEffect(() => {
     if (!router.isReady) {
       return;
     }
