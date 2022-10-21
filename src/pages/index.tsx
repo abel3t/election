@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, InputNumber, message, Modal, Row, Upload } from 'antd';
+import { Button, Form, Input, InputNumber, message, Modal, Row, Upload } from 'antd';
 import React, { useEffect, useState } from 'react';
 import AppLayout from '../components/app-layout';
 import ElectionCard from '../components/election-card';
@@ -66,7 +66,7 @@ const App: NextPage = () => {
   return (
     <AppLayout>
       <div>
-        <div className="w-full max-w-full px-32 mt-6 md:w-full md:flex-none">
+        <div className="w-full max-w-full mt-6 md:w-full md:flex-none">
           <div
             className="relative flex flex-col min-w-0 break-words bg-white border-0 shadow-soft-xl rounded-2xl bg-clip-border">
             <div className="p-6 px-4 pb-0 mb-0 bg-white border-b-0 rounded-t-2xl">
@@ -75,7 +75,7 @@ const App: NextPage = () => {
               </Button>
             </div>
 
-            <Modal title="Basic Modal" open={isModalOpen} onCancel={handleCancel}
+            <Modal title="Tạo cuộc bầu cử" open={isModalOpen} onCancel={handleCancel}
                    footer={[
                      <Button form="CreateForm" key="submit" htmlType="submit">
                        Submit
@@ -94,7 +94,7 @@ const App: NextPage = () => {
             </Modal>
 
             <div className="flex-auto p-4 pt-6">
-              <ul className="flex flex-col pl-0 mb-0 rounded-lg">
+              <ul className="pl-0 mb-0 rounded-lg">
                 {
                   elections?.map((election: any) => <ElectionCard key={election.id} isLoad={isLoad} setIsLoad={setIsLoad} election={election}/>)
                 }
@@ -102,7 +102,7 @@ const App: NextPage = () => {
             </div>
           </div>
         </div>
-        <div className="mt-5 px-32">
+        <div className="mt-5">
           <div>
             <PaginationCard currentPage={1} total={50}/>
           </div>

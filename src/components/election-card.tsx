@@ -54,14 +54,14 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
 
   return (
     <li className="mt-4 mb-2">
-      <div className="flex justify-between">
-        <Link href={href} className="grow h-14">
-          <div className="font-bold text-4xl text-gray-900 cursor-pointer">
-            {title}
-          </div>
-        </Link>
+      <div className="flex" style={{ justifyContent: 'space-between', borderRadius: '0.7em', padding: '1.5em', boxShadow: '0 2px 8px 0 rgb(153 166 166 / 30%)' }}>
+          <Link href={href}>
+            <p className="font-bold text-gray-900 cursor-pointer" style={{ cursor: 'pointer', fontSize: '1.5em' }}>
+              {title}
+            </p>
+          </Link>
 
-        <div className="flex grow w-14">
+        <div className="flex">
           <div className="text-sm text-gray-500 truncate dark:text-gray-400">
             <Popconfirm title="Bạn chắc chắn sao chép？" okText="Sao chép" cancelText="Trở lại"
                         onConfirm={handleCloneElection}
@@ -71,17 +71,17 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
             </Popconfirm>
           </div>
 
-          <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+          <div className="inline-flex ml-2 items-center text-base font-semibold text-gray-900 dark:text-white">
             <Button onClick={showModal} className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded">Chỉnh
               sửa</Button>
           </div>
         </div>
       </div>
 
-      <Modal title="Basic Modal" open={isModalOpen} onCancel={handleCancel}
+      <Modal title="Chỉnh sửa bầu cử" open={isModalOpen} onCancel={handleCancel}
              footer={[
                <Button form="UpdateForm" key="submit" htmlType="submit">
-                 Submit
+                 Sửa
                </Button>
              ]}
       >

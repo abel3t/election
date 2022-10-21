@@ -1,9 +1,10 @@
-import { Alert, Button, message, Result, Table } from 'antd';
+import { Alert, Button, message, Result, Spin, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { checkCode, getMaxSelectedCandidate, getVotingCandidates } from '../operation/vote.query';
 import { createVotes } from '../operation/vote.mutation';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const columns = [
   {
@@ -31,8 +32,12 @@ const VotingPage = () => {
   const [codeId, setCodeId] = useState('');
   const [electionId, setElectionId] = useState('');
   const [isValidPage, setIsValidPage] = useState(true);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [candidates, setCandidates]: [any, any] = useState([]);
+
+  const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin/>;
 
   useEffect(() => {
     if (!router.isReady) {
@@ -84,11 +89,19 @@ const VotingPage = () => {
   };
 
   const onSubmitData = () => {
+    setIsSubmitting(true);
     const selectedCandidateIds = selectedRowKeys.map(rowKey => candidates[rowKey].id);
 
     createVotes(electionId, codeId, selectedCandidateIds)
-      .then(data => console.log(data))
-      .catch(error => console.log(error));
+      .then(data => {
+        setIsSubmitting(false);
+        setIsSubmitted(true);
+        console.log(data)
+      })
+      .catch(error => {
+        console.log(error);
+        setIsSubmitting(false);
+      });
   };
 
   const rowSelection = {
@@ -99,6 +112,13 @@ const VotingPage = () => {
   return (
     <>
       {
+        isSubmitted && isValidPage && <Result
+          status="success"
+          title="Bạn đã gửi phiếu bầu thành công!"
+        />
+      }
+
+      {
         !isValidPage && <Result
           status="warning"
           className="px-2 lg:px-32"
@@ -108,7 +128,7 @@ const VotingPage = () => {
       }
 
       {
-        isValidPage && <div className="px-2 lg:px-32">
+        !isSubmitted && isValidPage && <div className="px-2 lg:px-32">
           <div className="flex justify-center py-5">
             <p className="font-bold text-4xl">
               Bầu Cử
@@ -122,7 +142,12 @@ const VotingPage = () => {
           <div className="flex my-2">
             <Button className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
                     onClick={onSubmitData}
-                    disabled={selectedRowKeys.length !== 2}>Gửi phiếu bầu</Button>
+                    disabled={selectedRowKeys.length !== 2}>
+              {
+                isSubmitting && <Spin indicator={antIcon}/>
+              }
+              {!isSubmitting && 'Gửi phiếu bầu'}
+            </Button>
 
             {hasSelected &&
               <Alert className="w-fit ml-5" message={`Bạn đã bầu cho ${selectedRowKeys.length} người`} type="info"/>}
