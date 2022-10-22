@@ -15,7 +15,7 @@ const columns = [
     title: 'STT',
     dataIndex: 'index',
     width: '10%',
-    render: (index: string) => <div className="text-xl font-bold">{index}</div>
+    render: (index: string) => <div className="text-md font-bold">{index}</div>
   },
   {
     title: 'Ảnh',
@@ -29,7 +29,7 @@ const columns = [
     title: 'Họ và Tên',
     dataIndex: 'name',
     width: '40%',
-    render: (name: string) => <div className="text-xl font-bold">{name}</div>
+    render: (name: string) => <div className="text-md font-bold">{name}</div>
   }
 ];
 
