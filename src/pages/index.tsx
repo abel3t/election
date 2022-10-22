@@ -14,6 +14,9 @@ const App: NextPage = () => {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [isLoad, setIsLoad] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -47,7 +50,6 @@ const App: NextPage = () => {
     setIsModalOpen(false);
   };
 
-
   const [form] = Form.useForm();
 
   const onFinish = ({ name, maxSelected }: any) => {
@@ -62,6 +64,9 @@ const App: NextPage = () => {
       .catch((error: Error) => message.error(error?.message));
   };
 
+  const handleChangePage = (page: number) => {
+    setCurrentPage(page);
+  }
 
   return (
     <AppLayout>
@@ -70,7 +75,8 @@ const App: NextPage = () => {
           <div
             className="relative flex flex-col min-w-0 break-words bg-white border-0 shadow-soft-xl rounded-2xl bg-clip-border">
             <div className="p-6 px-4 pb-0 mb-0 bg-white border-b-0 rounded-t-2xl">
-              <Button type="primary" onClick={showModal} className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded">
+              <Button type="primary" onClick={showModal}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded">
                 Tạo bầu cử
               </Button>
             </div>
@@ -82,13 +88,14 @@ const App: NextPage = () => {
                      </Button>
                    ]}
             >
-              <Form {...{ labelCol: { span: 8 }, wrapperCol: { span: 16 } }} form={form} name="control-hooks" id="CreateForm"
+              <Form {...{ labelCol: { span: 8 }, wrapperCol: { span: 16 } }} form={form} name="control-hooks"
+                    id="CreateForm"
                     onFinish={onFinish}>
                 <Form.Item name="name" label="Tên cuộc bầu cử" rules={[{ required: true }]}>
                   <Input/>
                 </Form.Item>
                 <Form.Item name="maxSelected" label="Số lượng được chọn" rules={[{ required: true }]}>
-                  <InputNumber min={1} max={10} defaultValue={5} />
+                  <InputNumber min={1} max={10} defaultValue={5}/>
                 </Form.Item>
               </Form>
             </Modal>
@@ -96,7 +103,9 @@ const App: NextPage = () => {
             <div className="flex-auto p-4 pt-6">
               <ul className="pl-0 mb-0 rounded-lg">
                 {
-                  elections?.map((election: any) => <ElectionCard key={election.id} isLoad={isLoad} setIsLoad={setIsLoad} election={election}/>)
+                  elections?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                    .map((election: any) => <ElectionCard key={election.id} isLoad={isLoad} setIsLoad={setIsLoad}
+                                                          election={election}/>)
                 }
               </ul>
             </div>
@@ -104,7 +113,7 @@ const App: NextPage = () => {
         </div>
         <div className="mt-5">
           <div>
-            <PaginationCard currentPage={1} total={50}/>
+              <PaginationCard currentPage={currentPage} total={elections.length} itemsPerPage={itemsPerPage} onChange={handleChangePage}/>
           </div>
         </div>
       </div>

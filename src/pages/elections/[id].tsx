@@ -37,7 +37,7 @@ interface ResultDataType {
 
 const codeColumns: ColumnsType<DataType> = [
   {
-    title: 'ID',
+    title: 'STT',
     dataIndex: 'index',
     width: '10%'
   },
@@ -61,7 +61,7 @@ const codeColumns: ColumnsType<DataType> = [
 
 const resultColumns: ColumnsType<ResultDataType> = [
   {
-    title: 'ID',
+    title: 'STT',
     dataIndex: 'index',
     width: '10%'
   },
@@ -83,7 +83,7 @@ const resultColumns: ColumnsType<ResultDataType> = [
     dataIndex: ['votes', 'totalCodes'],
     render: (text, record) => <p><span className="text-green-700 text-4xl font-bold">{record.votes}</span>
       <span className="font-bold">/</span>
-      <span className="text-yellow-700 text-2xl font-bold">{record.totalCodes}</span></p>,
+      <span className="text-yellow-600 text-2xl font-bold">{record.totalCodes}</span></p>,
     width: '15%'
   }
 ];
@@ -94,6 +94,7 @@ const ElectionDetailPage: React.FC = () => {
   const [codes, setCodes] = useState([]);
   const [isLoadCode, setIsLoadCode] = useState(true);
   const [isLoadCandidate, setIsLoadCandidate] = useState(true);
+  const [tabChange, setTabChange] = useState('1');
 
   const router = useRouter();
 
@@ -120,7 +121,7 @@ const ElectionDetailPage: React.FC = () => {
         setCandidates(newCandidates);
       }).catch((error: Error) => message.error(error.message));
     }
-  }, [isLoadCandidate, electionId]);
+  }, [isLoadCandidate, electionId, tabChange]);
 
   const items = [
     {
@@ -135,24 +136,24 @@ const ElectionDetailPage: React.FC = () => {
       children: <CodeComponent electionId={electionId} codes={codes} isLoadCode={isLoadCode}
                                setIsLoadCode={setIsLoadCode}/>
     },
-    { label: 'Kết quả', key: '3', children: <ResultComponent electionId={electionId}/> }
+    { label: 'Kết quả', key: '3', children: <ResultComponent tabChange={tabChange} electionId={electionId}/> }
   ];
 
   return (<AppLayout>
     <>
-      <Tabs items={items}/>
+      <Tabs items={items} onChange={(activeKey) => setTabChange(activeKey)}/>
     </>
   </AppLayout>);
 };
 
-const CandidateComponent = ({ electionId, candidates, isLoadCandidate, setIsLoadCandidate }: any) => {
+const CandidateComponent = ({ electionId, tabChange, candidates, isLoadCandidate, setIsLoadCandidate }: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [headers, setHeaders] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const columns: ColumnsType<CandidateDataType> = [
     {
-      title: 'ID',
+      title: 'STT',
       dataIndex: 'index',
       width: '10%'
     },
@@ -170,7 +171,7 @@ const CandidateComponent = ({ electionId, candidates, isLoadCandidate, setIsLoad
       width: '40%'
     },
     {
-      title: 'Hành Động',
+      title: 'Hành động',
       dataIndex: '',
       key: 'x',
       width: '20%',
@@ -274,7 +275,7 @@ const CandidateComponent = ({ electionId, candidates, isLoadCandidate, setIsLoad
           <Form.Item name="name" label="Họ và tên" rules={[{ required: true }]}>
             <Input/>
           </Form.Item>
-          <Form.Item name="image" label="Hình Ảnh">
+          <Form.Item name="image" label="Hình ảnh" rules={[{ required: true }]}>
             <Upload
               beforeUpload={() => false}
               listType="picture-card"
@@ -294,6 +295,8 @@ const CandidateComponent = ({ electionId, candidates, isLoadCandidate, setIsLoad
 };
 
 const CodeComponent = ({ electionId, codes, isLoadCode, setIsLoadCode }: any) => {
+  const unUsedCodes = codes.filter((code: any) => !code.isUsed);
+  const usedCodes = codes.filter((code: any) => code.isUsed);
   const handleGenerateCodes = () => {
     const amountText = prompt('Nhập số lượng mã bạn muốn tạo thêm!');
 
@@ -335,12 +338,21 @@ const CodeComponent = ({ electionId, codes, isLoadCode, setIsLoadCode }: any) =>
 
       <Button onClick={handleDownloadCodes}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mb-2">Tải xuống</Button>
+
+      {
+        unUsedCodes?.length && <Tag className="ml-2" color="green">Có {unUsedCodes.length} chưa sử dụng</Tag>
+      }
+
+      {
+        usedCodes?.length && <Tag className="ml-2" color="orange">Có {usedCodes.length} đã sử dụng</Tag>
+      }
+
       <Table columns={codeColumns} dataSource={codes}/>
     </div>
   );
 };
 
-const ResultComponent = ({ electionId }: any) => {
+const ResultComponent = ({ electionId, tabChange }: any) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -351,7 +363,7 @@ const ResultComponent = ({ electionId }: any) => {
         setData(newData || []);
       })
       .catch((error: Error) => message.error(error.message));
-  }, []);
+  }, [tabChange]);
 
   return (
     <div>
@@ -379,7 +391,7 @@ const DeleteComponent = ({ record, setIsLoadCandidate, isLoadCandidate }: any) =
                 cancelButtonProps={{ className: 'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded' }}
                 okButtonProps={{ className: 'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded' }}
     >
-      <a href="#">Xoá</a>
+      <a href="#" className="text-red-600 hover:text-red-700">Xoá</a>
     </Popconfirm>
   </>;
 };
