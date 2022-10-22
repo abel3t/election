@@ -1,4 +1,4 @@
-import { Alert, Button, message, Modal, Result, Spin, Table } from 'antd';
+import { Alert, Button, message, Modal, Result, Spin, Table, Tag } from 'antd';
 import React, { useEffect, useState } from 'react';
 import {
   checkCode,
@@ -14,7 +14,8 @@ const columns = [
   {
     title: 'STT',
     dataIndex: 'index',
-    width: '10%'
+    width: '10%',
+    render: (index: string) => <div className="text-xl font-bold">{index}</div>
   },
   {
     title: 'Ảnh',
@@ -27,7 +28,8 @@ const columns = [
   {
     title: 'Họ và Tên',
     dataIndex: 'name',
-    width: '40%'
+    width: '40%',
+    render: (name: string) => <div className="text-xl font-bold">{name}</div>
   }
 ];
 
@@ -166,7 +168,7 @@ const VotingPage = () => {
 
           <div className="flex my-2">
             <Button
-              className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
               onClick={() => showModal()}
               disabled={
                 selectedRowKeys.length <= 0 ||
@@ -211,11 +213,7 @@ const VotingPage = () => {
             </Modal>
 
             {hasSelected && (
-              <Alert
-                className="w-fit ml-5"
-                message={`Bạn đã chọn ${selectedRowKeys.length} người`}
-                type="info"
-              />
+              <Tag className="ml-2 align-middle" color="blue">Bạn đã chọn {selectedRowKeys.length} người</Tag>
             )}
           </div>
 
