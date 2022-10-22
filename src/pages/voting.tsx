@@ -224,7 +224,7 @@ const VotingPage = () => {
                 Bạn sẽ bầu cho các ứng cử viên sau
               </div>
 
-              {selectedRowKeys.map((selectedRow, index) => {
+              {selectedRowKeys.sort((a, b) => a - b).map((selectedRow, index) => {
                 return (
                   <div
                     className="my-2 font-bold text-lg text-gray-700"
