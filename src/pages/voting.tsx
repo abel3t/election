@@ -14,13 +14,13 @@ const columns = [
   {
     title: 'STT',
     dataIndex: 'index',
-    width: '10%',
+    width: '5%',
     key: 'index',
     render: (index: string) => <div className="text-md font-bold">{index}</div>
   },
   {
     title: 'Ảnh',
-    width: '25%',
+    width: '20%',
     dataIndex: 'imageUrl',
     key: 'imageUrl',
     render: (url: string) => (
@@ -30,7 +30,7 @@ const columns = [
   {
     title: 'Họ và Tên',
     dataIndex: 'name',
-    width: '60%',
+    width: '70%',
     key: 'name',
     render: (name: string) => <div className="text-md font-bold">{name}</div>
   }
