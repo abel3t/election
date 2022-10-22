@@ -14,7 +14,7 @@ const columns = [
   {
     title: 'STT',
     dataIndex: 'index',
-    width: '5%',
+    width: '3%',
     key: 'index',
     render: (index: string) => <div className="text-md font-bold">{index}</div>
   },
@@ -30,7 +30,7 @@ const columns = [
   {
     title: 'Họ và Tên',
     dataIndex: 'name',
-    width: '65%',
+    width: '62%',
     key: 'name',
     render: (name: string) => <div className="text-md font-bold">{name}</div>
   }
@@ -206,7 +206,7 @@ const VotingPage = () => {
               onCancel={handleCancel}
               footer={[
                 <Button key="back" onClick={handleCancel}>
-                  Trỏ lại
+                  Trở lại
                 </Button>,
                 <Button
                   form="CreateCandidateForm"
