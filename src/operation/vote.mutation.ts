@@ -1,16 +1,20 @@
-import { gql } from '@apollo/client';
-import apolloClient from '../apollo-client';
+import { gql } from "@apollo/client";
+import apolloClient from "../apollo-client";
 
 export const CREATE_VOTES = gql`
-  mutation createVotes($input:  CreateVoteInput!) {
+  mutation createVotes($input: CreateVoteInput!) {
     createVotes(input: $input)
   }
 `;
 
-export const createVotes = async (electionId: string, codeId: string, candidateIds: string[]) => {
+export const createVotes = async (
+  electionId: string,
+  codeId: string,
+  candidateIds: string[]
+) => {
   const result = await apolloClient.mutate({
     mutation: CREATE_VOTES,
-    variables: { input: { electionId, codeId, candidateIds } }
+    variables: { input: { electionId, codeId, candidateIds } },
   });
 
   if (result?.errors) {
@@ -18,4 +22,4 @@ export const createVotes = async (electionId: string, codeId: string, candidateI
   }
 
   return result.data;
-}
+};

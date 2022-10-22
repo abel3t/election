@@ -1,10 +1,9 @@
 .ant-layout-header {
-    background: #fff;
+  background: #fff;
 }
 
-
 .ant-layout-content {
-    min-height: 85vh;
+  min-height: 85vh;
 }
 
 @tailwind base;

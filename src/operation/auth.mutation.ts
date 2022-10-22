@@ -1,5 +1,5 @@
-import { gql } from '@apollo/client';
-import apolloClient from '../apollo-client';
+import { gql } from "@apollo/client";
+import apolloClient from "../apollo-client";
 
 export const LOGIN = gql`
   mutation Login($input: AccountLoginInput!) {
@@ -24,7 +24,7 @@ export const REFRESH_TOKEN = gql`
 export const login = async (email: string, password: string) => {
   const result = await apolloClient.mutate({
     mutation: LOGIN,
-    variables: { input: { email, password } }
+    variables: { input: { email, password } },
   });
 
   if (result?.errors) {

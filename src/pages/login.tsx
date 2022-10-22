@@ -1,30 +1,32 @@
-import React, { useEffect } from 'react';
-import { Form, Input, Button, message } from 'antd';
-import { useRouter } from 'next/router';
-import { login } from '../operation/auth.mutation';
+import React, { useEffect } from "react";
+import { Form, Input, Button, message } from "antd";
+import { useRouter } from "next/router";
+import { login } from "../operation/auth.mutation";
 
 const Login: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    localStorage.setItem('logIn', 'true');
+    localStorage.setItem("logIn", "true");
   }, []);
 
   const onFinish = (values: any) => {
-    login(values.email, values.password).then((data) => {
-      localStorage.setItem('token', data.login?.token);
-      localStorage.setItem('refreshToken', data.login?.refreshToken);
+    login(values.email, values.password)
+      .then((data) => {
+        localStorage.setItem("token", data.login?.token);
+        localStorage.setItem("refreshToken", data.login?.refreshToken);
 
-      const date = new Date();
+        const date = new Date();
 
-      date.setHours(date.getHours() + 1);
-      localStorage.setItem('expiredTime', date.toISOString());
-      localStorage.removeItem('logIn');
+        date.setHours(date.getHours() + 1);
+        localStorage.setItem("expiredTime", date.toISOString());
+        localStorage.removeItem("logIn");
 
-
-      router.push('/');
-    })
-      .catch((error: Error) => message.error(error.message || 'Oops! Please try again!'));
+        router.push("/");
+      })
+      .catch((error: Error) =>
+        message.error(error.message || "Oops! Please try again!")
+      );
   };
 
   return (
@@ -33,7 +35,7 @@ const Login: React.FC = () => {
         <div className="md:w-8/12 lg:w-5/12 lg:ml-20">
           <Form
             initialValues={{
-              remember: true
+              remember: true,
             }}
             onFinish={onFinish}
           >
@@ -43,13 +45,15 @@ const Login: React.FC = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please input your Username!'
-                }
+                  message: "Please input your Username!",
+                },
               ]}
             >
-              <Input type="text"
-                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                     placeholder="Email address"/>
+              <Input
+                type="text"
+                className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                placeholder="Email address"
+              />
             </Form.Item>
             <Form.Item
               className="mb-6"
@@ -57,8 +61,8 @@ const Login: React.FC = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please input your Password!'
-                }
+                  message: "Please input your Password!",
+                },
               ]}
             >
               <Input
@@ -68,14 +72,16 @@ const Login: React.FC = () => {
               />
             </Form.Item>
 
-
-            <Button type="primary" htmlType="submit"
-                    className="inline-block px-7 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
-                    data-mdb-ripple="true" data-mdb-ripple-color="light">
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="inline-block px-7 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
+              data-mdb-ripple="true"
+              data-mdb-ripple-color="light"
+            >
               Log in
             </Button>
           </Form>
-
         </div>
       </div>
     </div>
@@ -83,4 +89,3 @@ const Login: React.FC = () => {
 };
 
 export default Login;
-  

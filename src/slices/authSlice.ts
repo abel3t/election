@@ -1,6 +1,6 @@
-import { AppState } from '../store';
-import { HYDRATE } from 'next-redux-wrapper';
-import { createSlice } from '@reduxjs/toolkit';
+import { AppState } from "../store";
+import { HYDRATE } from "next-redux-wrapper";
+import { createSlice } from "@reduxjs/toolkit";
 
 // Type for our state
 export interface AuthState {
@@ -9,20 +9,19 @@ export interface AuthState {
 
 // Initial state
 const initialState: AuthState = {
-  authState: false
+  authState: false,
 };
 
 // Actual Slice
 export const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
-
     // Action to set the authentication status
     setAuthState(state, action) {
       state.authState = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export const { setAuthState } = authSlice.actions;

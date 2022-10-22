@@ -1,5 +1,5 @@
-import apolloClient from '../apollo-client';
-import { gql } from '@apollo/client';
+import apolloClient from "../apollo-client";
+import { gql } from "@apollo/client";
 
 export const GET_ELECTIONS = gql`
   query getElections {
@@ -15,13 +15,13 @@ export const GET_ELECTIONS = gql`
 
 export const GET_CANDIDATES = gql`
   query getCandidates($electionId: String!) {
-      getCandidates(electionId: $electionId) {
-        id
-        name
-        electionId
-        imageUrl
-        createdAt
-      }
+    getCandidates(electionId: $electionId) {
+      id
+      name
+      electionId
+      imageUrl
+      createdAt
+    }
   }
 `;
 
@@ -38,7 +38,7 @@ export const GET_CODES = gql`
 `;
 
 export const GET_ELECTION_RESULT = gql`
-  query getElectionResult($electionId: String!)  {
+  query getElectionResult($electionId: String!) {
     getElectionResult(electionId: $electionId) {
       id
       name
@@ -51,10 +51,9 @@ export const GET_ELECTION_RESULT = gql`
   }
 `;
 
-
 export const getElections = async () => {
   const result = await apolloClient.query({
-    query: GET_ELECTIONS
+    query: GET_ELECTIONS,
   });
 
   if (result?.errors) {
@@ -62,12 +61,12 @@ export const getElections = async () => {
   }
 
   return result.data;
-}
+};
 
 export const getCandidates = async (electionId: string) => {
   const result = await apolloClient.query({
     query: GET_CANDIDATES,
-    variables: { electionId }
+    variables: { electionId },
   });
 
   if (result?.errors) {
@@ -75,12 +74,12 @@ export const getCandidates = async (electionId: string) => {
   }
 
   return result.data;
-}
+};
 
 export const getCodes = async (electionId: string) => {
   const result = await apolloClient.query({
     query: GET_CODES,
-    variables: { electionId }
+    variables: { electionId },
   });
 
   if (result?.errors) {
@@ -88,12 +87,12 @@ export const getCodes = async (electionId: string) => {
   }
 
   return result.data;
-}
+};
 
 export const getElectionResult = async (electionId: string) => {
   const result = await apolloClient.query({
     query: GET_ELECTION_RESULT,
-    variables: { electionId }
+    variables: { electionId },
   });
 
   if (result?.errors) {
@@ -101,4 +100,4 @@ export const getElectionResult = async (electionId: string) => {
   }
 
   return result.data;
-}
+};
