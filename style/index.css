@@ -6,6 +6,11 @@
   min-height: 85vh;
 }
 
+.ant-checkbox-inner,
+.ant-checkbox-input {
+  transform: scale(1.5);
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

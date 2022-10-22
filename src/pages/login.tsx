@@ -18,7 +18,7 @@ const Login: React.FC = () => {
 
         const date = new Date();
 
-        date.setHours(date.getHours() + 1);
+        date.setMinutes(date.getMinutes() + 55);
         localStorage.setItem('expiredTime', date.toISOString());
         localStorage.removeItem('logIn');
 

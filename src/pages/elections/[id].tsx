@@ -60,17 +60,20 @@ const codeColumns: ColumnsType<DataType> = [
   {
     title: 'STT',
     dataIndex: 'index',
-    width: '10%'
+    width: '10%',
+    key: 'index'
   },
   {
     title: 'Mã Bầu Cử',
     dataIndex: 'id',
-    width: '40%'
+    width: '40%',
+    key: 'id'
   },
   {
     title: 'Trạng Thái',
     dataIndex: 'isUsed',
     width: '30%',
+    key: 'isUsed',
     render: (isUsed) => (
       <span>
         {isUsed ? (
@@ -84,7 +87,8 @@ const codeColumns: ColumnsType<DataType> = [
   {
     title: 'Lượt tải xuống',
     dataIndex: 'downloaded',
-    width: '20%'
+    width: '20%',
+    key: 'downloaded'
   }
 ];
 
@@ -92,12 +96,15 @@ const resultColumns: ColumnsType<ResultDataType> = [
   {
     title: 'STT',
     dataIndex: 'index',
-    width: '10%'
+    width: '10%',
+    key: 'index',
+    render: (index) => <div className="font-bold">{index}</div>
   },
   {
     title: 'Ảnh',
     dataIndex: 'imageUrl',
     width: '20%',
+    key: 'imageUrl',
     render: (url: string) => (
       <img src={url} alt={'N/A'} width={80} height={80} />
     )
@@ -107,11 +114,14 @@ const resultColumns: ColumnsType<ResultDataType> = [
     dataIndex: 'name',
     filterMode: 'tree',
     filterSearch: true,
-    width: '40%'
+    width: '40%',
+    key: 'name',
+    render: (name) => <div className="font-bold">{name}</div>
   },
   {
     title: 'Số phiếu',
     dataIndex: ['votes', 'totalCodes'],
+    key: 'votes-totalCodes',
     render: (text, record) => (
       <p>
         <span className="text-green-700 text-4xl font-bold">
@@ -189,7 +199,7 @@ const ElectionDetailPage: React.FC = () => {
           setIsLoadCandidate={setIsLoadCandidate}
         />
       )
-    }, // remember to pass the key prop
+    },
     {
       label: 'Mã bầu cử',
       key: '2',
@@ -235,12 +245,14 @@ const CandidateComponent = ({
     {
       title: 'STT',
       dataIndex: 'index',
-      width: '10%'
+      width: '10%',
+      key: 'index'
     },
     {
       title: 'Ảnh',
       width: '20%',
       dataIndex: 'imageUrl',
+      key: 'imageUrl',
       render: (url: string) => (
         <img src={url} alt={'N/A'} width={80} height={80} />
       )
@@ -250,7 +262,8 @@ const CandidateComponent = ({
       dataIndex: 'name',
       filterMode: 'tree',
       filterSearch: true,
-      width: '40%'
+      width: '40%',
+      key: 'name'
     },
     {
       title: 'Hành động',
@@ -341,7 +354,7 @@ const CandidateComponent = ({
   const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin />;
 
   return (
-    <>
+    <div key={`election-component-${electionId}`}>
       <Button
         type="primary"
         onClick={showModal}
@@ -390,7 +403,7 @@ const CandidateComponent = ({
       </Modal>
 
       <Table columns={columns} dataSource={candidates} />
-    </>
+    </div>
   );
 };
 
@@ -440,7 +453,7 @@ const CodeComponent = ({
   };
 
   return (
-    <div>
+    <div key={`code-component-${electionId}`}>
       <Button
         onClick={handleGenerateCodes}
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mb-2"
@@ -487,7 +500,7 @@ const ResultComponent = ({ electionId, tabChange }: any) => {
   }, [tabChange]);
 
   return (
-    <div>
+    <div key={`result-component-${electionId}`}>
       <Table columns={resultColumns} dataSource={data} />
     </div>
   );

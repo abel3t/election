@@ -15,12 +15,14 @@ const columns = [
     title: 'STT',
     dataIndex: 'index',
     width: '10%',
+    key: 'index',
     render: (index: string) => <div className="text-md font-bold">{index}</div>
   },
   {
     title: 'Ảnh',
-    width: '30%',
+    width: '25%',
     dataIndex: 'imageUrl',
+    key: 'imageUrl',
     render: (url: string) => (
       <Image src={url} alt={'N/A'} width={80} height={80} />
     )
@@ -28,7 +30,8 @@ const columns = [
   {
     title: 'Họ và Tên',
     dataIndex: 'name',
-    width: '40%',
+    width: '60%',
+    key: 'name',
     render: (name: string) => <div className="text-md font-bold">{name}</div>
   }
 ];
@@ -50,17 +53,20 @@ const VotingPage = () => {
   };
 
   const handleOk = () => {
+    if (isSubmitting || isSubmitted) {
+      return;
+    }
+
     setIsSubmitting(true);
     const selectedCandidateIds = selectedRowKeys.map(
       (rowKey) => candidates[rowKey].id
     );
 
     createVotes(electionId, codeId, selectedCandidateIds)
-      .then((data) => {
+      .then(() => {
         setIsSubmitting(false);
         setIsSubmitted(true);
         setIsModalOpen(false);
-        console.log(data);
       })
       .catch((error) => {
         console.log(error);
@@ -140,11 +146,17 @@ const VotingPage = () => {
   return (
     <>
       {isSubmitted && isValidPage && (
-        <Result status="success" title="Bạn đã gửi phiếu bầu thành công!" />
+        <Result
+          style={{ marginTop: '100px' }}
+          className="px-2 lg:px-32"
+          status="success"
+          title="Bạn đã gửi phiếu bầu thành công!"
+        />
       )}
 
       {!isValidPage && (
         <Result
+          style={{ marginTop: '100px' }}
           status="warning"
           className="px-2 lg:px-32"
           title="Mã bầu cử chưa đúng hoặc đã sử dụng."
@@ -166,7 +178,7 @@ const VotingPage = () => {
             />
           </div>
 
-          <div className="flex my-2">
+          <div className="my-2">
             <Button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
               onClick={() => showModal()}
@@ -177,6 +189,12 @@ const VotingPage = () => {
             >
               Gửi phiếu bầu
             </Button>
+
+            {hasSelected && (
+              <Tag className="ml-2 align-middle" color="blue">
+                Bạn đã chọn {selectedRowKeys.length} người
+              </Tag>
+            )}
 
             <Modal
               title="Xác nhận gửi phiếu bầu"
@@ -205,16 +223,15 @@ const VotingPage = () => {
 
               {selectedRowKeys.map((selectedRow, index) => {
                 return (
-                  <p className="my-2 text-lg text-gray-700" key={index}>
+                  <div
+                    className="my-2 font-bold text-lg text-gray-700"
+                    key={index}
+                  >
                     {index + 1}. {candidates[selectedRow]?.name || 'N/A'}
-                  </p>
+                  </div>
                 );
               })}
             </Modal>
-
-            {hasSelected && (
-              <Tag className="ml-2 align-middle" color="blue">Bạn đã chọn {selectedRowKeys.length} người</Tag>
-            )}
           </div>
 
           <div></div>
