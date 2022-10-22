@@ -1,4 +1,11 @@
-import { ApolloLink, ApolloClient, concat, HttpLink, InMemoryCache, DefaultOptions } from '@apollo/client';
+import {
+  ApolloLink,
+  ApolloClient,
+  concat,
+  HttpLink,
+  InMemoryCache,
+  DefaultOptions
+} from '@apollo/client';
 import { REFRESH_TOKEN } from './operation/auth.mutation';
 import jwtDecode from 'jwt-decode';
 import { useRouter } from 'next/router';
@@ -48,7 +55,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
     if (token && refreshToken) {
       const payload: any = jwtDecode(token);
       callRefreshToken(payload.email, refreshToken)
-        .then(data => {
+        .then((data) => {
           if (data.errors) {
             window.location.href = '/login';
           }
@@ -59,7 +66,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
           date.setHours(date.getHours() + 1);
           localStorage.setItem('expiredTime', date.toISOString());
         })
-        .catch(error => {
+        .catch((error) => {
           localStorage.clear();
           console.log(error);
           window.location.href = '/login';

@@ -16,7 +16,7 @@ export const CHECK_CODE = gql`
   query checkCode($input: CheckCodeInput!) {
     checkCode(input: $input) {
       isValid
-     }
+    }
   }
 `;
 
@@ -28,7 +28,10 @@ export const GET_MAX_SELECTED_CANDIDATE = gql`
   }
 `;
 
-export const getVotingCandidates = async (electionId: string, codeId: string) => {
+export const getVotingCandidates = async (
+  electionId: string,
+  codeId: string
+) => {
   const result = await apolloClient.query({
     query: GET_VOTING_CANDIDATES,
     variables: { electionId, codeId }
@@ -39,7 +42,7 @@ export const getVotingCandidates = async (electionId: string, codeId: string) =>
   }
 
   return result.data;
-}
+};
 
 export const checkCode = async (electionId: string, codeId: string) => {
   const result = await apolloClient.query({
@@ -52,9 +55,12 @@ export const checkCode = async (electionId: string, codeId: string) => {
   }
 
   return result.data;
-}
+};
 
-export const getMaxSelectedCandidate = async (electionId: string, codeId: string) => {
+export const getMaxSelectedCandidate = async (
+  electionId: string,
+  codeId: string
+) => {
   const result = await apolloClient.query({
     query: GET_MAX_SELECTED_CANDIDATE,
     variables: { electionId, codeId }
@@ -65,4 +71,4 @@ export const getMaxSelectedCandidate = async (electionId: string, codeId: string
   }
 
   return result.data;
-}
+};

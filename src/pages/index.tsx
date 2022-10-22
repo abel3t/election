@@ -1,4 +1,13 @@
-import { Button, Form, Input, InputNumber, message, Modal, Row, Upload } from 'antd';
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  Modal,
+  Row,
+  Upload
+} from 'antd';
 import React, { useEffect, useState } from 'react';
 import AppLayout from '../components/app-layout';
 import ElectionCard from '../components/election-card';
@@ -59,7 +68,6 @@ const App: NextPage = () => {
 
         form.resetFields();
         setIsLoad(!isLoad);
-
       })
       .catch((error: Error) => message.error(error?.message));
   };
@@ -72,49 +80,79 @@ const App: NextPage = () => {
     <AppLayout>
       <div>
         <div className="w-full max-w-full mt-6 md:w-full md:flex-none">
-          <div
-            className="relative flex flex-col min-w-0 break-words bg-white border-0 shadow-soft-xl rounded-2xl bg-clip-border">
+          <div className="relative flex flex-col min-w-0 break-words bg-white border-0 shadow-soft-xl rounded-2xl bg-clip-border">
             <div className="p-6 px-4 pb-0 mb-0 bg-white border-b-0 rounded-t-2xl">
-              <Button type="primary" onClick={showModal}
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded">
+              <Button
+                type="primary"
+                onClick={showModal}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
+              >
                 Tạo bầu cử
               </Button>
             </div>
 
-            <Modal title="Tạo cuộc bầu cử" open={isModalOpen} onCancel={handleCancel}
-                   footer={[
-                     <Button form="CreateForm" key="submit" htmlType="submit"  className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded">
-                       Tạo bầu cử
-                     </Button>
-                   ]}
+            <Modal
+              title="Tạo cuộc bầu cử"
+              open={isModalOpen}
+              onCancel={handleCancel}
+              footer={[
+                <Button
+                  form="CreateForm"
+                  key="submit"
+                  htmlType="submit"
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
+                >
+                  Tạo bầu cử
+                </Button>
+              ]}
             >
-              <Form {...{ labelCol: { span: 8 }, wrapperCol: { span: 16 } }} form={form} name="control-hooks"
-                    id="CreateForm"
-                    onFinish={onFinish}>
-                <Form.Item name="name" label="Tên cuộc bầu cử" rules={[{ required: true }]}>
-                  <Input/>
+              <Form
+                {...{ labelCol: { span: 8 }, wrapperCol: { span: 16 } }}
+                form={form}
+                name="control-hooks"
+                id="CreateForm"
+                onFinish={onFinish}
+              >
+                <Form.Item
+                  name="name"
+                  label="Tên cuộc bầu cử"
+                  rules={[{ required: true }]}
+                >
+                  <Input />
                 </Form.Item>
                 <Form.Item name="maxSelected" label="Số lượng được chọn">
-                  <InputNumber min={1} max={10} defaultValue={5}/>
+                  <InputNumber min={1} max={10} defaultValue={5} />
                 </Form.Item>
               </Form>
             </Modal>
 
             <div className="flex-auto p-4 pt-6">
               <ul className="pl-0 mb-0 rounded-lg">
-                {
-                  elections?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-                    .map((election: any) => <ElectionCard key={election.id} isLoad={isLoad} setIsLoad={setIsLoad}
-                                                          election={election}/>)
-                }
+                {elections
+                  ?.slice(
+                    (currentPage - 1) * itemsPerPage,
+                    currentPage * itemsPerPage
+                  )
+                  .map((election: any) => (
+                    <ElectionCard
+                      key={election.id}
+                      isLoad={isLoad}
+                      setIsLoad={setIsLoad}
+                      election={election}
+                    />
+                  ))}
               </ul>
             </div>
           </div>
         </div>
         <div className="mt-5">
           <div>
-            <PaginationCard currentPage={currentPage} total={elections.length} itemsPerPage={itemsPerPage}
-                            onChange={handleChangePage}/>
+            <PaginationCard
+              currentPage={currentPage}
+              total={elections.length}
+              itemsPerPage={itemsPerPage}
+              onChange={handleChangePage}
+            />
           </div>
         </div>
       </div>

@@ -1,6 +1,10 @@
 import { Alert, Button, message, Modal, Result, Spin, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { checkCode, getMaxSelectedCandidate, getVotingCandidates } from '../operation/vote.query';
+import {
+  checkCode,
+  getMaxSelectedCandidate,
+  getVotingCandidates
+} from '../operation/vote.query';
 import { createVotes } from '../operation/vote.mutation';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -16,7 +20,9 @@ const columns = [
     title: 'Ảnh',
     width: '30%',
     dataIndex: 'imageUrl',
-    render: (url: string) => <Image src={url} alt={'N/A'} width={80} height={80}/>
+    render: (url: string) => (
+      <Image src={url} alt={'N/A'} width={80} height={80} />
+    )
   },
   {
     title: 'Họ và Tên',
@@ -43,16 +49,18 @@ const VotingPage = () => {
 
   const handleOk = () => {
     setIsSubmitting(true);
-    const selectedCandidateIds = selectedRowKeys.map(rowKey => candidates[rowKey].id);
+    const selectedCandidateIds = selectedRowKeys.map(
+      (rowKey) => candidates[rowKey].id
+    );
 
     createVotes(electionId, codeId, selectedCandidateIds)
-      .then(data => {
+      .then((data) => {
         setIsSubmitting(false);
         setIsSubmitted(true);
         setIsModalOpen(false);
         console.log(data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         setIsSubmitting(false);
         setIsModalOpen(false);
@@ -63,7 +71,7 @@ const VotingPage = () => {
     setIsModalOpen(false);
   };
 
-  const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin/>;
+  const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin />;
 
   useEffect(() => {
     localStorage.setItem('guest', 'true');
@@ -83,31 +91,35 @@ const VotingPage = () => {
       setIsValidPage(false);
     }
 
-    checkCode(election as string, code)
-      .then(data => {
-        if (data.checkCode?.isValid) {
-          setElectionId(election);
-          setCodeId(code);
-        }
+    checkCode(election as string, code).then((data) => {
+      if (data.checkCode?.isValid) {
+        setElectionId(election);
+        setCodeId(code);
+      }
 
-        setIsValidPage(!!data.checkCode?.isValid);
+      setIsValidPage(!!data.checkCode?.isValid);
 
-        getVotingCandidates(election, code)
-          .then((data) => {
-            const newCandidates = (data?.getVotingCandidates || []).map(
-              (code: any, index: number) => ({ index: index + 1, key: index, ...code }));
-            setCandidates(newCandidates);
-          }).catch((error: Error) => message.error(error.message));
+      getVotingCandidates(election, code)
+        .then((data) => {
+          const newCandidates = (data?.getVotingCandidates || []).map(
+            (code: any, index: number) => ({
+              index: index + 1,
+              key: index,
+              ...code
+            })
+          );
+          setCandidates(newCandidates);
+        })
+        .catch((error: Error) => message.error(error.message));
 
-        getMaxSelectedCandidate(election, code)
-
-          .then((data) => {
-            if (data?.getMaxSelectedCandidate?.maxSelected) {
-              setMaxSelected(data.getMaxSelectedCandidate?.maxSelected);
-            }
-          }).catch((error: Error) => message.error(error.message));
-      });
-
+      getMaxSelectedCandidate(election, code)
+        .then((data) => {
+          if (data?.getMaxSelectedCandidate?.maxSelected) {
+            setMaxSelected(data.getMaxSelectedCandidate?.maxSelected);
+          }
+        })
+        .catch((error: Error) => message.error(error.message));
+    });
   }, [router.isReady]);
 
   const onSelectChange = (newSelectedRowKeys: any) => {
@@ -125,80 +137,97 @@ const VotingPage = () => {
   const hasSelected = selectedRowKeys.length > 0;
   return (
     <>
-      {
-        isSubmitted && isValidPage && <Result
-          status="success"
-          title="Bạn đã gửi phiếu bầu thành công!"
-        />
-      }
+      {isSubmitted && isValidPage && (
+        <Result status="success" title="Bạn đã gửi phiếu bầu thành công!" />
+      )}
 
-      {
-        !isValidPage && <Result
+      {!isValidPage && (
+        <Result
           status="warning"
           className="px-2 lg:px-32"
           title="Mã bầu cử chưa đúng hoặc đã sử dụng."
           subTitle="Liên hệ với Nhân Sự để lấy mã bầu cử mới nhé!"
         />
-      }
+      )}
 
-      {
-        !isSubmitted && isValidPage && <div className="px-2 lg:px-32">
+      {!isSubmitted && isValidPage && (
+        <div className="px-2 lg:px-32">
           <div className="flex justify-center py-5">
-            <p className="font-bold text-4xl">
-              Bầu Cử
-            </p>
+            <p className="font-bold text-4xl">Bầu Cử</p>
           </div>
 
           <div className="w-fit">
-            <Alert message={`Bạn có thể chọn tối đa ${maxSelected} ứng cử viên!`} type="warning" showIcon/>
+            <Alert
+              message={`Bạn có thể chọn tối đa ${maxSelected} ứng cử viên!`}
+              type="warning"
+              showIcon
+            />
           </div>
 
           <div className="flex my-2">
-            <Button className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
-                    onClick={() => showModal()}
-                    disabled={selectedRowKeys.length <= 0 || selectedRowKeys.length > maxSelected}>
+            <Button
+              className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
+              onClick={() => showModal()}
+              disabled={
+                selectedRowKeys.length <= 0 ||
+                selectedRowKeys.length > maxSelected
+              }
+            >
               Gửi phiếu bầu
             </Button>
 
-            <Modal title="Xác nhận gửi phiếu bầu" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}
-                   footer={[
-                     <Button key="back" onClick={handleCancel}>
-                       Trỏ lại
-                     </Button>,
-                     <Button form="CreateCandidateForm" key="submit" htmlType="submit" onClick={handleOk}
-                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded">
-                       {
-                         isSubmitting && <Spin indicator={antIcon}/>
-                       }
-                       {
-                         !isSubmitting && 'Xác Nhận'
-                       }
-                     </Button>
-                   ]}
+            <Modal
+              title="Xác nhận gửi phiếu bầu"
+              open={isModalOpen}
+              onOk={handleOk}
+              onCancel={handleCancel}
+              footer={[
+                <Button key="back" onClick={handleCancel}>
+                  Trỏ lại
+                </Button>,
+                <Button
+                  form="CreateCandidateForm"
+                  key="submit"
+                  htmlType="submit"
+                  onClick={handleOk}
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
+                >
+                  {isSubmitting && <Spin indicator={antIcon} />}
+                  {!isSubmitting && 'Xác Nhận'}
+                </Button>
+              ]}
             >
               <div className="text-lg font-bold text-yellow-500 italic">
                 Bạn sẽ bầu cho các ứng cử viên sau
               </div>
 
-              {
-                selectedRowKeys.map((selectedRow, index) => {
-                  return <p className="my-2 text-lg text-gray-700" key={index}>{index +
-                    1}. {candidates[selectedRow]?.name || 'N/A'}</p>;
-                })
-              }
+              {selectedRowKeys.map((selectedRow, index) => {
+                return (
+                  <p className="my-2 text-lg text-gray-700" key={index}>
+                    {index + 1}. {candidates[selectedRow]?.name || 'N/A'}
+                  </p>
+                );
+              })}
             </Modal>
 
-            {hasSelected &&
-              <Alert className="w-fit ml-5" message={`Bạn đã chọn ${selectedRowKeys.length} người`} type="info"/>}
+            {hasSelected && (
+              <Alert
+                className="w-fit ml-5"
+                message={`Bạn đã chọn ${selectedRowKeys.length} người`}
+                type="info"
+              />
+            )}
           </div>
 
-          <div>
-          </div>
-          <Table rowSelection={rowSelection} columns={columns} dataSource={candidates}/>
+          <div></div>
+          <Table
+            rowSelection={rowSelection}
+            columns={columns}
+            dataSource={candidates}
+          />
         </div>
-      }
+      )}
     </>
-
   );
 };
 

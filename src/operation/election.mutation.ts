@@ -2,12 +2,12 @@ import apolloClient from '../apollo-client';
 import { gql } from '@apollo/client';
 
 export const CREATE_ELECTION = gql`
-    mutation createElection($input: CreateElectionInput!) {
-      createElection(input: $input) {
-        id,
-        name
-      }
+  mutation createElection($input: CreateElectionInput!) {
+    createElection(input: $input) {
+      id
+      name
     }
+  }
 `;
 
 export const CREATE_CANDIDATE = gql`
@@ -42,8 +42,16 @@ export const CLONE_ELECTION = gql`
 `;
 
 export const UPDATE_ELECTION = gql`
-  mutation updateElection($electionId: String!, $name: String!, $maxSelected: Float!) {
-    updateElection(electionId: $electionId, name: $name, maxSelected: $maxSelected)
+  mutation updateElection(
+    $electionId: String!
+    $name: String!
+    $maxSelected: Float!
+  ) {
+    updateElection(
+      electionId: $electionId
+      name: $name
+      maxSelected: $maxSelected
+    )
   }
 `;
 
@@ -54,16 +62,20 @@ export const createElection = async (name: string, maxSelected: number) => {
   });
 
   return result.data;
-}
+};
 
-export const createCandidate = async (electionId: string, name: string, imageUrl: string) => {
+export const createCandidate = async (
+  electionId: string,
+  name: string,
+  imageUrl: string
+) => {
   const result = await apolloClient.mutate({
     mutation: CREATE_CANDIDATE,
     variables: { input: { name, electionId, imageUrl } }
   });
 
   return result.data;
-}
+};
 
 export const generateCodes = async (electionId: string, amount: number) => {
   const result = await apolloClient.mutate({
@@ -72,16 +84,19 @@ export const generateCodes = async (electionId: string, amount: number) => {
   });
 
   return result.data;
-}
+};
 
-export const deleteCandidate = async (electionId: string, candidateId: string) => {
+export const deleteCandidate = async (
+  electionId: string,
+  candidateId: string
+) => {
   const result = await apolloClient.mutate({
     mutation: DELETE_CANDIDATE,
-    variables: { electionId, candidateId  }
+    variables: { electionId, candidateId }
   });
 
   return result.data;
-}
+};
 
 export const cloneElection = async (electionId: string) => {
   const result = await apolloClient.mutate({
@@ -90,12 +105,16 @@ export const cloneElection = async (electionId: string) => {
   });
 
   return result.data;
-}
+};
 
-export const updateElection = async (electionId: string, name: string, maxSelected: string) => {
+export const updateElection = async (
+  electionId: string,
+  name: string,
+  maxSelected: string
+) => {
   const result = await apolloClient.mutate({
     mutation: UPDATE_ELECTION,
-    variables: { electionId, name, maxSelected  }
+    variables: { electionId, name, maxSelected }
   });
 
   if (result?.errors) {
@@ -103,5 +122,4 @@ export const updateElection = async (electionId: string, name: string, maxSelect
   }
 
   return result.data;
-}
-
+};

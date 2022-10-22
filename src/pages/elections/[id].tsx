@@ -1,11 +1,31 @@
-import { Button, Form, Input, message, Modal, Popconfirm, Spin, Table, Tabs, Tag, Upload } from 'antd';
+import {
+  Button,
+  Form,
+  Input,
+  message,
+  Modal,
+  Popconfirm,
+  Spin,
+  Table,
+  Tabs,
+  Tag,
+  Upload
+} from 'antd';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import type { ColumnsType } from 'antd/es/table';
 import React, { useEffect, useState } from 'react';
 import AppLayout from '../../components/app-layout';
-import { getCandidates, getCodes, getElectionResult } from '../../operation/election.query';
+import {
+  getCandidates,
+  getCodes,
+  getElectionResult
+} from '../../operation/election.query';
 import { useRouter } from 'next/router';
-import { createCandidate, deleteCandidate, generateCodes } from '../../operation/election.mutation';
+import {
+  createCandidate,
+  deleteCandidate,
+  generateCodes
+} from '../../operation/election.mutation';
 import axios, { AxiosRequestConfig } from 'axios';
 import { LoadingOutlined } from '@ant-design/icons';
 
@@ -50,7 +70,15 @@ const codeColumns: ColumnsType<DataType> = [
     title: 'Trạng Thái',
     dataIndex: 'isUsed',
     width: '30%',
-    render: (isUsed) => <span>{isUsed ?  <Tag color="orange">Đã sử dụng</Tag> : <Tag color="green">Chưa sửa dụng</Tag>}</span>
+    render: (isUsed) => (
+      <span>
+        {isUsed ? (
+          <Tag color="orange">Đã sử dụng</Tag>
+        ) : (
+          <Tag color="green">Chưa sửa dụng</Tag>
+        )}
+      </span>
+    )
   },
   {
     title: 'Lượt tải xuống',
@@ -69,7 +97,9 @@ const resultColumns: ColumnsType<ResultDataType> = [
     title: 'Ảnh',
     dataIndex: 'imageUrl',
     width: '20%',
-    render: (url: string) => <img src={url} alt={'N/A'} width={80} height={80}/>
+    render: (url: string) => (
+      <img src={url} alt={'N/A'} width={80} height={80} />
+    )
   },
   {
     title: 'Họ và Tên',
@@ -81,9 +111,17 @@ const resultColumns: ColumnsType<ResultDataType> = [
   {
     title: 'Số phiếu',
     dataIndex: ['votes', 'totalCodes'],
-    render: (text, record) => <p><span className="text-green-700 text-4xl font-bold">{record.votes}</span>
-      <span className="font-bold">/</span>
-      <span className="text-yellow-600 text-2xl font-bold">{record.totalCodes}</span></p>,
+    render: (text, record) => (
+      <p>
+        <span className="text-green-700 text-4xl font-bold">
+          {record.votes}
+        </span>
+        <span className="font-bold">/</span>
+        <span className="text-yellow-600 text-2xl font-bold">
+          {record.totalCodes}
+        </span>
+      </p>
+    ),
     width: '15%'
   }
 ];
@@ -106,20 +144,30 @@ const ElectionDetailPage: React.FC = () => {
 
   useEffect(() => {
     if (electionId) {
-      getCodes(electionId).then((data) => {
-        const newCodes = (data?.getCodes || []).map((code: any, index: number) => ({ index: index + 1, ...code }));
-        setCodes(newCodes);
-      }).catch((error: Error) => message.error(error.message));
+      getCodes(electionId)
+        .then((data) => {
+          const newCodes = (data?.getCodes || []).map(
+            (code: any, index: number) => ({ index: index + 1, ...code })
+          );
+          setCodes(newCodes);
+        })
+        .catch((error: Error) => message.error(error.message));
     }
   }, [isLoadCode, electionId]);
 
   useEffect(() => {
     if (electionId) {
-      getCandidates(electionId).then((data) => {
-        const newCandidates = (data?.getCandidates || []).map(
-          (candidate: any, index: number) => ({ index: index + 1, ...candidate }));
-        setCandidates(newCandidates);
-      }).catch((error: Error) => message.error(error.message));
+      getCandidates(electionId)
+        .then((data) => {
+          const newCandidates = (data?.getCandidates || []).map(
+            (candidate: any, index: number) => ({
+              index: index + 1,
+              ...candidate
+            })
+          );
+          setCandidates(newCandidates);
+        })
+        .catch((error: Error) => message.error(error.message));
     }
   }, [isLoadCandidate, electionId, tabChange]);
 
@@ -127,26 +175,52 @@ const ElectionDetailPage: React.FC = () => {
     {
       label: 'Người ứng cử',
       key: '1',
-      children: <CandidateComponent electionId={electionId} candidates={candidates} isLoadCandidate={isLoadCandidate}
-                                    setIsLoadCandidate={setIsLoadCandidate}/>
+      children: (
+        <CandidateComponent
+          electionId={electionId}
+          candidates={candidates}
+          isLoadCandidate={isLoadCandidate}
+          setIsLoadCandidate={setIsLoadCandidate}
+        />
+      )
     }, // remember to pass the key prop
     {
       label: 'Mã bầu cử',
       key: '2',
-      children: <CodeComponent electionId={electionId} codes={codes} isLoadCode={isLoadCode}
-                               setIsLoadCode={setIsLoadCode}/>
+      children: (
+        <CodeComponent
+          electionId={electionId}
+          codes={codes}
+          isLoadCode={isLoadCode}
+          setIsLoadCode={setIsLoadCode}
+        />
+      )
     },
-    { label: 'Kết quả', key: '3', children: <ResultComponent tabChange={tabChange} electionId={electionId}/> }
+    {
+      label: 'Kết quả',
+      key: '3',
+      children: (
+        <ResultComponent tabChange={tabChange} electionId={electionId} />
+      )
+    }
   ];
 
-  return (<AppLayout>
-    <>
-      <Tabs items={items} onChange={(activeKey) => setTabChange(activeKey)}/>
-    </>
-  </AppLayout>);
+  return (
+    <AppLayout>
+      <>
+        <div className="text-xl font-bold">{}</div>
+        <Tabs items={items} onChange={(activeKey) => setTabChange(activeKey)} />
+      </>
+    </AppLayout>
+  );
 };
 
-const CandidateComponent = ({ electionId, tabChange, candidates, isLoadCandidate, setIsLoadCandidate }: any) => {
+const CandidateComponent = ({
+  electionId,
+  candidates,
+  isLoadCandidate,
+  setIsLoadCandidate
+}: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [headers, setHeaders] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -161,7 +235,9 @@ const CandidateComponent = ({ electionId, tabChange, candidates, isLoadCandidate
       title: 'Ảnh',
       width: '20%',
       dataIndex: 'imageUrl',
-      render: (url: string) => <img src={url} alt={'N/A'} width={80} height={80}/>
+      render: (url: string) => (
+        <img src={url} alt={'N/A'} width={80} height={80} />
+      )
     },
     {
       title: 'Họ và Tên',
@@ -175,8 +251,13 @@ const CandidateComponent = ({ electionId, tabChange, candidates, isLoadCandidate
       dataIndex: '',
       key: 'x',
       width: '20%',
-      render: (_, record) => <DeleteComponent record={record} setIsLoadCandidate={setIsLoadCandidate}
-                                              isLoadCandidate={isLoadCandidate}/>
+      render: (_, record) => (
+        <DeleteComponent
+          record={record}
+          setIsLoadCandidate={setIsLoadCandidate}
+          isLoadCandidate={isLoadCandidate}
+        />
+      )
     }
   ];
 
@@ -188,7 +269,6 @@ const CandidateComponent = ({ electionId, tabChange, candidates, isLoadCandidate
         authorization: `Bearer ${token}`
       });
     }
-
   }, []);
 
   const showModal = () => {
@@ -210,8 +290,12 @@ const CandidateComponent = ({ electionId, tabChange, candidates, isLoadCandidate
 
     fmData.append('file', fileList[0].originFileObj as RcFile);
     return axios
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/election/uploadFile`, fmData, config)
-      .then(res => {
+      .post(
+        `${process.env.NEXT_PUBLIC_API_URL}/election/uploadFile`,
+        fmData,
+        config
+      )
+      .then((res) => {
         createCandidate(electionId, name, res.data.link)
           .then(() => setIsLoadCandidate(!isLoadCandidate))
           .catch((error: Error) => message.error(error.message));
@@ -222,7 +306,7 @@ const CandidateComponent = ({ electionId, tabChange, candidates, isLoadCandidate
         form.resetFields();
         setFileList([]);
       })
-      .catch(err => {
+      .catch((err) => {
         const error = new Error('Some error');
         setIsSubmitting(false);
       });
@@ -237,7 +321,7 @@ const CandidateComponent = ({ electionId, tabChange, candidates, isLoadCandidate
   const onPreview = async (file: UploadFile) => {
     let src = file.url as string;
     if (!src) {
-      src = await new Promise(resolve => {
+      src = await new Promise((resolve) => {
         const reader = new FileReader();
         reader.readAsDataURL(file.originFileObj as RcFile);
         reader.onload = () => resolve(reader.result as string);
@@ -248,32 +332,42 @@ const CandidateComponent = ({ electionId, tabChange, candidates, isLoadCandidate
     const imgWindow = window.open(src);
     imgWindow?.document.write(image.outerHTML);
   };
-  const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin/>;
+  const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin />;
 
   return (
     <>
-      <Button type="primary" onClick={showModal}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mb-2">
+      <Button
+        type="primary"
+        onClick={showModal}
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mb-2"
+      >
         Tạo ứng cử viên
       </Button>
-      <Modal title="Tạo ứng cử viên" open={isModalOpen} onCancel={handleCancel}
-             footer={[
-               <Button form="CreateCandidateForm" key="submit" htmlType="submit"
-                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded">
-                 {
-                   isSubmitting && <Spin indicator={antIcon}/>
-                 }
-                 {
-                   !isSubmitting && 'Gửi'
-                 }
-               </Button>
-             ]}
+      <Modal
+        title="Tạo ứng cử viên"
+        open={isModalOpen}
+        onCancel={handleCancel}
+        footer={[
+          <Button
+            form="CreateCandidateForm"
+            key="submit"
+            htmlType="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
+          >
+            {isSubmitting && <Spin indicator={antIcon} />}
+            {!isSubmitting && 'Gửi'}
+          </Button>
+        ]}
       >
-        <Form {...{ labelCol: { span: 8 }, wrapperCol: { span: 16 } }} form={form} name="control-hooks"
-              id="CreateCandidateForm"
-              onFinish={onFinish}>
+        <Form
+          {...{ labelCol: { span: 8 }, wrapperCol: { span: 16 } }}
+          form={form}
+          name="control-hooks"
+          id="CreateCandidateForm"
+          onFinish={onFinish}
+        >
           <Form.Item name="name" label="Họ và tên" rules={[{ required: true }]}>
-            <Input/>
+            <Input />
           </Form.Item>
           <Form.Item name="image" label="Hình ảnh" rules={[{ required: true }]}>
             <Upload
@@ -289,12 +383,17 @@ const CandidateComponent = ({ electionId, tabChange, candidates, isLoadCandidate
         </Form>
       </Modal>
 
-      <Table columns={columns} dataSource={candidates}/>
+      <Table columns={columns} dataSource={candidates} />
     </>
   );
 };
 
-const CodeComponent = ({ electionId, codes, isLoadCode, setIsLoadCode }: any) => {
+const CodeComponent = ({
+  electionId,
+  codes,
+  isLoadCode,
+  setIsLoadCode
+}: any) => {
   const unUsedCodes = codes.filter((code: any) => !code.isUsed);
   const usedCodes = codes.filter((code: any) => code.isUsed);
   const handleGenerateCodes = () => {
@@ -319,8 +418,11 @@ const CodeComponent = ({ electionId, codes, isLoadCode, setIsLoadCode }: any) =>
 
   const handleDownloadCodes = () => {
     axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}/election/${electionId}/codes/download`, config)
-      .then(response => {
+      .get(
+        `${process.env.NEXT_PUBLIC_API_URL}/election/${electionId}/codes/download`,
+        config
+      )
+      .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
         link.href = url;
@@ -333,21 +435,33 @@ const CodeComponent = ({ electionId, codes, isLoadCode, setIsLoadCode }: any) =>
 
   return (
     <div>
-      <Button onClick={handleGenerateCodes}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mb-2">Tạo mã bầu cử</Button>
+      <Button
+        onClick={handleGenerateCodes}
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mb-2"
+      >
+        Tạo mã bầu cử
+      </Button>
 
-      <Button onClick={handleDownloadCodes}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mb-2">Tải xuống</Button>
+      <Button
+        onClick={handleDownloadCodes}
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mb-2"
+      >
+        Tải xuống
+      </Button>
 
-      {
-        !!unUsedCodes?.length && <Tag className="ml-2" color="green">Có {unUsedCodes.length} mã chưa sử dụng</Tag>
-      }
+      {!!unUsedCodes?.length && (
+        <Tag className="ml-2" color="green">
+          Có {unUsedCodes.length} mã chưa sử dụng
+        </Tag>
+      )}
 
-      {
-        !!usedCodes?.length && <Tag className="ml-2" color="orange">Có {usedCodes.length} mã đã sử dụng</Tag>
-      }
+      {!!usedCodes?.length && (
+        <Tag className="ml-2" color="orange">
+          Có {usedCodes.length} mã đã sử dụng
+        </Tag>
+      )}
 
-      <Table columns={codeColumns} dataSource={codes}/>
+      <Table columns={codeColumns} dataSource={codes} />
     </div>
   );
 };
@@ -359,7 +473,8 @@ const ResultComponent = ({ electionId, tabChange }: any) => {
     getElectionResult(electionId)
       .then((data) => {
         const newData = data?.getElectionResult?.map(
-          (election: any, index: number) => ({ index: index + 1, ...election }));
+          (election: any, index: number) => ({ index: index + 1, ...election })
+        );
         setData(newData || []);
       })
       .catch((error: Error) => message.error(error.message));
@@ -367,12 +482,16 @@ const ResultComponent = ({ electionId, tabChange }: any) => {
 
   return (
     <div>
-      <Table columns={resultColumns} dataSource={data}/>
+      <Table columns={resultColumns} dataSource={data} />
     </div>
   );
 };
 
-const DeleteComponent = ({ record, setIsLoadCandidate, isLoadCandidate }: any) => {
+const DeleteComponent = ({
+  record,
+  setIsLoadCandidate,
+  isLoadCandidate
+}: any) => {
   const handleDeleteCandidate = () => {
     deleteCandidate(record.electionId, record.id)
       .then(() => {
@@ -385,15 +504,28 @@ const DeleteComponent = ({ record, setIsLoadCandidate, isLoadCandidate }: any) =
       });
   };
 
-  return <>
-    <Popconfirm title="Bạn chắc chắn xoá ứng cử viên？" okText="Xoá" cancelText="Trở lại"
-                onConfirm={handleDeleteCandidate}
-                cancelButtonProps={{ className: 'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded' }}
-                okButtonProps={{ className: 'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded' }}
-    >
-      <a href="#" className="text-red-600 hover:text-red-700">Xoá</a>
-    </Popconfirm>
-  </>;
+  return (
+    <>
+      <Popconfirm
+        title="Bạn chắc chắn xoá ứng cử viên？"
+        okText="Xoá"
+        cancelText="Trở lại"
+        onConfirm={handleDeleteCandidate}
+        cancelButtonProps={{
+          className:
+            'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded'
+        }}
+        okButtonProps={{
+          className:
+            'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded'
+        }}
+      >
+        <a href="#" className="text-red-600 hover:text-red-700">
+          Xoá
+        </a>
+      </Popconfirm>
+    </>
+  );
 };
 
 export default ElectionDetailPage;

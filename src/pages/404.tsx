@@ -3,10 +3,10 @@ import { Button, Result } from 'antd';
 import Link from 'next/link';
 
 const BackHomeLink = () => (
-  <Link href={"/"}>
+  <Link href={'/'}>
     <Button type="primary">Trở về trang chính</Button>
   </Link>
-)
+);
 
 const FourZeroFourPage: React.FC = () => (
   <Result
@@ -15,6 +15,6 @@ const FourZeroFourPage: React.FC = () => (
     subTitle="Thành thật xin lỗi, trang này không tồn tại."
     extra={<BackHomeLink />}
   />
-)
+);
 
 export default FourZeroFourPage;
