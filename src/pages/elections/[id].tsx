@@ -17,7 +17,8 @@ import React, { useEffect, useState } from 'react';
 import AppLayout from '../../components/app-layout';
 import {
   getCandidates,
-  getCodes, getElection,
+  getCodes,
+  getElection,
   getElectionResult
 } from '../../operation/election.query';
 import { useRouter } from 'next/router';
@@ -98,7 +99,7 @@ const resultColumns: ColumnsType<ResultDataType> = [
     dataIndex: 'imageUrl',
     width: '20%',
     render: (url: string) => (
-      <img src={url} alt={'N/A'} width={80} height={80}/>
+      <img src={url} alt={'N/A'} width={80} height={80} />
     )
   },
   {
@@ -205,7 +206,7 @@ const ElectionDetailPage: React.FC = () => {
       label: 'Kết quả',
       key: '3',
       children: (
-        <ResultComponent tabChange={tabChange} electionId={electionId}/>
+        <ResultComponent tabChange={tabChange} electionId={electionId} />
       )
     }
   ];
@@ -214,7 +215,7 @@ const ElectionDetailPage: React.FC = () => {
     <AppLayout>
       <>
         <div className="my-1 text-xl font-bold">{election.name || 'N/A'}</div>
-        <Tabs items={items} onChange={(activeKey) => setTabChange(activeKey)}/>
+        <Tabs items={items} onChange={(activeKey) => setTabChange(activeKey)} />
       </>
     </AppLayout>
   );
@@ -241,7 +242,7 @@ const CandidateComponent = ({
       width: '20%',
       dataIndex: 'imageUrl',
       render: (url: string) => (
-        <img src={url} alt={'N/A'} width={80} height={80}/>
+        <img src={url} alt={'N/A'} width={80} height={80} />
       )
     },
     {
@@ -337,7 +338,7 @@ const CandidateComponent = ({
     const imgWindow = window.open(src);
     imgWindow?.document.write(image.outerHTML);
   };
-  const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin/>;
+  const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin />;
 
   return (
     <>
@@ -359,7 +360,7 @@ const CandidateComponent = ({
             htmlType="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
           >
-            {isSubmitting && <Spin indicator={antIcon}/>}
+            {isSubmitting && <Spin indicator={antIcon} />}
             {!isSubmitting && 'Gửi'}
           </Button>
         ]}
@@ -372,7 +373,7 @@ const CandidateComponent = ({
           onFinish={onFinish}
         >
           <Form.Item name="name" label="Họ và tên" rules={[{ required: true }]}>
-            <Input/>
+            <Input />
           </Form.Item>
           <Form.Item name="image" label="Hình ảnh" rules={[{ required: true }]}>
             <Upload
@@ -388,7 +389,7 @@ const CandidateComponent = ({
         </Form>
       </Modal>
 
-      <Table columns={columns} dataSource={candidates}/>
+      <Table columns={columns} dataSource={candidates} />
     </>
   );
 };
@@ -466,7 +467,7 @@ const CodeComponent = ({
         </Tag>
       )}
 
-      <Table columns={codeColumns} dataSource={codes}/>
+      <Table columns={codeColumns} dataSource={codes} />
     </div>
   );
 };
@@ -487,7 +488,7 @@ const ResultComponent = ({ electionId, tabChange }: any) => {
 
   return (
     <div>
-      <Table columns={resultColumns} dataSource={data}/>
+      <Table columns={resultColumns} dataSource={data} />
     </div>
   );
 };
