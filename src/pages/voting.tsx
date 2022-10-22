@@ -1,4 +1,4 @@
-import { Alert, Button, message, Result, Spin, Table } from 'antd';
+import { Alert, Button, message, Modal, Result, Spin, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { checkCode, getMaxSelectedCandidate, getVotingCandidates } from '../operation/vote.query';
 import { createVotes } from '../operation/vote.mutation';
@@ -34,8 +34,34 @@ const VotingPage = () => {
   const [isValidPage, setIsValidPage] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [candidates, setCandidates]: [any, any] = useState([]);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsSubmitting(true);
+    const selectedCandidateIds = selectedRowKeys.map(rowKey => candidates[rowKey].id);
+
+    createVotes(electionId, codeId, selectedCandidateIds)
+      .then(data => {
+        setIsSubmitting(false);
+        setIsSubmitted(true);
+        setIsModalOpen(false);
+        console.log(data);
+      })
+      .catch(error => {
+        console.log(error);
+        setIsSubmitting(false);
+        setIsModalOpen(false);
+      });
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin/>;
 
@@ -92,22 +118,6 @@ const VotingPage = () => {
     }
   };
 
-  const onSubmitData = () => {
-    setIsSubmitting(true);
-    const selectedCandidateIds = selectedRowKeys.map(rowKey => candidates[rowKey].id);
-
-    createVotes(electionId, codeId, selectedCandidateIds)
-      .then(data => {
-        setIsSubmitting(false);
-        setIsSubmitted(true);
-        console.log(data)
-      })
-      .catch(error => {
-        console.log(error);
-        setIsSubmitting(false);
-      });
-  };
-
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange
@@ -145,16 +155,41 @@ const VotingPage = () => {
 
           <div className="flex my-2">
             <Button className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
-                    onClick={onSubmitData}
-                    disabled={selectedRowKeys.length !== maxSelected}>
-              {
-                isSubmitting && <Spin indicator={antIcon}/>
-              }
-              {!isSubmitting && 'Gửi phiếu bầu'}
+                    onClick={() => showModal()}
+                    disabled={selectedRowKeys.length <= 0 || selectedRowKeys.length > maxSelected}>
+              Gửi phiếu bầu
             </Button>
 
+            <Modal title="Xác nhận gửi phiếu bầu" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}
+                   footer={[
+                     <Button key="back" onClick={handleCancel}>
+                       Trỏ lại
+                     </Button>,
+                     <Button form="CreateCandidateForm" key="submit" htmlType="submit" onClick={handleOk}
+                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded">
+                       {
+                         isSubmitting && <Spin indicator={antIcon}/>
+                       }
+                       {
+                         !isSubmitting && 'Xác Nhận'
+                       }
+                     </Button>
+                   ]}
+            >
+              <div className="text-lg font-bold text-yellow-500 italic">
+                Bạn sẽ bầu cho các ứng cử viên sau
+              </div>
+
+              {
+                selectedRowKeys.map((selectedRow, index) => {
+                  return <p className="my-2 text-lg text-gray-700" key={index}>{index +
+                    1}. {candidates[selectedRow]?.name || 'N/A'}</p>;
+                })
+              }
+            </Modal>
+
             {hasSelected &&
-              <Alert className="w-fit ml-5" message={`Bạn đã bầu cho ${selectedRowKeys.length} người`} type="info"/>}
+              <Alert className="w-fit ml-5" message={`Bạn đã chọn ${selectedRowKeys.length} người`} type="info"/>}
           </div>
 
           <div>
@@ -162,8 +197,6 @@ const VotingPage = () => {
           <Table rowSelection={rowSelection} columns={columns} dataSource={candidates}/>
         </div>
       }
-
-
     </>
 
   );

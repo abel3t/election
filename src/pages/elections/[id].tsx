@@ -264,7 +264,7 @@ const CandidateComponent = ({ electionId, tabChange, candidates, isLoadCandidate
                    isSubmitting && <Spin indicator={antIcon}/>
                  }
                  {
-                   !isSubmitting && 'Submit'
+                   !isSubmitting && 'Gửi'
                  }
                </Button>
              ]}
