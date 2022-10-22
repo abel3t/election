@@ -8,15 +8,14 @@ import {
   Modal,
   Popconfirm
 } from 'antd';
-import { cloneElection, updateElection } from '../operation/election.mutation';
+import { cloneElection, deleteElection, updateElection } from '../operation/election.mutation';
 import Link from 'next/link';
 
 const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const { id, name: title, maxSelected: defaultMaxSelected } = election;
-
   const href = `/elections/${election.id}`;
+
 
   const showModal = () => {
     form.resetFields();
@@ -35,12 +34,10 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
       .then(() => {
         setIsModalOpen(false);
         setIsLoad(!isLoad);
-
-        form.resetFields();
       })
       .catch((error: Error) => {
-        form.resetFields();
         message.error(error?.message);
+        setIsModalOpen(false);
       });
   };
 
@@ -53,6 +50,18 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
       .catch((error: Error) => {
         console.log(error);
         message.error('Sao chép thất bại!');
+      });
+  };
+
+  const handleDeleteElection = () => {
+    deleteElection(id)
+      .then(() => {
+        message.success('Xoá thành công!');
+        setIsLoad(!isLoad);
+      })
+      .catch((error: Error) => {
+        console.log(error);
+        message.error('Xoá thất bại!');
       });
   };
 
@@ -106,6 +115,28 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
               Chỉnh sửa
             </Button>
           </div>
+
+
+          <div className="text-sm text-gray-500 truncate dark:text-gray-400">
+            <Popconfirm
+              title="Bạn chắc chắn xoá？"
+              okText="Xoá"
+              cancelText="Trở lại"
+              onConfirm={handleDeleteElection}
+              cancelButtonProps={{
+                className:
+                  'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded'
+              }}
+              okButtonProps={{
+                className:
+                  'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded'
+              }}
+            >
+              <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded">
+                Xoá
+              </Button>
+            </Popconfirm>
+          </div>
         </div>
       </div>
 
@@ -127,10 +158,10 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
           onFinish={onFinish}
         >
           <Form.Item name="name" label="Tên cuộc bầu cử">
-            <Input defaultValue={title} />
+            <Input defaultValue={title}/>
           </Form.Item>
           <Form.Item name="maxSelected" label="Số lượng được chọn">
-            <InputNumber min={1} max={10} defaultValue={defaultMaxSelected} />
+            <InputNumber min={1} max={10} defaultValue={defaultMaxSelected}/>
           </Form.Item>
         </Form>
       </Modal>

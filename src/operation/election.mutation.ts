@@ -35,6 +35,13 @@ export const DELETE_CANDIDATE = gql`
   }
 `;
 
+export const DELETE_ELECTION = gql`
+  query deleteElection($electionId: String!) {
+    deleteElection(electionId: $electionId)
+  }
+`;
+
+
 export const CLONE_ELECTION = gql`
   mutation cloneElection($electionId: String!) {
     cloneElection(electionId: $electionId)
@@ -93,6 +100,15 @@ export const deleteCandidate = async (
   const result = await apolloClient.mutate({
     mutation: DELETE_CANDIDATE,
     variables: { electionId, candidateId }
+  });
+
+  return result.data;
+};
+
+export const deleteElection = async (electionId: string) => {
+  const result = await apolloClient.mutate({
+    mutation: DELETE_ELECTION,
+    variables: { electionId }
   });
 
   return result.data;

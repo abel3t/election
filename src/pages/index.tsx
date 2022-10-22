@@ -62,6 +62,7 @@ const App: NextPage = () => {
   const [form] = Form.useForm();
 
   const onFinish = ({ name, maxSelected }: any) => {
+    console.log(maxSelected)
     createElection(name, maxSelected)
       .then(() => {
         setIsModalOpen(false);
@@ -111,6 +112,7 @@ const App: NextPage = () => {
                 form={form}
                 name="control-hooks"
                 id="CreateForm"
+                initialValues={{name: '', maxSelected: 5 }}
                 onFinish={onFinish}
               >
                 <Form.Item
@@ -120,8 +122,8 @@ const App: NextPage = () => {
                 >
                   <Input />
                 </Form.Item>
-                <Form.Item name="maxSelected" label="Số lượng được chọn">
-                  <InputNumber min={1} max={10} defaultValue={5} />
+                <Form.Item name="maxSelected" label="Số lượng được chọn" rules={[{ required: true }]}>
+                  <InputNumber min={1} max={10} />
                 </Form.Item>
               </Form>
             </Modal>
