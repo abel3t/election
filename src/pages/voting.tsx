@@ -20,7 +20,7 @@ const columns = [
   },
   {
     title: 'Ảnh',
-    width: '20%',
+    width: '25%',
     dataIndex: 'imageUrl',
     key: 'imageUrl',
     render: (url: string) => (
@@ -30,7 +30,7 @@ const columns = [
   {
     title: 'Họ và Tên',
     dataIndex: 'name',
-    width: '70%',
+    width: '65%',
     key: 'name',
     render: (name: string) => <div className="text-md font-bold">{name}</div>
   }
