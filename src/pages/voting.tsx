@@ -169,11 +169,16 @@ const VotingPage = () => {
 
       {!isSubmitted && isValidPage && (
         <div className="px-2 lg:px-32">
-          <div className="flex justify-center py-5">
-            <p className="font-bold text-4xl">Bầu Cử</p>
+          <div className="flex flex-col justify-center items-center py-1">
+            <div>
+              <Image src="https://election-v1.s3.ap-southeast-1.amazonaws.com/static/LEC_Logo.png" width={60} height={60}/>
+            </div>
+
+            <div className="font-bold text-xl mt-2">BẦU CỬ CHẤP SỰ</div>
+            <div className="font-bold text-lg">Nhiệm Kỳ 2023-2025</div>
           </div>
 
-          <div className="w-fit">
+          <div className="w-fit mt-2">
             <Alert
               message={`Bạn có thể chọn tối đa ${maxSelected} ứng cử viên!`}
               type="warning"
