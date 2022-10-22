@@ -13,6 +13,15 @@ export const GET_ELECTIONS = gql`
   }
 `;
 
+export const GET_ELECTION = gql`
+  query getElection($electionId: String!) {
+    getElection(electionId: $electionId) {
+      id
+      name
+    }
+  }
+`;
+
 export const GET_CANDIDATES = gql`
   query getCandidates($electionId: String!) {
     getCandidates(electionId: $electionId) {
@@ -54,6 +63,19 @@ export const GET_ELECTION_RESULT = gql`
 export const getElections = async () => {
   const result = await apolloClient.query({
     query: GET_ELECTIONS
+  });
+
+  if (result?.errors) {
+    throw new Error(result?.errors[0]?.message);
+  }
+
+  return result.data;
+};
+
+export const getElection = async (electionId: string) => {
+  const result = await apolloClient.query({
+    query: GET_ELECTION,
+    variables: { electionId }
   });
 
   if (result?.errors) {
