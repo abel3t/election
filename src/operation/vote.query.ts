@@ -34,6 +34,10 @@ export const getVotingCandidates = async (electionId: string, codeId: string) =>
     variables: { electionId, codeId }
   });
 
+  if (result?.errors) {
+    throw new Error(result?.errors[0]?.message);
+  }
+
   return result.data;
 }
 
@@ -43,6 +47,10 @@ export const checkCode = async (electionId: string, codeId: string) => {
     variables: { input: { electionId, codeId } }
   });
 
+  if (result?.errors) {
+    throw new Error(result?.errors[0]?.message);
+  }
+
   return result.data;
 }
 
@@ -51,6 +59,10 @@ export const getMaxSelectedCandidate = async (electionId: string, codeId: string
     query: GET_MAX_SELECTED_CANDIDATE,
     variables: { electionId, codeId }
   });
+
+  if (result?.errors) {
+    throw new Error(result?.errors[0]?.message);
+  }
 
   return result.data;
 }

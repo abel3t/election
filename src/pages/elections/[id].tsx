@@ -340,11 +340,11 @@ const CodeComponent = ({ electionId, codes, isLoadCode, setIsLoadCode }: any) =>
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mb-2">Tải xuống</Button>
 
       {
-        unUsedCodes?.length && <Tag className="ml-2" color="green">Có {unUsedCodes.length} chưa sử dụng</Tag>
+        !!unUsedCodes?.length && <Tag className="ml-2" color="green">Có {unUsedCodes.length} mã chưa sử dụng</Tag>
       }
 
       {
-        usedCodes?.length && <Tag className="ml-2" color="orange">Có {usedCodes.length} đã sử dụng</Tag>
+        !!usedCodes?.length && <Tag className="ml-2" color="orange">Có {usedCodes.length} mã đã sử dụng</Tag>
       }
 
       <Table columns={codeColumns} dataSource={codes}/>

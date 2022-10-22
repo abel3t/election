@@ -41,6 +41,31 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 
   const token = localStorage.getItem('token');
   const logIn = localStorage.getItem('logIn');
+  const expiredTime = localStorage.getItem('expiredTime');
+  const refreshToken = localStorage.getItem('refreshToken');
+
+  if (!expiredTime || expiredTime < new Date().toISOString()) {
+    if (token && refreshToken) {
+      const payload: any = jwtDecode(token);
+      callRefreshToken(payload.email, refreshToken)
+        .then(data => {
+          if (data.errors) {
+            window.location.href = '/login';
+          }
+
+          localStorage.setItem('token', data.refreshToken?.token);
+          const date = new Date();
+
+          date.setHours(date.getHours() + 1);
+          localStorage.setItem('expiredTime', date.toISOString());
+        })
+        .catch(error => {
+          localStorage.clear();
+          console.log(error);
+          window.location.href = '/login';
+        });
+    }
+  }
 
   if (!token && logIn !== 'true') {
     window.location.href = '/login';

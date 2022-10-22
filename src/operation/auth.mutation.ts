@@ -22,10 +22,14 @@ export const REFRESH_TOKEN = gql`
 `;
 
 export const login = async (email: string, password: string) => {
-  const { data } = await apolloClient.mutate({
+  const result = await apolloClient.mutate({
     mutation: LOGIN,
-    variables: { input: { email, password } },
+    variables: { input: { email, password } }
   });
 
-  return data;
-}
+  if (result?.errors) {
+    throw new Error(result?.errors[0]?.message);
+  }
+
+  return result?.data;
+};

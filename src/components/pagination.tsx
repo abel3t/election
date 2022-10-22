@@ -9,7 +9,6 @@ type IPaginationProps = {
 }
 
 const PaginationCard = ({ currentPage, total, itemsPerPage, onChange }: IPaginationProps) => {
-  console.log({ currentPage, total })
   return <Pagination defaultCurrent={currentPage} total={total}  pageSize={itemsPerPage} onChange={onChange} />;
 };
 

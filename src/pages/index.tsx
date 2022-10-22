@@ -66,7 +66,7 @@ const App: NextPage = () => {
 
   const handleChangePage = (page: number) => {
     setCurrentPage(page);
-  }
+  };
 
   return (
     <AppLayout>
@@ -83,8 +83,8 @@ const App: NextPage = () => {
 
             <Modal title="Tạo cuộc bầu cử" open={isModalOpen} onCancel={handleCancel}
                    footer={[
-                     <Button form="CreateForm" key="submit" htmlType="submit">
-                       Submit
+                     <Button form="CreateForm" key="submit" htmlType="submit"  className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded">
+                       Tạo bầu cử
                      </Button>
                    ]}
             >
@@ -94,7 +94,7 @@ const App: NextPage = () => {
                 <Form.Item name="name" label="Tên cuộc bầu cử" rules={[{ required: true }]}>
                   <Input/>
                 </Form.Item>
-                <Form.Item name="maxSelected" label="Số lượng được chọn" rules={[{ required: true }]}>
+                <Form.Item name="maxSelected" label="Số lượng được chọn">
                   <InputNumber min={1} max={10} defaultValue={5}/>
                 </Form.Item>
               </Form>
@@ -113,7 +113,8 @@ const App: NextPage = () => {
         </div>
         <div className="mt-5">
           <div>
-              <PaginationCard currentPage={currentPage} total={elections.length} itemsPerPage={itemsPerPage} onChange={handleChangePage}/>
+            <PaginationCard currentPage={currentPage} total={elections.length} itemsPerPage={itemsPerPage}
+                            onChange={handleChangePage}/>
           </div>
         </div>
       </div>

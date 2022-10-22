@@ -57,6 +57,10 @@ export const getElections = async () => {
     query: GET_ELECTIONS
   });
 
+  if (result?.errors) {
+    throw new Error(result?.errors[0]?.message);
+  }
+
   return result.data;
 }
 
@@ -65,6 +69,10 @@ export const getCandidates = async (electionId: string) => {
     query: GET_CANDIDATES,
     variables: { electionId }
   });
+
+  if (result?.errors) {
+    throw new Error(result?.errors[0]?.message);
+  }
 
   return result.data;
 }
@@ -75,6 +83,10 @@ export const getCodes = async (electionId: string) => {
     variables: { electionId }
   });
 
+  if (result?.errors) {
+    throw new Error(result?.errors[0]?.message);
+  }
+
   return result.data;
 }
 
@@ -83,6 +95,10 @@ export const getElectionResult = async (electionId: string) => {
     query: GET_ELECTION_RESULT,
     variables: { electionId }
   });
+
+  if (result?.errors) {
+    throw new Error(result?.errors[0]?.message);
+  }
 
   return result.data;
 }

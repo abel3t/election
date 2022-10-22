@@ -98,6 +98,10 @@ export const updateElection = async (electionId: string, name: string, maxSelect
     variables: { electionId, name, maxSelected  }
   });
 
+  if (result?.errors) {
+    throw new Error(result?.errors[0]?.message);
+  }
+
   return result.data;
 }
 
