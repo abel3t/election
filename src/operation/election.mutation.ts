@@ -41,7 +41,6 @@ export const DELETE_ELECTION = gql`
   }
 `;
 
-
 export const CLONE_ELECTION = gql`
   mutation cloneElection($electionId: String!) {
     cloneElection(electionId: $electionId)

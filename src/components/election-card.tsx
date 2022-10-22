@@ -8,14 +8,17 @@ import {
   Modal,
   Popconfirm
 } from 'antd';
-import { cloneElection, deleteElection, updateElection } from '../operation/election.mutation';
+import {
+  cloneElection,
+  deleteElection,
+  updateElection
+} from '../operation/election.mutation';
 import Link from 'next/link';
 
 const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id, name: title, maxSelected: defaultMaxSelected } = election;
   const href = `/elections/${election.id}`;
-
 
   const showModal = () => {
     form.resetFields();
@@ -157,10 +160,10 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
           onFinish={onFinish}
         >
           <Form.Item name="name" label="Tên cuộc bầu cử">
-            <Input defaultValue={title}/>
+            <Input defaultValue={title} />
           </Form.Item>
           <Form.Item name="maxSelected" label="Số lượng được chọn">
-            <InputNumber min={1} max={10} defaultValue={defaultMaxSelected}/>
+            <InputNumber min={1} max={10} defaultValue={defaultMaxSelected} />
           </Form.Item>
         </Form>
       </Modal>

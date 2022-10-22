@@ -118,7 +118,10 @@ const VotingPage = () => {
           );
           setCandidates(newCandidates);
         })
-        .catch((error: Error) => message.error(error.message));
+        .catch((error: Error) => {
+          console.log(error);
+          setIsValidPage(false);
+        });
 
       getMaxSelectedCandidate(election, code)
         .then((data) => {
@@ -126,7 +129,7 @@ const VotingPage = () => {
             setMaxSelected(data.getMaxSelectedCandidate?.maxSelected);
           }
         })
-        .catch((error: Error) => message.error(error.message));
+        .catch((error: Error) => console.log(error));
     });
   }, [router.isReady]);
 
