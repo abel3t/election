@@ -42,13 +42,13 @@ const callRefreshToken = async (email: string, refreshToken: string) => {
 
 const authMiddleware = new ApolloLink((operation, forward) => {
   const guest = localStorage.getItem('guest');
+  const logIn = localStorage.getItem('logIn');
 
-  if (guest === 'true') {
+  if (guest === 'true' || logIn === 'true') {
     return forward(operation);
   }
 
   let token = localStorage.getItem('token');
-  const logIn = localStorage.getItem('logIn');
   const expiredTime = localStorage.getItem('expiredTime') || '';
   const refreshToken = localStorage.getItem('refreshToken');
 
