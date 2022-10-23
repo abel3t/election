@@ -4,11 +4,12 @@ import {
   concat,
   HttpLink,
   InMemoryCache,
-  DefaultOptions
+  DefaultOptions, Observable
 } from '@apollo/client';
 import { REFRESH_TOKEN } from './operation/auth.mutation';
 import jwtDecode from 'jwt-decode';
-import { useRouter } from 'next/router';
+import { FetchResult } from '@apollo/client/link/core/types';
+import { subscribe } from 'graphql/execution';
 
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/graphql`;
 const httpLink = new HttpLink({ uri: API_URL });
@@ -51,7 +52,21 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   const expiredTime = localStorage.getItem('expiredTime') || '';
   const refreshToken = localStorage.getItem('refreshToken');
 
-  if (!expiredTime || expiredTime < new Date().toISOString()) {
+  if (!token && logIn !== 'true') {
+    window.location.href = '/login';
+  }
+
+  if (expiredTime && expiredTime > new Date().toISOString()) {
+    operation.setContext({
+      headers: {
+        authorization: token ? `Bearer ${token}` : ''
+      }
+    });
+
+    return forward(operation);
+  }
+
+  return new Observable<FetchResult>((observer) => {
     if (token && refreshToken) {
       const payload: any = jwtDecode(token);
       callRefreshToken(payload.email, refreshToken)
@@ -67,9 +82,16 @@ const authMiddleware = new ApolloLink((operation, forward) => {
           }
 
           const date = new Date();
-
-          date.setMinutes(date.getMinutes() + 50);
+          date.setHours(date.getHours() + 1);
           localStorage.setItem('expiredTime', date.toISOString());
+
+          operation.setContext({
+            headers: {
+              authorization: token ? `Bearer ${token}` : ''
+            }
+          });
+
+          forward(operation).subscribe(observer);
         })
         .catch((error) => {
           localStorage.clear();
@@ -77,18 +99,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
           window.location.href = '/login';
         });
     }
-  }
-
-  if (!token && logIn !== 'true') {
-    window.location.href = '/login';
-  }
-
-  operation.setContext({
-    headers: {
-      authorization: token ? `Bearer ${token}` : ''
-    }
   });
-  return forward(operation);
 });
 
 const apolloClient = new ApolloClient({
