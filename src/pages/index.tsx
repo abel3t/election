@@ -28,6 +28,7 @@ const App: NextPage = () => {
   const itemsPerPage = 10;
 
   useEffect(() => {
+    localStorage.removeItem('guest');
     const token = localStorage.getItem('token');
     if (!token) {
       setIsAuthenticated(false);

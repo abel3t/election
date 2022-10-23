@@ -46,9 +46,9 @@ const authMiddleware = new ApolloLink((operation, forward) => {
     return forward(operation);
   }
 
-  const token = localStorage.getItem('token');
+  let token = localStorage.getItem('token');
   const logIn = localStorage.getItem('logIn');
-  const expiredTime = localStorage.getItem('expiredTime');
+  const expiredTime = localStorage.getItem('expiredTime') || '';
   const refreshToken = localStorage.getItem('refreshToken');
 
   if (!expiredTime || expiredTime < new Date().toISOString()) {
@@ -57,10 +57,15 @@ const authMiddleware = new ApolloLink((operation, forward) => {
       callRefreshToken(payload.email, refreshToken)
         .then((data) => {
           if (data.errors) {
+            console.log(data.errors);
             window.location.href = '/login';
           }
 
-          localStorage.setItem('token', data.refreshToken?.token);
+          if (data.refreshToken?.token) {
+            token = data.refreshToken?.token;
+            localStorage.setItem('token', `${token}`);
+          }
+
           const date = new Date();
 
           date.setMinutes(date.getMinutes() + 50);
