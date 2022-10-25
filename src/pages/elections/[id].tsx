@@ -8,7 +8,7 @@ import {
   Spin,
   Table,
   Tabs,
-  Tag,
+  Tag, Timeline,
   Upload
 } from 'antd';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
@@ -64,10 +64,16 @@ const codeColumns: ColumnsType<DataType> = [
     key: 'index'
   },
   {
-    title: 'Mã Bầu Cử',
+    title: 'ID',
     dataIndex: 'id',
-    width: '40%',
-    key: 'id'
+    width: '30%',
+    key: 'text'
+  },
+  {
+    title: 'Mã Bầu Cử',
+    dataIndex: 'text',
+    width: '15%',
+    key: 'text'
   },
   {
     title: 'Trạng Thái',
@@ -106,7 +112,7 @@ const resultColumns: ColumnsType<ResultDataType> = [
     width: '20%',
     key: 'imageUrl',
     render: (url: string) => (
-      <img src={url} alt={'N/A'} width={80} height={80} />
+      <img src={url} alt={'N/A'} width={80} height={80}/>
     )
   },
   {
@@ -134,6 +140,15 @@ const resultColumns: ColumnsType<ResultDataType> = [
       </p>
     ),
     width: '15%'
+  },
+  {
+    title: 'Chi tiết',
+    dataIndex: '',
+    key: 'x',
+    width: '20%',
+    render: (_, record) => (
+      <DetailComponent record={record}/>
+    )
   }
 ];
 
@@ -216,7 +231,7 @@ const ElectionDetailPage: React.FC = () => {
       label: 'Kết quả',
       key: '3',
       children: (
-        <ResultComponent tabChange={tabChange} electionId={electionId} />
+        <ResultComponent tabChange={tabChange} electionId={electionId}/>
       )
     }
   ];
@@ -225,7 +240,7 @@ const ElectionDetailPage: React.FC = () => {
     <AppLayout>
       <>
         <div className="my-1 text-xl font-bold">{election.name || 'N/A'}</div>
-        <Tabs items={items} onChange={(activeKey) => setTabChange(activeKey)} />
+        <Tabs items={items} onChange={(activeKey) => setTabChange(activeKey)}/>
       </>
     </AppLayout>
   );
@@ -254,7 +269,7 @@ const CandidateComponent = ({
       dataIndex: 'imageUrl',
       key: 'imageUrl',
       render: (url: string) => (
-        <img src={url} alt={'N/A'} width={80} height={80} />
+        <img src={url} alt={'N/A'} width={80} height={80}/>
       )
     },
     {
@@ -351,7 +366,7 @@ const CandidateComponent = ({
     const imgWindow = window.open(src);
     imgWindow?.document.write(image.outerHTML);
   };
-  const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin />;
+  const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin/>;
 
   return (
     <div key={`election-component-${electionId}`}>
@@ -373,7 +388,7 @@ const CandidateComponent = ({
             htmlType="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
           >
-            {isSubmitting && <Spin indicator={antIcon} />}
+            {isSubmitting && <Spin indicator={antIcon}/>}
             {!isSubmitting && 'Gửi'}
           </Button>
         ]}
@@ -386,7 +401,7 @@ const CandidateComponent = ({
           onFinish={onFinish}
         >
           <Form.Item name="name" label="Họ và tên" rules={[{ required: true }]}>
-            <Input />
+            <Input/>
           </Form.Item>
           <Form.Item name="image" label="Hình ảnh" rules={[{ required: true }]}>
             <Upload
@@ -402,7 +417,7 @@ const CandidateComponent = ({
         </Form>
       </Modal>
 
-      <Table columns={columns} dataSource={candidates} />
+      <Table columns={columns} dataSource={candidates}/>
     </div>
   );
 };
@@ -480,7 +495,7 @@ const CodeComponent = ({
         </Tag>
       )}
 
-      <Table columns={codeColumns} dataSource={codes} />
+      <Table columns={codeColumns} dataSource={codes}/>
     </div>
   );
 };
@@ -501,7 +516,7 @@ const ResultComponent = ({ electionId, tabChange }: any) => {
 
   return (
     <div key={`result-component-${electionId}`}>
-      <Table columns={resultColumns} dataSource={data} />
+      <Table columns={resultColumns} dataSource={data}/>
     </div>
   );
 };
@@ -545,6 +560,71 @@ const DeleteComponent = ({
       </Popconfirm>
     </>
   );
+};
+
+const DetailComponent = ({ record }: any) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    console.log(record);
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const formatDate = (date: Date) => {
+    return [
+        date.getDate(), date.getMonth() + 1,
+        date.getFullYear()].join('/') + ' ' +
+      [
+        date.getHours(),
+        date.getMinutes(),
+        date.getSeconds()].join(':');
+  };
+
+  return (<>
+    <Button
+      type="primary"
+      onClick={showModal}
+      className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mb-2"
+    >
+      Chi tiết
+    </Button>
+
+    <Modal title={`Danh sách bỏ phiếu cho ${record.name}`} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}
+           footer={[
+             <Button
+               form="ResultDetail"
+               className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
+               onClick={() => setIsModalOpen(false)}
+             >
+               OK
+             </Button>
+           ]}
+    >
+      <Timeline>
+        {
+          !record?.texts?.length && <div>Chưa có ai bỏ phiếu cho người này</div>
+        }
+        {
+          !!record?.texts?.length && record?.texts.map((text: string, index: number) =>
+            <Timeline.Item key={index}>
+              <span className="font-bold text-xl text-blue-700">{text}</span>
+
+              <span className="text-lg">
+              &nbsp;vào lúc&nbsp; <span className="font-bold">{formatDate(new Date(record.createdAt || ''))}</span>
+              </span>
+            </Timeline.Item>)
+        }
+      </Timeline>
+    </Modal>
+  </>);
 };
 
 export default ElectionDetailPage;

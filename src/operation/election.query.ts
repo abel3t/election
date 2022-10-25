@@ -38,6 +38,7 @@ export const GET_CODES = gql`
   query getCodes($electionId: String!) {
     getCodes(electionId: $electionId) {
       id
+      text
       isUsed
       downloaded
       createdAt
@@ -55,6 +56,7 @@ export const GET_ELECTION_RESULT = gql`
       totalCodes
       imageUrl
       codeIds
+      texts
       createdAt
     }
   }
