@@ -162,8 +162,7 @@ const VotingPage = () => {
           style={{ marginTop: '100px' }}
           status="warning"
           className="px-2 lg:px-32"
-          title="Mã bầu cử chưa đúng hoặc đã sử dụng."
-          subTitle="Liên hệ với Nhân Sự để lấy mã bầu cử mới nhé!"
+          title="Bạn chỉ được bầu cử 1 lần duy nhất!"
         />
       )}
 
