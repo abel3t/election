@@ -171,7 +171,11 @@ const VotingPage = () => {
         <div className="px-2 lg:px-32">
           <div className="flex flex-col justify-center items-center py-1">
             <div>
-              <Image src="https://election-v1.s3.ap-southeast-1.amazonaws.com/static/LEC_Logo.png" width={60} height={60}/>
+              <Image
+                src="https://election-v1.s3.ap-southeast-1.amazonaws.com/static/LEC_Logo.png"
+                width={60}
+                height={60}
+              />
             </div>
 
             <div className="font-bold text-xl mt-2">BẦU CỬ CHẤP SỰ</div>
@@ -229,16 +233,18 @@ const VotingPage = () => {
                 Bạn sẽ bầu cho các ứng cử viên sau
               </div>
 
-              {selectedRowKeys.sort((a, b) => a - b).map((selectedRow, index) => {
-                return (
-                  <div
-                    className="my-2 font-bold text-lg text-gray-700"
-                    key={index}
-                  >
-                    {index + 1}. {candidates[selectedRow]?.name || 'N/A'}
-                  </div>
-                );
-              })}
+              {selectedRowKeys
+                .sort((a, b) => a - b)
+                .map((selectedRow, index) => {
+                  return (
+                    <div
+                      className="my-2 font-bold text-lg text-gray-700"
+                      key={index}
+                    >
+                      {index + 1}. {candidates[selectedRow]?.name || 'N/A'}
+                    </div>
+                  );
+                })}
             </Modal>
           </div>
 

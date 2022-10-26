@@ -4,7 +4,8 @@ import {
   concat,
   HttpLink,
   InMemoryCache,
-  DefaultOptions, Observable
+  DefaultOptions,
+  Observable
 } from '@apollo/client';
 import { REFRESH_TOKEN } from './operation/auth.mutation';
 import jwtDecode from 'jwt-decode';
