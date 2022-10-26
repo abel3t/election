@@ -135,7 +135,7 @@ const VotingPage = () => {
 
   const onSelectChange = (newSelectedRowKeys: any) => {
     if (newSelectedRowKeys.length > maxSelected) {
-      message.error(`Bạn chỉ có thể chọn tối đa ${maxSelected} người!`);
+      message.error(`Bạn được chọn chỉ ${maxSelected} ứng viên!`);
     } else {
       setSelectedRowKeys(newSelectedRowKeys);
     }
@@ -203,7 +203,7 @@ const VotingPage = () => {
 
             {hasSelected && (
               <Tag className="ml-2 align-middle" color="blue">
-                Bạn đã chọn {selectedRowKeys.length} người
+                Bạn đã chọn {selectedRowKeys.length} ứng viên
               </Tag>
             )}
 
