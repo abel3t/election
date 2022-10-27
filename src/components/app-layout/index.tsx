@@ -37,7 +37,7 @@ const AppLayout = ({ children }: Props) => {
         {children}
       </div>
 
-      <Footer className="bg-slate-800 text-white">© 2022 - Bản quyền thuộc về LEC</Footer>
+      <Footer className="px-2 lg:px-32 bg-slate-800 text-white">© 2022 - Bản quyền thuộc về LEC</Footer>
     </Layout>
   );
 };
