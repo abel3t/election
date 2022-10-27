@@ -20,6 +20,7 @@ const PaginationCard = ({
       total={total}
       pageSize={itemsPerPage}
       onChange={onChange}
+      className="dark-pagination"
     />
   );
 };

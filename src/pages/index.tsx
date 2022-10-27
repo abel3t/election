@@ -4,9 +4,7 @@ import {
   Input,
   InputNumber,
   message,
-  Modal,
-  Row,
-  Upload
+  Modal
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import AppLayout from '../components/app-layout';
@@ -82,8 +80,9 @@ const App: NextPage = () => {
     <AppLayout>
       <div>
         <div className="w-full max-w-full mt-6 md:w-full md:flex-none">
-          <div className="relative flex flex-col min-w-0 break-words bg-white border-0 shadow-soft-xl rounded-2xl bg-clip-border">
-            <div className="p-6 px-4 pb-0 mb-0 bg-white border-b-0 rounded-t-2xl">
+          <div
+            className="relative flex flex-col min-w-0 break-words bg-slate-800 border-0 shadow-soft-xl rounded-2xl bg-clip-border">
+            <div className="p-6 px-4 pb-0 mb-0 bg-slate-800 border-b-0 rounded-t-2xl">
               <Button
                 type="primary"
                 onClick={showModal}
@@ -97,6 +96,7 @@ const App: NextPage = () => {
               title="Tạo cuộc bầu cử"
               open={isModalOpen}
               onCancel={handleCancel}
+              className={'dark-modal'}
               footer={[
                 <Button
                   form="CreateForm"
@@ -121,19 +121,19 @@ const App: NextPage = () => {
                   label="Tên cuộc bầu cử"
                   rules={[{ required: true }]}
                 >
-                  <Input />
+                  <Input/>
                 </Form.Item>
                 <Form.Item
                   name="maxSelected"
                   label="Số lượng được chọn"
                   rules={[{ required: true }]}
                 >
-                  <InputNumber min={1} max={10} />
+                  <InputNumber min={1} max={10}/>
                 </Form.Item>
               </Form>
             </Modal>
 
-            <div className="flex-auto p-4 pt-6">
+            <div className="flex-auto p-4 pt-6 bg-slate-800">
               <ul className="pl-0 mb-0 rounded-lg">
                 {elections
                   ?.slice(
@@ -152,15 +152,14 @@ const App: NextPage = () => {
             </div>
           </div>
         </div>
-        <div className="mt-5">
-          <div>
-            <PaginationCard
-              currentPage={currentPage}
-              total={elections.length}
-              itemsPerPage={itemsPerPage}
-              onChange={handleChangePage}
-            />
-          </div>
+
+        <div className="mt-5 p-4">
+          <PaginationCard
+            currentPage={currentPage}
+            total={elections.length}
+            itemsPerPage={itemsPerPage}
+            onChange={handleChangePage}
+          />
         </div>
       </div>
     </AppLayout>

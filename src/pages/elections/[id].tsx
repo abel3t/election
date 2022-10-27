@@ -238,7 +238,7 @@ const ElectionDetailPage: React.FC = () => {
   return (
     <AppLayout>
       <>
-        <div className="my-1 text-xl font-bold">{election.name || 'N/A'}</div>
+        <div className="my-1 text-xl font-bold text-white bg-slate-800">{election.name || 'N/A'}</div>
         <Tabs items={items} onChange={(activeKey) => setTabChange(activeKey)} />
       </>
     </AppLayout>
@@ -368,7 +368,7 @@ const CandidateComponent = ({
   const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin />;
 
   return (
-    <div key={`election-component-${electionId}`}>
+    <div key={`election-component-${electionId}`} className="bg-slate-800 text-white">
       <Button
         type="primary"
         onClick={showModal}
@@ -380,6 +380,7 @@ const CandidateComponent = ({
         title="Tạo ứng cử viên"
         open={isModalOpen}
         onCancel={handleCancel}
+        className={"dark-modal"}
         footer={[
           <Button
             form="CreateCandidateForm"
@@ -416,7 +417,7 @@ const CandidateComponent = ({
         </Form>
       </Modal>
 
-      <Table columns={columns} dataSource={candidates} />
+      <Table columns={columns} dataSource={candidates} className="candidate-table" />
     </div>
   );
 };
@@ -494,7 +495,7 @@ const CodeComponent = ({
         </Tag>
       )}
 
-      <Table columns={codeColumns} dataSource={codes} />
+      <Table columns={codeColumns} dataSource={codes} className="code-table" />
     </div>
   );
 };
@@ -515,7 +516,7 @@ const ResultComponent = ({ electionId, tabChange }: any) => {
 
   return (
     <div key={`result-component-${electionId}`}>
-      <Table columns={resultColumns} dataSource={data} />
+      <Table columns={resultColumns} dataSource={data} className="result-table" />
     </div>
   );
 };
@@ -600,6 +601,7 @@ const DetailComponent = ({ record }: any) => {
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        className={"dark-modal"}
         footer={[
           <Button
             key="submit"
@@ -620,7 +622,7 @@ const DetailComponent = ({ record }: any) => {
               <Timeline.Item key={index}>
                 <span className="font-bold text-xl text-blue-700">{text}</span>
 
-                <span className="text-lg">
+                <span className="text-lg text-white">
                   &nbsp;vào lúc&nbsp;{' '}
                   <span className="font-bold">
                     {formatDate(new Date(record.createdAt || ''))}

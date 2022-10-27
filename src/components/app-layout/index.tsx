@@ -21,7 +21,7 @@ const AppLayout = ({ children }: Props) => {
         style={{ justifyContent: 'space-between', paddingTop: '12px' }}
       >
         <Link href="/">
-          <a className="text-sm hover:text-gray-600 text-3xl">Bầu Cử</a>
+          <a className="text-sm text-white text-3xl">Bầu Cử</a>
         </Link>
         <div>
           <Button
@@ -33,11 +33,11 @@ const AppLayout = ({ children }: Props) => {
         </div>
       </Header>
 
-      <div className="px-2 lg:px-32 min-h-full" style={{ minHeight: '84vh' }}>
+      <div className="px-2 lg:px-32 min-h-full text-white bg-slate-800" style={{ minHeight: '84vh' }}>
         {children}
       </div>
 
-      <Footer>© 2022 - Bản quyền thuộc về LEC</Footer>
+      <Footer className="bg-slate-800 text-white">© 2022 - Bản quyền thuộc về LEC</Footer>
     </Layout>
   );
 };

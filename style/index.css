@@ -1,15 +1,134 @@
 .ant-layout-header {
-  background: #fff;
+    background-color: #1e293b;
 }
 
 .ant-layout-content {
-  min-height: 85vh;
+    min-height: 85vh;
+}
+
+.ant-tabs-tab {
+    background-color: transparent;
+    color: #fff;
+    border-bottom: #fff;
+}
+
+.candidate-table .ant-table-thead > tr > th,
+.code-table .ant-table-thead > tr > th,
+.result-table .ant-table-thead > tr > th {
+    background-color: #1e293b;
+    color: #fff;
+}
+
+.candidate-table .ant-table,
+.code-table .ant-table,
+.result-table .ant-table {
+    background-color: #1e293b;
+    color: #fff;
+}
+
+.candidate-table .ant-table-tbody > tr > td.ant-table-cell-row-hover,
+.code-table .ant-table-tbody > tr > td.ant-table-cell-row-hover,
+.result-table .ant-table-tbody > tr > td.ant-table-cell-row-hover {
+    background: #0f172a !important;
+}
+
+.dark-modal .ant-modal-content {
+    background-color: #1e293b;
+    color: white;
+}
+
+.dark-modal .ant-modal-header {
+    background-color: #1e293b;
+    color: white;
+}
+
+.dark-modal .ant-modal-title {
+    color: white;
+}
+
+.dark-modal .ant-modal-close-icon {
+    color: white;
 }
 
 .ant-checkbox-inner,
 .ant-checkbox-input {
-  transform: scale(1.5);
+    transform: scale(1.5);
 }
+
+.ant-form-item-label > label {
+    color: white;
+}
+
+.ant-input-number-input,
+.ant-input-number-handler,
+.ant-input {
+    background-color: #1e293b;
+    color: white;
+}
+
+.dark-pagination .ant-pagination-item a,
+.dark-pagination .ant-pagination-item-link {
+    background-color: #1e293b;
+    color: white;
+}
+
+.candidate-table .ant-pagination-item-link a,
+.code-table .ant-pagination-item-link a,
+.result-table .ant-pagination-item-link a {
+    background-color: #1e293b;
+    color: white;
+}
+
+.candidate-table .ant-pagination-disabled .ant-pagination-item-link,
+.code-table .ant-pagination-disabled .ant-pagination-item-link,
+.result-table .ant-pagination-disabled .ant-pagination-item-link {
+    background-color: #1e293b;
+    color: white;
+}
+
+.candidate-table .ant-pagination-item a,
+.code-table .ant-pagination-item a,
+.result-table .ant-pagination-item a {
+    background-color: #1e293b;
+    color: white;
+}
+
+.candidate-table .ant-pagination-disabled .ant-pagination-item-link:hover,
+.code-table .ant-pagination-disabled .ant-pagination-item-link:hover,
+.result-table .ant-pagination-disabled .ant-pagination-item-link:hover {
+    background-color: #1e293b;
+    color: gray;
+}
+
+.candidate-table .ant-pagination-item-link,
+.code-table .ant-pagination-item-link,
+.result-table .ant-pagination-item-link {
+    background-color: #1e293b;
+    color: white;
+}
+
+.candidate-table .ant-pagination-item-link:hover,
+.code-table .ant-pagination-item-link:hover,
+.result-table .ant-pagination-item-link:hover {
+    background-color: #1e293b;
+    color: gray;
+}
+
+.candidate-table .ant-pagination-item-active a,
+.code-table .ant-pagination-item-active a,
+.result-table .ant-pagination-item-active a {
+    background-color: #1e293b;
+    color: white;
+}
+
+
+.candidate-table .ant-pagination-item-active a:hover,
+.code-table .ant-pagination-item-active a:hover,
+.result-table .ant-pagination-item-active a:hover {
+    background-color: #1e293b;
+    color: gray;
+}
+
 
 @tailwind base;
 @tailwind components;

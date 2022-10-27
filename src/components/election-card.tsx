@@ -73,6 +73,7 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
       <div
         className="flex"
         style={{
+          backgroundColor: '#1e293b',
           justifyContent: 'space-between',
           borderRadius: '0.7em',
           padding: '1.5em',
@@ -81,7 +82,7 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
       >
         <Link href={href}>
           <p
-            className="font-bold text-gray-900 cursor-pointer"
+            className="font-bold text-white cursor-pointer"
             style={{ cursor: 'pointer', fontSize: '1.5em' }}
           >
             {title}
