@@ -120,6 +120,7 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
             </Button>
           </div>
 
+
           <div className="ml-2 text-sm text-gray-500 truncate dark:text-gray-400">
             <Popconfirm
               title="Bạn chắc chắn xoá？"
@@ -134,10 +135,11 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
                 className:
                   'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded'
               }}
+              disabled
             >
-              <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded">
-                Xoá
-              </Button>
+              {/*<Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded">*/}
+              {/*  Xoá*/}
+              {/*</Button>*/}
             </Popconfirm>
           </div>
         </div>
