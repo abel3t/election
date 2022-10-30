@@ -83,7 +83,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
           }
 
           const date = new Date();
-          date.setHours(date.getHours() + 1);
+          date.setHours(date.getHours() + 23);
           localStorage.setItem('expiredTime', date.toISOString());
 
           operation.setContext({

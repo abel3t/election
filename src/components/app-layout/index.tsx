@@ -10,7 +10,7 @@ type Props = {
 
 const AppLayout = ({ children }: Props) => {
   const handleLogout = () => {
-    localStorage.clear();
+    localStorage.clear(); 
     window.location.href = '/login';
   };
 
