@@ -54,6 +54,7 @@ interface ResultDataType {
   imageUrl?: string;
   votes?: number;
   totalCodes?: number;
+  totalVotes?: number;
   name: string;
 }
 
@@ -127,12 +128,12 @@ const resultColumns: ColumnsType<ResultDataType> = [
   },
   {
     title: 'Số phiếu',
-    dataIndex: ['votes', 'totalCodes'],
+    dataIndex: ['totalVotes', 'totalCodes'],
     key: 'votes-totalCodes',
     render: (text, record) => (
       <p>
         <span className="text-green-700 text-4xl font-bold">
-          {record.votes}
+          {record.totalVotes}
         </span>
         <span className="font-bold">/</span>
         <span className="text-yellow-600 text-2xl font-bold">
@@ -606,18 +607,18 @@ const DetailComponent = ({ record }: any) => {
         ]}
       >
         <Timeline>
-          {!record?.texts?.length && (
+          {!record?.votes?.length && (
             <div>Chưa có ai bỏ phiếu cho người này</div>
           )}
-          {!!record?.texts?.length &&
-            record?.texts.map((text: string, index: number) => (
+          {!!record?.votes?.length &&
+            record?.votes.map((vote: any, index: number) => (
               <Timeline.Item key={index}>
-                <span className="font-bold text-xl text-blue-700">{text}</span>
+                <span className="font-bold text-xl text-blue-700">{vote?.text}</span>
 
                 <span className="text-lg text-white">
                   &nbsp;vào lúc&nbsp;{' '}
                   <span className="font-bold">
-                    {new Date(record.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}
+                    {new Date(vote.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}
                   </span>
                 </span>
               </Timeline.Item>

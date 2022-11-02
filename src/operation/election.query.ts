@@ -52,11 +52,14 @@ export const GET_ELECTION_RESULT = gql`
     getElectionResult(electionId: $electionId) {
       id
       name
-      votes
+      votes {
+        text
+        createdAt
+      }
+      totalVotes
       totalCodes
       imageUrl
       codeIds
-      texts
       createdAt
     }
   }
