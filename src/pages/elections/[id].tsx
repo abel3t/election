@@ -113,7 +113,7 @@ const resultColumns: ColumnsType<ResultDataType> = [
     width: '20%',
     key: 'imageUrl',
     render: (url: string) => (
-      <img src={url} alt={'N/A'} width={80} height={80} />
+      <img src={url} alt={'N/A'} width={80} height={80}/>
     )
   },
   {
@@ -147,7 +147,7 @@ const resultColumns: ColumnsType<ResultDataType> = [
     dataIndex: '',
     key: 'x',
     width: '20%',
-    render: (_, record) => <DetailComponent record={record} />
+    render: (_, record) => <DetailComponent record={record}/>
   }
 ];
 
@@ -230,7 +230,7 @@ const ElectionDetailPage: React.FC = () => {
       label: 'Kết quả',
       key: '3',
       children: (
-        <ResultComponent tabChange={tabChange} electionId={electionId} />
+        <ResultComponent tabChange={tabChange} electionId={electionId}/>
       )
     }
   ];
@@ -239,7 +239,7 @@ const ElectionDetailPage: React.FC = () => {
     <AppLayout>
       <>
         <div className="my-1 text-xl font-bold text-white bg-slate-800">{election.name || 'N/A'}</div>
-        <Tabs items={items} onChange={(activeKey) => setTabChange(activeKey)} />
+        <Tabs items={items} onChange={(activeKey) => setTabChange(activeKey)}/>
       </>
     </AppLayout>
   );
@@ -268,7 +268,7 @@ const CandidateComponent = ({
       dataIndex: 'imageUrl',
       key: 'imageUrl',
       render: (url: string) => (
-        <img src={url} alt={'N/A'} width={80} height={80} />
+        <img src={url} alt={'N/A'} width={80} height={80}/>
       )
     },
     {
@@ -365,7 +365,7 @@ const CandidateComponent = ({
     const imgWindow = window.open(src);
     imgWindow?.document.write(image.outerHTML);
   };
-  const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin />;
+  const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin/>;
 
   return (
     <div key={`election-component-${electionId}`} className="bg-slate-800 text-white">
@@ -380,7 +380,7 @@ const CandidateComponent = ({
         title="Tạo ứng cử viên"
         open={isModalOpen}
         onCancel={handleCancel}
-        className={"dark-modal"}
+        className={'dark-modal'}
         footer={[
           <Button
             form="CreateCandidateForm"
@@ -388,7 +388,7 @@ const CandidateComponent = ({
             htmlType="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
           >
-            {isSubmitting && <Spin indicator={antIcon} />}
+            {isSubmitting && <Spin indicator={antIcon}/>}
             {!isSubmitting && 'Gửi'}
           </Button>
         ]}
@@ -401,7 +401,7 @@ const CandidateComponent = ({
           onFinish={onFinish}
         >
           <Form.Item name="name" label="Họ và tên" rules={[{ required: true }]}>
-            <Input />
+            <Input/>
           </Form.Item>
           <Form.Item name="image" label="Hình ảnh" rules={[{ required: true }]}>
             <Upload
@@ -417,7 +417,7 @@ const CandidateComponent = ({
         </Form>
       </Modal>
 
-      <Table columns={columns} dataSource={candidates} className="candidate-table" />
+      <Table columns={columns} dataSource={candidates} className="candidate-table"/>
     </div>
   );
 };
@@ -495,7 +495,7 @@ const CodeComponent = ({
         </Tag>
       )}
 
-      <Table columns={codeColumns} dataSource={codes} className="code-table" />
+      <Table columns={codeColumns} dataSource={codes} className="code-table"/>
     </div>
   );
 };
@@ -516,7 +516,7 @@ const ResultComponent = ({ electionId, tabChange }: any) => {
 
   return (
     <div key={`result-component-${electionId}`}>
-      <Table columns={resultColumns} dataSource={data} className="result-table" />
+      <Table columns={resultColumns} dataSource={data} className="result-table"/>
     </div>
   );
 };
@@ -578,14 +578,6 @@ const DetailComponent = ({ record }: any) => {
     setIsModalOpen(false);
   };
 
-  const formatDate = (date: Date) => {
-    return (
-      [date.getDate(), date.getMonth() + 1, date.getFullYear()].join('/') +
-      ' ' +
-      [date.getHours(), date.getMinutes(), date.getSeconds()].join(':')
-    );
-  };
-
   return (
     <>
       <Button
@@ -601,7 +593,7 @@ const DetailComponent = ({ record }: any) => {
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
-        className={"dark-modal"}
+        className={'dark-modal'}
         footer={[
           <Button
             key="submit"
@@ -625,7 +617,7 @@ const DetailComponent = ({ record }: any) => {
                 <span className="text-lg text-white">
                   &nbsp;vào lúc&nbsp;{' '}
                   <span className="font-bold">
-                    {formatDate(new Date(record.createdAt || ''))}
+                    {new Date(record.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}
                   </span>
                 </span>
               </Timeline.Item>
