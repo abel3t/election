@@ -14,7 +14,7 @@ export const createVotes = async (
 ) => {
   const result = await apolloClient.mutate({
     mutation: CREATE_VOTES,
-    variables: { input: { electionId, codeId, candidateIds } }
+    variables: { input: { electionId, codeId, candidateIds, date: new Date().toISOString() } }
   });
 
   if (result?.errors) {
