@@ -28,6 +28,16 @@ export const GET_MAX_SELECTED_CANDIDATE = gql`
   }
 `;
 
+
+export const GET_ELECTION_TITLE = gql`
+  query getElectionTitle($electionId: String!) {
+    getElectionTitle(electionId: $electionId) {
+      title
+    }
+  }
+`;
+
+
 export const getVotingCandidates = async (
   electionId: string,
   codeId: string
@@ -72,3 +82,19 @@ export const getMaxSelectedCandidate = async (
 
   return result.data;
 };
+
+export const getElectionTitle = async (
+  electionId: string
+) => {
+  const result = await apolloClient.query({
+    query: GET_ELECTION_TITLE,
+    variables: { electionId }
+  });
+
+  if (result?.errors) {
+    throw new Error(result?.errors[0]?.message);
+  }
+
+  return result.data;
+};
+

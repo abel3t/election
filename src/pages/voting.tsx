@@ -1,7 +1,7 @@
 import { Alert, Button, message, Modal, Result, Spin, Table, Tag } from 'antd';
 import React, { useEffect, useState } from 'react';
 import {
-  checkCode,
+  checkCode, getElectionTitle,
   getMaxSelectedCandidate,
   getVotingCandidates
 } from '../operation/vote.query';
@@ -47,6 +47,7 @@ const VotingPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [candidates, setCandidates]: [any, any] = useState([]);
+  const [electionTitle, setElectionTitle] = useState('');
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -130,6 +131,14 @@ const VotingPage = () => {
           }
         })
         .catch((error: Error) => console.log(error));
+
+      getElectionTitle(election)
+        .then((data) => {
+          if (data?.getElectionTitle?.title) {
+            setElectionTitle(data.getElectionTitle?.title);
+          }
+        })
+        .catch((error: Error) => console.log(error));
     });
   }, [router.isReady]);
 
@@ -169,16 +178,17 @@ const VotingPage = () => {
       {!isSubmitted && isValidPage && (
         <div className="px-2 lg:px-32">
           <div className="flex flex-col justify-center items-center py-1">
-            <div>
-              <Image
-                src="https://election-v1.s3.ap-southeast-1.amazonaws.com/static/LEC_Logo.png"
-                width={60}
-                height={60}
-              />
-            </div>
+            {/*<div>*/}
+            {/*  <Image*/}
+            {/*    src="https://election-v1.s3.ap-southeast-1.amazonaws.com/static/LEC_Logo.png"*/}
+            {/*    width={60}*/}
+            {/*    height={60}*/}
+            {/*  />*/}
+            {/*</div>*/}
 
-            <div className="font-bold text-xl mt-2">BẦU CỬ CHẤP SỰ</div>
-            <div className="font-bold text-lg">Nhiệm Kỳ 2023-2025</div>
+            {/*<div className="font-bold text-xl mt-2">BẦU CỬ CHẤP SỰ</div>*/}
+            {/*<div className="font-bold text-lg">Nhiệm Kỳ 2023-2025</div>*/}
+            <div className="font-bold text-lg">{electionTitle || 'N/A'}</div>
           </div>
 
           <div className="w-fit mt-2">
