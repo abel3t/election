@@ -204,7 +204,7 @@ const VotingPage = () => {
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
               onClick={() => showModal()}
               disabled={
-                selectedRowKeys.length <= 0 || selectedRowKeys.length > maxSelected
+                selectedRowKeys.length !== maxSelected
               }
             >
               Gửi phiếu bầu
