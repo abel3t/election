@@ -30,6 +30,7 @@ import {
 } from '../../operation/election.mutation';
 import axios, { AxiosRequestConfig } from 'axios';
 import { LoadingOutlined } from '@ant-design/icons';
+import Image from 'next/image';
 
 interface CandidateDataType {
   key: React.Key;
@@ -269,7 +270,7 @@ const CandidateComponent = ({
       dataIndex: 'imageUrl',
       key: 'imageUrl',
       render: (url: string) => (
-        <img src={url} alt={'N/A'} width={80} height={80}/>
+        <Image src={url} alt={'N/A'} width={80} height={80} />
       )
     },
     {
