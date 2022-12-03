@@ -88,7 +88,7 @@ const codeColumns: ColumnsType<DataType> = [
         {isUsed ? (
           <Tag color="orange">Đã sử dụng</Tag>
         ) : (
-          <Tag color="green">Chưa sửa dụng</Tag>
+          <Tag color="green">Chưa sử dụng</Tag>
         )}
       </span>
     )
