@@ -86,9 +86,9 @@ const codeColumns: ColumnsType<DataType> = [
     render: (isUsed) => (
       <span>
         {isUsed ? (
-          <Tag color="orange">Đã sử dụng</Tag>
+          <Tag style={{ backgroundColor: '#da0e0e', color: '#ffffff' }}>Đã sử dụng</Tag>
         ) : (
-          <Tag color="green">Chưa sử dụng</Tag>
+          <Tag style={{ backgroundColor: '#fcbb1d', color: '#15181a' }}>Chưa sử dụng</Tag>
         )}
       </span>
     )
@@ -133,11 +133,11 @@ const resultColumns: ColumnsType<ResultDataType> = [
     key: 'votes-totalCodes',
     render: (text, record) => (
       <p>
-        <span className="text-green-700 text-4xl font-bold">
+        <span style={{ color: '#fcbb1d' }} className="text-4xl font-bold">
           {record.totalVotes}
         </span>
         <span className="font-bold">/</span>
-        <span className="text-yellow-600 text-2xl font-bold">
+        <span style={{ color: '#de9e03' }} className="text-2xl font-bold">
           {record.totalCodes}
         </span>
       </p>
@@ -240,7 +240,7 @@ const ElectionDetailPage: React.FC = () => {
   return (
     <AppLayout>
       <>
-        <div className="my-1 text-xl font-bold text-white bg-slate-800">{election.name || 'N/A'}</div>
+        <div className="my-1 text-xl font-bold text-white" style={{ backgroundColor: '#15181a' }}>{election.name || 'N/A'}</div>
         <Tabs items={items} onChange={(activeKey) => setTabChange(activeKey)}/>
       </>
     </AppLayout>
@@ -370,11 +370,12 @@ const CandidateComponent = ({
   const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin/>;
 
   return (
-    <div key={`election-component-${electionId}`} className="bg-slate-800 text-white">
+    <div key={`election-component-${electionId}`} style={{ backgroundColor: '#15181a', color: 'white' }}>
       <Button
         type="primary"
         onClick={showModal}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mb-2"
+        style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
+        className="font-bold px-4 rounded mb-2"
       >
         Tạo ứng cử viên
       </Button>
@@ -388,7 +389,8 @@ const CandidateComponent = ({
             form="CreateCandidateForm"
             key="submit"
             htmlType="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
+            style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
+            className="font-bold px-4 rounded"
           >
             {isSubmitting && <Spin indicator={antIcon}/>}
             {!isSubmitting && 'Gửi'}
@@ -473,26 +475,28 @@ const CodeComponent = ({
     <div key={`code-component-${electionId}`}>
       <Button
         onClick={handleGenerateCodes}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mb-2"
+        style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
+        className="font-bold px-4 rounded mb-2"
       >
         Tạo mã bầu cử
       </Button>
 
       <Button
         onClick={handleDownloadCodes}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mb-2"
+        style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
+        className="font-bold px-4 rounded mb-2"
       >
         Tải xuống
       </Button>
 
       {!!unUsedCodes?.length && (
-        <Tag className="ml-2" color="green">
+        <Tag className="ml-2" style={{ backgroundColor: '#fcbb1d', color: '#15181a' }}>
           Có {unUsedCodes.length} mã chưa sử dụng
         </Tag>
       )}
 
       {!!usedCodes?.length && (
-        <Tag className="ml-2" color="orange">
+        <Tag className="ml-2" style={{ backgroundColor: '#da0e0e', color: '#ffffff' }}>
           Có {usedCodes.length} mã đã sử dụng
         </Tag>
       )}
@@ -548,15 +552,15 @@ const DeleteComponent = ({
         cancelText="Trở lại"
         onConfirm={handleDeleteCandidate}
         cancelButtonProps={{
-          className:
-            'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded'
+          style: { backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' },
+          className: 'font-bold px-4 rounded'
         }}
         okButtonProps={{
-          className:
-            'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded'
+          style: { backgroundColor: '#da0e0e', borderColor: '#da0e0e', color: '#ffffff' },
+          className: 'font-bold px-4 rounded'
         }}
       >
-        <a href="#" className="text-red-600 hover:text-red-700">
+        <a href="#" style={{ color: '#da0e0e' }} className="hover:opacity-80">
           Xoá
         </a>
       </Popconfirm>
@@ -585,7 +589,8 @@ const DetailComponent = ({ record }: any) => {
       <Button
         type="primary"
         onClick={showModal}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded mb-2"
+        style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
+        className="font-bold px-4 rounded mb-2"
       >
         Chi tiết
       </Button>
@@ -600,7 +605,8 @@ const DetailComponent = ({ record }: any) => {
           <Button
             key="submit"
             form="ResultDetail"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
+            style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
+            className="font-bold px-4 rounded"
             onClick={() => setIsModalOpen(false)}
           >
             OK
@@ -614,9 +620,9 @@ const DetailComponent = ({ record }: any) => {
           {!!record?.votes?.length &&
             record?.votes.map((vote: any, index: number) => (
               <Timeline.Item key={index}>
-                <span className="font-bold text-xl text-blue-700">{vote?.text}</span>
+                <span style={{ color: '#fcbb1d' }} className="font-bold text-xl">{vote?.text}</span>
 
-                <span className="text-lg text-white">
+                <span className="text-lg" style={{ color: '#ffffff' }}>
                   &nbsp;vào lúc&nbsp;{' '}
                   <span className="font-bold">
                     {new Date(vote.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}

@@ -81,12 +81,14 @@ const App: NextPage = () => {
       <div>
         <div className="w-full max-w-full mt-6 md:w-full md:flex-none">
           <div
-            className="relative flex flex-col min-w-0 break-words bg-slate-800 border-0 shadow-soft-xl rounded-2xl bg-clip-border">
-            <div className="p-6 px-4 pb-0 mb-0 bg-slate-800 border-b-0 rounded-t-2xl">
+            className="relative flex flex-col min-w-0 break-words border-0 shadow-soft-xl rounded-2xl bg-clip-border"
+            style={{ backgroundColor: '#15181a' }}>
+            <div className="p-6 px-4 pb-0 mb-0 border-b-0 rounded-t-2xl" style={{ backgroundColor: '#15181a' }}>
               <Button
                 type="primary"
                 onClick={showModal}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
+                style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
+                className="font-bold px-4 rounded"
               >
                 Tạo bầu cử
               </Button>
@@ -102,7 +104,8 @@ const App: NextPage = () => {
                   form="CreateForm"
                   key="submit"
                   htmlType="submit"
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
+                  style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
+                  className="font-bold px-4 rounded"
                 >
                   Tạo bầu cử
                 </Button>
@@ -133,7 +136,7 @@ const App: NextPage = () => {
               </Form>
             </Modal>
 
-            <div className="flex-auto p-4 pt-6 bg-slate-800">
+            <div className="flex-auto p-4 pt-6" style={{ backgroundColor: '#15181a' }}>
               <ul className="pl-0 mb-0 rounded-lg">
                 {elections
                   ?.slice(

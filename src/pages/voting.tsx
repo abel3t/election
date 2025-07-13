@@ -16,7 +16,7 @@ const columns = [
     dataIndex: 'index',
     width: '3%',
     key: 'index',
-    render: (index: string) => <div className="text-md font-bold">{index}</div>
+    render: (index: string) => <div className="text-md font-bold" style={{ color: '#ffffff' }}>{index}</div>
   },
   {
     title: 'Ảnh',
@@ -32,7 +32,7 @@ const columns = [
     dataIndex: 'name',
     width: '62%',
     key: 'name',
-    render: (name: string) => <div className="text-md font-bold">{name}</div>
+    render: (name: string) => <div className="text-md font-bold" style={{ color: '#ffffff' }}>{name}</div>
   }
 ];
 
@@ -176,7 +176,7 @@ const VotingPage = () => {
       )}
 
       {!isSubmitted && isValidPage && (
-        <div className="px-2 lg:px-32">
+        <div className="px-2 lg:px-32" style={{ backgroundColor: '#15181a', minHeight: '100vh' }}>
           <div className="flex flex-col justify-center items-center py-1">
             {/*<div>*/}
             {/*  <Image*/}
@@ -188,7 +188,7 @@ const VotingPage = () => {
 
             {/*<div className="font-bold text-xl mt-2">BẦU CỬ CHẤP SỰ</div>*/}
             {/*<div className="font-bold text-lg">Nhiệm Kỳ 2023-2025</div>*/}
-            <div className="font-bold text-lg">{electionTitle || 'N/A'}</div>
+            <div className="font-bold text-lg text-white">{electionTitle || 'N/A'}</div>
           </div>
 
           <div className="w-fit mt-2">
@@ -201,7 +201,8 @@ const VotingPage = () => {
 
           <div className="my-2">
             <Button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
+              style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
+              className="font-bold px-4 rounded"
               onClick={() => showModal()}
               disabled={
                 selectedRowKeys.length !== maxSelected
@@ -211,7 +212,7 @@ const VotingPage = () => {
             </Button>
 
             {hasSelected && (
-              <Tag className="ml-2 align-middle" color="blue">
+              <Tag className="ml-2 align-middle" style={{ backgroundColor: '#fcbb1d', color: '#15181a' }}>
                 Bạn đã chọn {selectedRowKeys.length} ứng viên
               </Tag>
             )}
@@ -222,7 +223,7 @@ const VotingPage = () => {
               onOk={handleOk}
               onCancel={handleCancel}
               footer={[
-                <Button key="back" onClick={handleCancel}>
+                <Button key="back" onClick={handleCancel} style={{ backgroundColor: '#3a4044', borderColor: '#3a4044', color: '#ffffff' }}>
                   Trở lại
                 </Button>,
                 <Button
@@ -230,14 +231,15 @@ const VotingPage = () => {
                   key="submit"
                   htmlType="submit"
                   onClick={handleOk}
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
+                  style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
+                  className="font-bold px-4 rounded"
                 >
                   {isSubmitting && <Spin indicator={antIcon} />}
                   {!isSubmitting && 'Xác Nhận'}
                 </Button>
               ]}
             >
-              <div className="text-lg font-bold text-yellow-500 italic">
+              <div className="text-lg font-bold italic" style={{ color: '#fcbb1d' }}>
                 Bạn sẽ bầu cho các ứng cử viên sau
               </div>
 
@@ -246,7 +248,8 @@ const VotingPage = () => {
                 .map((selectedRow, index) => {
                   return (
                     <div
-                      className="my-2 font-bold text-lg text-gray-700"
+                      className="my-2 font-bold text-lg"
+                      style={{ color: '#15181a' }}
                       key={index}
                     >
                       {index + 1}. {candidates[selectedRow]?.name || 'N/A'}

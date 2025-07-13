@@ -73,7 +73,7 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
       <div
         className="flex"
         style={{
-          backgroundColor: '#1e293b',
+          backgroundColor: '#15181a',
           justifyContent: 'space-between',
           borderRadius: '0.7em',
           padding: '1.5em',
@@ -97,15 +97,15 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
               cancelText="Trở lại"
               onConfirm={handleCloneElection}
               cancelButtonProps={{
-                className:
-                  'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded'
+                style: { backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' },
+                className: 'font-bold px-4 rounded'
               }}
               okButtonProps={{
-                className:
-                  'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded'
+                style: { backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' },
+                className: 'font-bold px-4 rounded'
               }}
             >
-              <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded">
+              <Button style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }} className="font-bold px-4 rounded">
                 Sao chép
               </Button>
             </Popconfirm>
@@ -114,7 +114,8 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
           <div className="inline-flex ml-2 items-center text-base font-semibold text-gray-900 dark:text-white">
             <Button
               onClick={showModal}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
+              style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
+              className="font-bold px-4 rounded"
             >
               Chỉnh sửa
             </Button>
@@ -127,15 +128,15 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
               cancelText="Trở lại"
               onConfirm={handleDeleteElection}
               cancelButtonProps={{
-                className:
-                  'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded'
+                style: { backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' },
+                className: 'font-bold px-4 rounded'
               }}
               okButtonProps={{
-                className:
-                  'bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded'
+                style: { backgroundColor: '#da0e0e', borderColor: '#da0e0e', color: '#ffffff' },
+                className: 'font-bold px-4 rounded'
               }}
             >
-              <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded">
+              <Button style={{ backgroundColor: '#da0e0e', borderColor: '#da0e0e', color: '#ffffff' }} className="font-bold px-4 rounded">
                 Xoá
               </Button>
             </Popconfirm>
@@ -148,7 +149,13 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
         open={isModalOpen}
         onCancel={handleCancel}
         footer={[
-          <Button form="UpdateForm" key="submit" htmlType="submit">
+          <Button 
+            form="UpdateForm" 
+            key="submit" 
+            htmlType="submit"
+            style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
+            className="font-bold px-4 rounded"
+          >
             Sửa
           </Button>
         ]}

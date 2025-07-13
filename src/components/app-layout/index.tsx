@@ -1,5 +1,4 @@
 import { Button, Layout } from 'antd';
-import React from 'react';
 import Link from 'next/link';
 
 const { Header, Footer } = Layout;
@@ -25,7 +24,8 @@ const AppLayout = ({ children }: Props) => {
         </Link>
         <div>
           <Button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded"
+            style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
+            className="font-bold px-4 rounded"
             onClick={handleLogout}
           >
             Đăng Xuất
@@ -33,11 +33,11 @@ const AppLayout = ({ children }: Props) => {
         </div>
       </Header>
 
-      <div className="px-2 lg:px-32 min-h-full text-white bg-slate-800" style={{ minHeight: '84vh' }}>
+      <div className="px-2 lg:px-32 min-h-full text-white" style={{ backgroundColor: '#15181a', minHeight: '84vh' }}>
         {children}
       </div>
 
-      <Footer className="px-2 lg:px-32 bg-slate-800 text-white">© 2022 - Bản quyền thuộc về LEC</Footer>
+      <Footer className="px-2 lg:px-32 text-white" style={{ backgroundColor: '#15181a' }}>© 2022 - Bản quyền thuộc về LEC</Footer>
     </Layout>
   );
 };
