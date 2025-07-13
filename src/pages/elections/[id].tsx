@@ -86,9 +86,9 @@ const codeColumns: ColumnsType<DataType> = [
     render: (isUsed) => (
       <span>
         {isUsed ? (
-          <Tag style={{ backgroundColor: '#da0e0e', color: '#ffffff' }}>Đã sử dụng</Tag>
+          <Tag style={{ backgroundColor: '#da0e0e', color: '#ffffff', border: 'none' }}>Đã sử dụng</Tag>
         ) : (
-          <Tag style={{ backgroundColor: '#fcbb1d', color: '#15181a' }}>Chưa sử dụng</Tag>
+          <Tag style={{ backgroundColor: '#fcbb1d', color: '#15181a', border: 'none' }}>Chưa sử dụng</Tag>
         )}
       </span>
     )
@@ -240,6 +240,90 @@ const ElectionDetailPage: React.FC = () => {
   return (
     <AppLayout>
       <>
+        <style jsx global>{`
+          .ant-tabs .ant-tabs-tab {
+            color: #ffffff !important;
+            background-color: transparent !important;
+          }
+          .ant-tabs .ant-tabs-tab:hover {
+            color: #fcbb1d !important;
+          }
+          .ant-tabs .ant-tabs-tab.ant-tabs-tab-active {
+            color: #fcbb1d !important;
+          }
+          .ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+            color: #fcbb1d !important;
+          }
+          .ant-tabs .ant-tabs-ink-bar {
+            background-color: #fcbb1d !important;
+          }
+          .ant-tabs .ant-tabs-nav::before {
+            border-bottom: 1px solid #333 !important;
+          }
+          .ant-tabs .ant-tabs-content-holder {
+            background-color: #15181a !important;
+          }
+          .ant-empty {
+            color: #ffffff !important;
+          }
+          .ant-empty-description {
+            color: #ffffff !important;
+          }
+          .ant-empty-normal {
+            color: #ffffff !important;
+          }
+          .ant-empty-normal .ant-empty-description {
+            color: #ffffff !important;
+          }
+          .ant-empty-image svg {
+            fill: #666 !important;
+          }
+          .candidate-table .ant-empty,
+          .code-table .ant-empty,
+          .result-table .ant-empty {
+            color: #ffffff !important;
+          }
+          .candidate-table .ant-empty-description,
+          .code-table .ant-empty-description,
+          .result-table .ant-empty-description {
+            color: #ffffff !important;
+          }
+          /* Select component dark theme */
+          .ant-select-selection-item {
+            background-color: #2a2d30 !important;
+            color: #ffffff !important;
+            border-color: #333 !important;
+          }
+          .ant-select-selector {
+            background-color: #2a2d30 !important;
+            border-color: #333 !important;
+          }
+          .ant-select-arrow {
+            color: #ffffff !important;
+          }
+          .ant-select:hover .ant-select-selector {
+            border-color: #fcbb1d !important;
+          }
+          .ant-select-focused .ant-select-selector {
+            border-color: #fcbb1d !important;
+            box-shadow: 0 0 0 2px rgba(252, 187, 29, 0.2) !important;
+          }
+          .ant-select-dropdown {
+            background-color: #15181a !important;
+            border: 1px solid #333 !important;
+          }
+          .ant-select-item {
+            background-color: #15181a !important;
+            color: #ffffff !important;
+          }
+          .ant-select-item:hover {
+            background-color: #2a2d30 !important;
+          }
+          .ant-select-item-option-selected {
+            background-color: #fcbb1d !important;
+            color: #15181a !important;
+          }
+        `}</style>
         <div className="my-1 text-xl font-bold text-white" style={{ backgroundColor: '#15181a' }}>{election.name || 'N/A'}</div>
         <Tabs items={items} onChange={(activeKey) => setTabChange(activeKey)}/>
       </>
@@ -421,7 +505,7 @@ const CandidateComponent = ({
         </Form>
       </Modal>
 
-      <Table columns={columns} dataSource={candidates} className="candidate-table"/>
+      <Table columns={columns} dataSource={candidates} className="candidate-table dark-pagination"/>
     </div>
   );
 };
@@ -484,24 +568,24 @@ const CodeComponent = ({
       <Button
         onClick={handleDownloadCodes}
         style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
-        className="font-bold px-4 rounded mb-2"
+        className="font-bold px-4 rounded mb-2 ml-2"
       >
         Tải xuống
       </Button>
 
       {!!unUsedCodes?.length && (
-        <Tag className="ml-2" style={{ backgroundColor: '#fcbb1d', color: '#15181a' }}>
+        <Tag className="ml-2 border-none" style={{ backgroundColor: '#fcbb1d', color: '#15181a' }}>
           Có {unUsedCodes.length} mã chưa sử dụng
         </Tag>
       )}
 
       {!!usedCodes?.length && (
-        <Tag className="ml-2" style={{ backgroundColor: '#da0e0e', color: '#ffffff' }}>
+        <Tag className="ml-2 border-none" style={{ backgroundColor: '#da0e0e', color: '#ffffff' }}>
           Có {usedCodes.length} mã đã sử dụng
         </Tag>
       )}
 
-      <Table columns={codeColumns} dataSource={codes} className="code-table"/>
+      <Table columns={codeColumns} dataSource={codes} className="code-table dark-pagination"/>
     </div>
   );
 };
@@ -522,7 +606,7 @@ const ResultComponent = ({ electionId, tabChange }: any) => {
 
   return (
     <div key={`result-component-${electionId}`}>
-      <Table columns={resultColumns} dataSource={data} className="result-table"/>
+      <Table columns={resultColumns} dataSource={data} className="result-table dark-pagination"/>
     </div>
   );
 };
@@ -551,6 +635,7 @@ const DeleteComponent = ({
         okText="Xoá"
         cancelText="Trở lại"
         onConfirm={handleDeleteCandidate}
+        overlayClassName="dark-popconfirm"
         cancelButtonProps={{
           style: { backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' },
           className: 'font-bold px-4 rounded'

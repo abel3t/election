@@ -96,6 +96,7 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
               okText="Sao chép"
               cancelText="Trở lại"
               onConfirm={handleCloneElection}
+              overlayClassName="dark-popconfirm"
               cancelButtonProps={{
                 style: { backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' },
                 className: 'font-bold px-4 rounded'
@@ -127,6 +128,7 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
               okText="Xoá"
               cancelText="Trở lại"
               onConfirm={handleDeleteElection}
+              overlayClassName="dark-popconfirm"
               cancelButtonProps={{
                 style: { backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' },
                 className: 'font-bold px-4 rounded'
@@ -145,9 +147,20 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
       </div>
 
       <Modal
-        title="Chỉnh sửa bầu cử"
+        title={<span style={{ color: '#ffffff' }}>Chỉnh sửa bầu cử</span>}
         open={isModalOpen}
         onCancel={handleCancel}
+        className="dark-modal"
+        style={{
+          top: 20,
+        }}
+        bodyStyle={{
+          backgroundColor: '#15181a',
+          color: '#ffffff'
+        }}
+        maskStyle={{
+          backgroundColor: 'rgba(0, 0, 0, 0.7)'
+        }}
         footer={[
           <Button 
             form="UpdateForm" 
@@ -160,6 +173,96 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
           </Button>
         ]}
       >
+        <style jsx global>{`
+          .dark-modal .ant-modal-content {
+            background-color: #15181a !important;
+            border: none !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
+          }
+          .dark-modal .ant-modal-header {
+            background-color: #15181a !important;
+            border-bottom: none !important;
+            padding: 16px 24px !important;
+          }
+          .dark-modal .ant-modal-body {
+            background-color: #15181a !important;
+            padding: 24px !important;
+          }
+          .dark-modal .ant-modal-footer {
+            background-color: #15181a !important;
+            border-top: none !important;
+            padding: 10px 16px 16px !important;
+          }
+          .dark-modal .ant-modal-close {
+            color: #ffffff !important;
+          }
+          .dark-modal .ant-modal-close:hover {
+            color: #fcbb1d !important;
+            background-color: rgba(252, 187, 29, 0.1) !important;
+          }
+          .dark-modal .ant-form-item-label > label {
+            color: #ffffff !important;
+          }
+          .dark-modal .ant-input:focus,
+          .dark-modal .ant-input-focused {
+            border-color: #fcbb1d !important;
+            box-shadow: 0 0 0 2px rgba(252, 187, 29, 0.2) !important;
+          }
+          .dark-modal .ant-input-number:focus,
+          .dark-modal .ant-input-number-focused {
+            border-color: #fcbb1d !important;
+            box-shadow: 0 0 0 2px rgba(252, 187, 29, 0.2) !important;
+          }
+          .dark-popconfirm .ant-popover-content {
+            background-color: #15181a !important;
+            border: 1px solid #333 !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
+          }
+          .dark-popconfirm .ant-popover-inner {
+            background-color: #15181a !important;
+            color: #ffffff !important;
+          }
+          .dark-popconfirm .ant-popover-title {
+            background-color: #15181a !important;
+            color: #ffffff !important;
+            border-bottom: 1px solid #333 !important;
+          }
+          .dark-popconfirm .ant-popover-inner-content {
+            background-color: #15181a !important;
+            color: #ffffff !important;
+          }
+          .dark-popconfirm .ant-popconfirm-message {
+            color: #ffffff !important;
+          }
+          .dark-popconfirm .ant-popconfirm-message-title {
+            color: #ffffff !important;
+          }
+          .dark-popconfirm .ant-popconfirm-message-icon {
+            color: #fcbb1d !important;
+          }
+          .dark-popconfirm .ant-popconfirm-buttons {
+            margin-top: 8px !important;
+          }
+          .dark-popconfirm .ant-popover-arrow {
+            border-color: #15181a !important;
+          }
+          .dark-popconfirm .ant-popover-arrow::before {
+            background-color: #15181a !important;
+            border-color: #333 !important;
+          }
+          .dark-popconfirm .ant-popover-arrow::after {
+            background-color: #15181a !important;
+          }
+          .dark-popconfirm * {
+            color: #ffffff !important;
+          }
+          .dark-popconfirm .anticon {
+            color: #fcbb1d !important;
+          }
+          .dark-popconfirm .ant-popconfirm-message .anticon {
+            color: #fcbb1d !important;
+          }
+        `}</style>
         <Form
           {...{ labelCol: { span: 8 }, wrapperCol: { span: 16 } }}
           form={form}
@@ -167,11 +270,34 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
           id="UpdateForm"
           onFinish={onFinish}
         >
-          <Form.Item name="name" label="Tên cuộc bầu cử">
-            <Input defaultValue={title} />
+          <Form.Item 
+            name="name" 
+            label="Tên cuộc bầu cử"
+          >
+            <Input 
+              defaultValue={title}
+              style={{ 
+                backgroundColor: '#2a2d30', 
+                borderColor: '#333', 
+                color: '#ffffff' 
+              }}
+            />
           </Form.Item>
-          <Form.Item name="maxSelected" label="Số lượng được chọn">
-            <InputNumber min={1} max={10} defaultValue={defaultMaxSelected} />
+          <Form.Item 
+            name="maxSelected" 
+            label="Số lượng được chọn"
+          >
+            <InputNumber 
+              min={1} 
+              max={10} 
+              defaultValue={defaultMaxSelected}
+              style={{ 
+                backgroundColor: '#2a2d30', 
+                borderColor: '#333', 
+                color: '#ffffff',
+                width: '100%'
+              }}
+            />
           </Form.Item>
         </Form>
       </Modal>
