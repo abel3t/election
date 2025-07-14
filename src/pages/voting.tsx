@@ -192,12 +192,12 @@ const VotingPage = () => {
           style={{ marginTop: '100px' }}
           status="warning"
           className="px-2 lg:px-32"
-          title="Bạn chỉ được bầu cử 1 lần duy nhất!"
+          title="Mã bầu cử chỉ được bầu cử 1 lần duy nhất!"
         />
       )}
 
       {!isSubmitted && isValidPage && (
-        <div className="px-2 lg:px-32" style={{ backgroundColor: '#15181a', minHeight: '100vh' }}>
+        <div className="px-2 lg:px-32 h-screen" style={{ backgroundColor: '#15181a', minHeight: '100vh' }}>
           <div className="flex flex-col justify-center items-center py-1">
             {/*<div>*/}
             {/*  <Image*/}
