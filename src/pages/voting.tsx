@@ -39,7 +39,7 @@ const columns = [
 const VotingPage = () => {
   const router = useRouter();
   const [maxSelected, setMaxSelected] = useState(0);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
   const [codeId, setCodeId] = useState('');
   const [electionId, setElectionId] = useState('');
   const [isValidPage, setIsValidPage] = useState(true);
@@ -154,6 +154,27 @@ const VotingPage = () => {
     selectedRowKeys,
     onChange: onSelectChange
   };
+
+  const handleRowClick = (record: any) => {
+    const key = record.key;
+    const currentIndex = selectedRowKeys.indexOf(key);
+    let newSelectedKeys = [...selectedRowKeys];
+
+    if (currentIndex >= 0) {
+      // Row is already selected, remove it
+      newSelectedKeys.splice(currentIndex, 1);
+    } else {
+      // Row is not selected, add it
+      if (newSelectedKeys.length >= maxSelected) {
+        message.error(`Bạn được chọn chỉ ${maxSelected} ứng viên!`);
+        return;
+      }
+      newSelectedKeys.push(key);
+    }
+
+    setSelectedRowKeys(newSelectedKeys);
+  };
+
   const hasSelected = selectedRowKeys.length > 0;
   return (
     <>
@@ -202,7 +223,7 @@ const VotingPage = () => {
           <div className="my-2">
             <Button
               style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
-              className="font-bold px-4 rounded"
+              className="font-bold px-4 rounded disabled:opacity-50"
               onClick={() => showModal()}
               disabled={
                 selectedRowKeys.length !== maxSelected
@@ -212,7 +233,7 @@ const VotingPage = () => {
             </Button>
 
             {hasSelected && (
-              <Tag className="ml-2 align-middle" style={{ backgroundColor: '#fcbb1d', color: '#15181a' }}>
+              <Tag className="ml-2 align-middle" style={{ backgroundColor: '#fcbb1d', color: '#15181a', border: 'none' }}>
                 Bạn đã chọn {selectedRowKeys.length} ứng viên
               </Tag>
             )}
@@ -264,6 +285,11 @@ const VotingPage = () => {
             rowSelection={rowSelection}
             columns={columns}
             dataSource={candidates}
+            className="dark-pagination"
+            onRow={(record) => ({
+              onClick: () => handleRowClick(record),
+              style: { cursor: 'pointer' }
+            })}
           />
         </div>
       )}

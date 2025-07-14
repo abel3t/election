@@ -69,28 +69,27 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
   };
 
   return (
-    <li className="mt-4 mb-2">
+    <li className='my-3'>
       <div
         className="flex"
         style={{
           backgroundColor: '#15181a',
           justifyContent: 'space-between',
           borderRadius: '0.7em',
-          padding: '1.5em',
           boxShadow: '0 2px 8px 0 rgb(153 166 166 / 30%)'
         }}
       >
         <Link href={href}>
           <p
-            className="font-bold text-white cursor-pointer"
+            className="font-bold text-white cursor-pointer w-full py-4 px-2"
             style={{ cursor: 'pointer', fontSize: '1.5em' }}
           >
             {title}
           </p>
         </Link>
 
-        <div className="flex">
-          <div className="text-sm text-gray-500 truncate dark:text-gray-400">
+        <div className="flex items-center px-2">
+          <div className="text-sm">
             <Popconfirm
               title="Bạn chắc chắn sao chép？"
               okText="Sao chép"
@@ -103,16 +102,16 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
               }}
               okButtonProps={{
                 style: { backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' },
-                className: 'font-bold px-4 rounded'
+                className: 'font-bold px-4 rounded text-red'
               }}
             >
-              <Button style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }} className="font-bold px-4 rounded">
+              <Button className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none focus:bg-[#fcbb1d] focus:text-[#15181a]">
                 Sao chép
               </Button>
             </Popconfirm>
           </div>
 
-          <div className="inline-flex ml-2 items-center text-base font-semibold text-gray-900 dark:text-white">
+          <div className="inline-flex ml-2 items-center text-base font-semibold">
             <Button
               onClick={showModal}
               style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
@@ -130,15 +129,15 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
               onConfirm={handleDeleteElection}
               overlayClassName="dark-popconfirm"
               cancelButtonProps={{
-                style: { backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' },
+                style: { backgroundColor: '#fcbb1d', border: 'none', color: '#15181a' },
                 className: 'font-bold px-4 rounded'
               }}
               okButtonProps={{
-                style: { backgroundColor: '#da0e0e', borderColor: '#da0e0e', color: '#ffffff' },
+                style: { backgroundColor: '#da0e0e', border: 'none', color: '#15181a' },
                 className: 'font-bold px-4 rounded'
               }}
             >
-              <Button style={{ backgroundColor: '#da0e0e', borderColor: '#da0e0e', color: '#ffffff' }} className="font-bold px-4 rounded">
+              <Button style={{ backgroundColor: '#da0e0e', border: 'none' }} className="font-bold px-4 rounded focus:bg-[#da0e0e] focus:text-[#15181a]">
                 Xoá
               </Button>
             </Popconfirm>
@@ -212,55 +211,6 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
           .dark-modal .ant-input-number-focused {
             border-color: #fcbb1d !important;
             box-shadow: 0 0 0 2px rgba(252, 187, 29, 0.2) !important;
-          }
-          .dark-popconfirm .ant-popover-content {
-            background-color: #15181a !important;
-            border: 1px solid #333 !important;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
-          }
-          .dark-popconfirm .ant-popover-inner {
-            background-color: #15181a !important;
-            color: #ffffff !important;
-          }
-          .dark-popconfirm .ant-popover-title {
-            background-color: #15181a !important;
-            color: #ffffff !important;
-            border-bottom: 1px solid #333 !important;
-          }
-          .dark-popconfirm .ant-popover-inner-content {
-            background-color: #15181a !important;
-            color: #ffffff !important;
-          }
-          .dark-popconfirm .ant-popconfirm-message {
-            color: #ffffff !important;
-          }
-          .dark-popconfirm .ant-popconfirm-message-title {
-            color: #ffffff !important;
-          }
-          .dark-popconfirm .ant-popconfirm-message-icon {
-            color: #fcbb1d !important;
-          }
-          .dark-popconfirm .ant-popconfirm-buttons {
-            margin-top: 8px !important;
-          }
-          .dark-popconfirm .ant-popover-arrow {
-            border-color: #15181a !important;
-          }
-          .dark-popconfirm .ant-popover-arrow::before {
-            background-color: #15181a !important;
-            border-color: #333 !important;
-          }
-          .dark-popconfirm .ant-popover-arrow::after {
-            background-color: #15181a !important;
-          }
-          .dark-popconfirm * {
-            color: #ffffff !important;
-          }
-          .dark-popconfirm .anticon {
-            color: #fcbb1d !important;
-          }
-          .dark-popconfirm .ant-popconfirm-message .anticon {
-            color: #fcbb1d !important;
           }
         `}</style>
         <Form

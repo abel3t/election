@@ -324,8 +324,8 @@ const ElectionDetailPage: React.FC = () => {
             color: #15181a !important;
           }
         `}</style>
-        <div className="my-1 text-xl font-bold text-white" style={{ backgroundColor: '#15181a' }}>{election.name || 'N/A'}</div>
-        <Tabs items={items} onChange={(activeKey) => setTabChange(activeKey)}/>
+        <div className="my-1 text-2xl font-bold text-white" style={{ backgroundColor: '#15181a' }}>{election.name}</div>
+        <Tabs items={items} onChange={(activeKey) => setTabChange(activeKey)} className='font-bold'/>
       </>
     </AppLayout>
   );
@@ -468,6 +468,7 @@ const CandidateComponent = ({
         open={isModalOpen}
         onCancel={handleCancel}
         className={'dark-modal'}
+        style={{ border: '1px solid #3a4044'}}
         footer={[
           <Button
             form="CreateCandidateForm"
@@ -686,6 +687,7 @@ const DetailComponent = ({ record }: any) => {
         onOk={handleOk}
         onCancel={handleCancel}
         className={'dark-modal'}
+        style={{ border: '1px solid #3a4044' }}
         footer={[
           <Button
             key="submit"
