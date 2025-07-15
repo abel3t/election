@@ -12,14 +12,14 @@ import { LoadingOutlined } from '@ant-design/icons';
 
 const columns = [
   {
-    title: 'STT',
+    title: <span className="font-bold">STT</span>,
     dataIndex: 'index',
     width: '3%',
     key: 'index',
     render: (index: string) => <div className="text-md font-bold" style={{ color: '#ffffff' }}>{index}</div>
   },
   {
-    title: 'Ảnh',
+    title: <span className="font-bold">Ảnh</span>,
     width: '25%',
     dataIndex: 'imageUrl',
     key: 'imageUrl',
@@ -28,7 +28,7 @@ const columns = [
     )
   },
   {
-    title: 'Họ và Tên',
+    title: <span className="font-bold">Họ và Tên</span>,
     dataIndex: 'name',
     width: '62%',
     key: 'name',
@@ -178,6 +178,33 @@ const VotingPage = () => {
   const hasSelected = selectedRowKeys.length > 0;
   return (
     <>
+      <style jsx global>{`
+        .dark-modal .ant-modal-content {
+          background-color: #15181a !important;
+          border: 1px solid #3a4044 !important;
+        }
+        .dark-modal .ant-modal-header {
+          background-color: #15181a !important;
+          border-bottom: 1px solid #3a4044 !important;
+        }
+        .dark-modal .ant-modal-title {
+          color: #ffffff !important;
+        }
+        .dark-modal .ant-modal-body {
+          background-color: #15181a !important;
+          color: #ffffff !important;
+        }
+        .dark-modal .ant-modal-footer {
+          background-color: #15181a !important;
+          border-top: 1px solid #3a4044 !important;
+        }
+        .dark-modal .ant-modal-close-x {
+          color: #ffffff !important;
+        }
+        .dark-modal .ant-modal-close:hover {
+          background-color: #3a4044 !important;
+        }
+      `}</style>
       {isSubmitted && isValidPage && (
         <Result
           style={{ marginTop: '100px' }}
@@ -197,7 +224,7 @@ const VotingPage = () => {
       )}
 
       {!isSubmitted && isValidPage && (
-        <div className="px-2 lg:px-32 h-screen" style={{ backgroundColor: '#15181a', minHeight: '100vh' }}>
+        <div className="px-2 lg:px-32 mb-10" style={{ backgroundColor: '#15181a', minHeight: '100vh' }}>
           <div className="flex flex-col justify-center items-center py-1">
             {/*<div>*/}
             {/*  <Image*/}
@@ -220,77 +247,84 @@ const VotingPage = () => {
             />
           </div>
 
-          <div className="my-2">
-            <Button
-              style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
-              className="font-bold px-4 rounded disabled:opacity-50"
-              onClick={() => showModal()}
-              disabled={
-                selectedRowKeys.length !== maxSelected
-              }
-            >
-              Gửi phiếu bầu
-            </Button>
-
-            {hasSelected && (
-              <Tag className="ml-2 align-middle" style={{ backgroundColor: '#fcbb1d', color: '#15181a', border: 'none' }}>
-                Bạn đã chọn {selectedRowKeys.length} ứng viên
-              </Tag>
-            )}
-
-            <Modal
-              title="Xác nhận gửi phiếu bầu"
-              open={isModalOpen}
-              onOk={handleOk}
-              onCancel={handleCancel}
-              footer={[
-                <Button key="back" onClick={handleCancel} style={{ backgroundColor: '#3a4044', borderColor: '#3a4044', color: '#ffffff' }}>
-                  Trở lại
-                </Button>,
-                <Button
-                  form="CreateCandidateForm"
-                  key="submit"
-                  htmlType="submit"
-                  onClick={handleOk}
-                  style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
-                  className="font-bold px-4 rounded"
-                >
-                  {isSubmitting && <Spin indicator={antIcon} />}
-                  {!isSubmitting && 'Xác Nhận'}
-                </Button>
-              ]}
-            >
-              <div className="text-lg font-bold italic" style={{ color: '#fcbb1d' }}>
-                Bạn sẽ bầu cho các ứng cử viên sau
+          <div className='py-3'>
+            <Table
+              rowSelection={rowSelection}
+              columns={columns}
+              dataSource={candidates}
+              className="dark-pagination"
+              onRow={(record) => ({
+                onClick: () => handleRowClick(record),
+                style: { cursor: 'pointer' }
+              })}
+            />
+            <div>
+              <div className="mb-3 flex justify-center">
+                <Tag className="py-1 px-4" style={{ backgroundColor: '#fcbb1d', color: '#15181a', border: 'none' }}>
+                  Bạn đã chọn {selectedRowKeys.length}/{maxSelected} ứng viên
+                </Tag>
               </div>
 
-              {selectedRowKeys
-                .sort((a, b) => a - b)
-                .map((selectedRow, index) => {
-                  return (
-                    <div
-                      className="my-2 font-bold text-lg"
-                      style={{ color: '#15181a' }}
-                      key={index}
-                    >
-                      {index + 1}. {candidates[selectedRow]?.name || 'N/A'}
-                    </div>
-                  );
-                })}
-            </Modal>
+              <div className="flex justify-center items-center my-6">
+                <Button
+                  style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
+                  className="font-bold px-10 py-6 rounded text-xl disabled:opacity-50 flex items-center justify-center"
+                  onClick={() => showModal()}
+                  disabled={selectedRowKeys.length !== maxSelected}
+                >
+                  GỬI PHIẾU BẦU
+                </Button>
+              </div>
+            </div>
           </div>
+          <Modal
+            title={<span style={{ color: '#ffffff' }}>Xác nhận gửi phiếu bầu</span>}
+            open={isModalOpen}
+            onOk={handleOk}
+            onCancel={handleCancel}
+            className="dark-modal"
+            style={{
+              border: '1px solid #3a4044'
+            }}
+            bodyStyle={{
+              backgroundColor: '#15181a',
+              color: '#ffffff'
+            }}
+            footer={[
+              <Button key="back" onClick={handleCancel} style={{ backgroundColor: '#3a4044', borderColor: '#3a4044', color: '#ffffff' }}>
+                Trở lại
+              </Button>,
+              <Button
+                form="CreateCandidateForm"
+                key="submit"
+                htmlType="submit"
+                onClick={handleOk}
+                style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
+                className="font-bold px-4 rounded"
+              >
+                {isSubmitting && <Spin indicator={antIcon} />}
+                {!isSubmitting && 'Xác Nhận'}
+              </Button>
+            ]}
+          >
+            <div className="text-lg font-bold italic" style={{ color: '#fcbb1d' }}>
+              Bạn sẽ bầu cho các ứng cử viên sau
+            </div>
 
-          <div></div>
-          <Table
-            rowSelection={rowSelection}
-            columns={columns}
-            dataSource={candidates}
-            className="dark-pagination"
-            onRow={(record) => ({
-              onClick: () => handleRowClick(record),
-              style: { cursor: 'pointer' }
-            })}
-          />
+            {selectedRowKeys
+              .sort((a, b) => a - b)
+              .map((selectedRow, index) => {
+                return (
+                  <div
+                    className="my-2 font-bold text-lg"
+                    style={{ color: '#ffffff' }}
+                    key={index}
+                  >
+                    {index + 1}. {candidates[selectedRow]?.name || 'N/A'}
+                  </div>
+                );
+              })}
+          </Modal>
         </div>
       )}
     </>

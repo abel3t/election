@@ -360,6 +360,17 @@
     color: #ffffff !important;
 }
 
+.ant-checkbox-indeterminate .ant-checkbox-inner::after {
+    background-color: #fcbb1d !important;
+    border-color: #fcbb1d !important;
+}
+
+.ant-message-notice-content {
+    background-color: #15181a !important;
+    color: #ffffff !important;
+    border: 1px solid #333 !important;
+}
+
 .ant-result-subtitle {
     color: #808080 !important;
 }

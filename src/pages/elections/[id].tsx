@@ -1,11 +1,14 @@
 import {
   Button,
+  Card,
   Form,
   Input,
   message,
   Modal,
   Popconfirm,
+  Progress,
   Spin,
+  Statistic,
   Table,
   Tabs,
   Tag,
@@ -31,6 +34,7 @@ import {
 import axios, { AxiosRequestConfig } from 'axios';
 import { LoadingOutlined } from '@ant-design/icons';
 import NextImage from 'next/image';
+import * as XLSX from 'xlsx';
 
 interface CandidateDataType {
   key: React.Key;
@@ -61,25 +65,25 @@ interface ResultDataType {
 
 const codeColumns: ColumnsType<DataType> = [
   {
-    title: 'STT',
+    title: <span className="font-bold">STT</span>,
     dataIndex: 'index',
     width: '10%',
     key: 'index'
   },
   {
-    title: 'ID',
+    title: <span className="font-bold">ID</span>,
     dataIndex: 'id',
     width: '30%',
     key: 'text'
   },
   {
-    title: 'Mã Bầu Cử',
+    title: <span className="font-bold">Mã Bầu Cử</span>,
     dataIndex: 'text',
     width: '15%',
     key: 'text'
   },
   {
-    title: 'Trạng Thái',
+    title: <span className="font-bold">Trạng Thái</span>,
     dataIndex: 'isUsed',
     width: '30%',
     key: 'isUsed',
@@ -94,7 +98,7 @@ const codeColumns: ColumnsType<DataType> = [
     )
   },
   {
-    title: 'Lượt tải xuống',
+    title: <span className="font-bold">Lượt tải xuống</span>,
     dataIndex: 'downloaded',
     width: '20%',
     key: 'downloaded'
@@ -103,14 +107,14 @@ const codeColumns: ColumnsType<DataType> = [
 
 const resultColumns: ColumnsType<ResultDataType> = [
   {
-    title: 'STT',
+    title: <span className="font-bold">STT</span>,
     dataIndex: 'index',
     width: '10%',
     key: 'index',
     render: (index) => <div className="font-bold">{index}</div>
   },
   {
-    title: 'Ảnh',
+    title: <span className="font-bold">Ảnh</span>,
     dataIndex: 'imageUrl',
     width: '20%',
     key: 'imageUrl',
@@ -119,7 +123,7 @@ const resultColumns: ColumnsType<ResultDataType> = [
     )
   },
   {
-    title: 'Họ và Tên',
+    title: <span className="font-bold">Họ và Tên</span>,
     dataIndex: 'name',
     filterMode: 'tree',
     filterSearch: true,
@@ -128,10 +132,10 @@ const resultColumns: ColumnsType<ResultDataType> = [
     render: (name) => <div className="font-bold">{name}</div>
   },
   {
-    title: 'Số phiếu',
+    title: <span className="font-bold">Số phiếu</span>,
     dataIndex: ['totalVotes', 'totalCodes'],
     key: 'votes-totalCodes',
-    render: (text, record) => (
+    render: (_, record) => (
       <p>
         <span style={{ color: '#fcbb1d' }} className="text-4xl font-bold">
           {record.totalVotes}
@@ -145,7 +149,25 @@ const resultColumns: ColumnsType<ResultDataType> = [
     width: '15%'
   },
   {
-    title: 'Chi tiết',
+    title: <span className="font-bold">Phần trăm</span>,
+    dataIndex: ['totalVotes', 'totalCodes'],
+    key: 'percentage',
+    render: (_, record) => {
+      const totalVotes = record.totalVotes || 0;
+      const totalCodes = record.totalCodes || 0;
+      const percentage = totalCodes > 0 ? ((totalVotes / totalCodes) * 100).toFixed(1) : '0.0';
+      return (
+        <p>
+          <span style={{ color: '#fcbb1d' }} className="text-3xl font-bold">
+            {percentage}%
+          </span>
+        </p>
+      );
+    },
+    width: '12%'
+  },
+  {
+    title: <span className="font-bold">Chi tiết</span>,
     dataIndex: '',
     key: 'x',
     width: '20%',
@@ -229,8 +251,19 @@ const ElectionDetailPage: React.FC = () => {
       )
     },
     {
-      label: 'Kết quả',
+      label: 'Báo cáo',
       key: '3',
+      children: (
+        <ReportComponent
+          electionId={electionId}
+          codes={codes}
+          tabChange={tabChange}
+        />
+      )
+    },
+    {
+      label: 'Kết quả',
+      key: '4',
       children: (
         <ResultComponent tabChange={tabChange} electionId={electionId}/>
       )
@@ -323,6 +356,32 @@ const ElectionDetailPage: React.FC = () => {
             background-color: #fcbb1d !important;
             color: #15181a !important;
           }
+          /* Card component dark theme */
+          .ant-card {
+            background-color: #2a2d30 !important;
+            border-color: #3a4044 !important;
+          }
+          .ant-card-head {
+            background-color: #2a2d30 !important;
+            border-color: #3a4044 !important;
+          }
+          .ant-card-head-title {
+            color: #ffffff !important;
+          }
+          .ant-card-body {
+            background-color: #2a2d30 !important;
+          }
+          /* Progress component dark theme */
+          .ant-progress-text {
+            color: #ffffff !important;
+          }
+          /* Statistic component dark theme */
+          .ant-statistic-title {
+            color: #ffffff !important;
+          }
+          .ant-statistic-content {
+            color: #fcbb1d !important;
+          }
         `}</style>
         <div className="my-1 text-2xl font-bold text-white" style={{ backgroundColor: '#15181a' }}>{election.name}</div>
         <Tabs items={items} onChange={(activeKey) => setTabChange(activeKey)} className='font-bold'/>
@@ -343,13 +402,13 @@ const CandidateComponent = ({
 
   const columns: ColumnsType<CandidateDataType> = [
     {
-      title: 'STT',
+      title: <span className="font-bold">STT</span>,
       dataIndex: 'index',
       width: '10%',
       key: 'index'
     },
     {
-      title: 'Ảnh',
+      title: <span className="font-bold">Ảnh</span>,
       width: '20%',
       dataIndex: 'imageUrl',
       key: 'imageUrl',
@@ -358,7 +417,7 @@ const CandidateComponent = ({
       )
     },
     {
-      title: 'Họ và Tên',
+      title: <span className="font-bold">Họ và Tên</span>,
       dataIndex: 'name',
       filterMode: 'tree',
       filterSearch: true,
@@ -366,7 +425,7 @@ const CandidateComponent = ({
       key: 'name'
     },
     {
-      title: 'Hành động',
+      title: <span className="font-bold">Hành động</span>,
       dataIndex: '',
       key: 'x',
       width: '20%',
@@ -591,8 +650,9 @@ const CodeComponent = ({
   );
 };
 
-const ResultComponent = ({ electionId, tabChange }: any) => {
+const ReportComponent = ({ electionId, codes, tabChange }: any) => {
   const [data, setData] = useState([]);
+  const [election, setElection] = useState({} as any);
 
   useEffect(() => {
     getElectionResult(electionId)
@@ -603,10 +663,345 @@ const ResultComponent = ({ electionId, tabChange }: any) => {
         setData(newData || []);
       })
       .catch((error: Error) => message.error(error.message));
-  }, [tabChange]);
+
+    // Get election details for the filename
+    getElection(electionId)
+      .then((data) => setElection(data?.getElection))
+      .catch((error: Error) => message.error(error.message));
+  }, [tabChange, electionId]);
+
+  const totalCodes = codes.length;
+  const usedCodes = codes.filter((code: any) => code.isUsed).length;
+  const unusedCodes = codes.filter((code: any) => !code.isUsed).length;
+  const votingRate = totalCodes > 0 ? (usedCodes / totalCodes) * 100 : 0;
+
+  // Calculate total votes from all candidates
+  const totalVotesFromResults = data.reduce((sum: number, candidate: any) => {
+    return sum + (candidate.totalVotes || 0);
+  }, 0);
+
+  // Excel export functions
+  const exportVotingDataToExcel = () => {
+    const workbook = XLSX.utils.book_new();
+    
+    // Sheet 1: Voting Codes Status
+    const codesData = codes.map((code: any, index: number) => ({
+      'STT': index + 1,
+      'Mã ID': code.id,
+      'Mã Bầu Cử': code.text,
+      'Trạng Thái': code.isUsed ? 'Đã sử dụng' : 'Chưa sử dụng',
+      'Lượt Tải Xuống': code.downloaded || 0,
+      'Thời Gian Tạo': code.createdAt ? new Date(code.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }) : 'N/A'
+    }));
+    
+    const codesSheet = XLSX.utils.json_to_sheet(codesData);
+    XLSX.utils.book_append_sheet(workbook, codesSheet, 'Mã Bầu Cử');
+
+    // Sheet 2: Detailed Vote Records
+    const voteRecords: any[] = [];
+    data.forEach((candidate: any) => {
+      if (candidate.votes && candidate.votes.length > 0) {
+        candidate.votes.forEach((vote: any) => {
+          voteRecords.push({
+            'STT': voteRecords.length + 1,
+            'Mã Phiếu': vote.text,
+            'Ứng Cử Viên': candidate.name,
+            'Thời Gian Bỏ Phiếu': new Date(vote.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
+            'Ngày Bỏ Phiếu': new Date(vote.createdAt).toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
+            'Giờ Bỏ Phiếu': new Date(vote.createdAt).toLocaleTimeString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })
+          });
+        });
+      }
+    });
+    
+    const voteRecordsSheet = XLSX.utils.json_to_sheet(voteRecords);
+    XLSX.utils.book_append_sheet(workbook, voteRecordsSheet, 'Chi Tiết Phiếu Bầu');
+
+    // Sheet 3: Candidates Results
+    const candidatesData = data.map((candidate: any) => ({
+      'STT': candidate.index,
+      'Tên Ứng Cử Viên': candidate.name,
+      'Số Phiếu Bầu': candidate.totalVotes || 0,
+      'Tổng Số Mã': candidate.totalCodes || 0,
+      'Tỷ Lệ (%)': candidate.totalCodes > 0 ? ((candidate.totalVotes / candidate.totalCodes) * 100).toFixed(1) : '0.0',
+      'Số Lượt Bỏ Phiếu': candidate.votes ? candidate.votes.length : 0
+    }));
+    
+    const candidatesSheet = XLSX.utils.json_to_sheet(candidatesData);
+    XLSX.utils.book_append_sheet(workbook, candidatesSheet, 'Kết Quả Ứng Cử Viên');
+
+    // Sheet 4: Election Summary
+    const summaryData = [
+      { 'Thông Tin': 'Tổng Số Mã Được Tạo', 'Giá Trị': totalCodes },
+      { 'Thông Tin': 'Số Mã Đã Sử Dụng', 'Giá Trị': usedCodes },
+      { 'Thông Tin': 'Số Mã Chưa Sử Dụng', 'Giá Trị': unusedCodes },
+      { 'Thông Tin': 'Tỷ Lệ Tham Gia (%)', 'Giá Trị': votingRate.toFixed(1) },
+      { 'Thông Tin': 'Tổng Số Phiếu Bầu', 'Giá Trị': totalVotesFromResults },
+      { 'Thông Tin': 'Số Ứng Cử Viên', 'Giá Trị': data.length },
+      { 'Thông Tin': 'Tổng Lượt Tải Xuống', 'Giá Trị': codes.reduce((sum: number, code: any) => sum + (code.downloaded || 0), 0) },
+      { 'Thông Tin': 'Thời Gian Xuất Báo Cáo', 'Giá Trị': new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }) }
+    ];
+    
+    const summarySheet = XLSX.utils.json_to_sheet(summaryData);
+    XLSX.utils.book_append_sheet(workbook, summarySheet, 'Tóm Tắt Bầu Cử');
+
+    // Export the file
+    const fileName = `BaoCao_BauCu_${election.name || electionId}_${new Date().toISOString().split('T')[0]}.xlsx`;
+    XLSX.writeFile(workbook, fileName);
+    
+    message.success('Xuất file Excel thành công!');
+  };
+
+  const exportVoteRecordsOnly = () => {
+    const voteRecords: any[] = [];
+    data.forEach((candidate: any) => {
+      if (candidate.votes && candidate.votes.length > 0) {
+        candidate.votes.forEach((vote: any) => {
+          voteRecords.push({
+            'STT': voteRecords.length + 1,
+            'Mã Phiếu': vote.text,
+            'Ứng Cử Viên Được Bầu': candidate.name,
+            'Thời Gian Bỏ Phiếu': new Date(vote.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
+            'Ngày': new Date(vote.createdAt).toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
+            'Giờ': new Date(vote.createdAt).toLocaleTimeString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
+            'ID Ứng Cử Viên': candidate.id || 'N/A'
+          });
+        });
+      }
+    });
+
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(voteRecords);
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ Liệu Phiếu Bầu');
+
+    const fileName = `DuLieu_PhieuBau_${election.name || electionId}_${new Date().toISOString().split('T')[0]}.xlsx`;
+    XLSX.writeFile(workbook, fileName);
+    
+    message.success('Xuất dữ liệu phiếu bầu thành công!');
+  };
+
+  return (
+    <div key={`report-component-${electionId}`} style={{ backgroundColor: '#15181a', color: 'white' }}>
+      {/* Export Buttons */}
+      <div className="mb-4 flex flex-wrap gap-2">
+        <Button
+          onClick={exportVotingDataToExcel}
+          style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#ffffff' }}
+          className="font-bold px-4 rounded"
+        >
+          📊 Xuất Báo Cáo Đầy Đủ
+        </Button>
+        <Button
+          onClick={exportVoteRecordsOnly}
+          style={{ backgroundColor: '#1890ff', borderColor: '#1890ff', color: '#ffffff' }}
+          className="font-bold px-4 rounded"
+        >
+          📋 Xuất Dữ Liệu Phiếu Bầu
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <Card style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044' }}>
+          <Statistic
+            title={<span style={{ color: '#ffffff' }}>Tổng số mã được tạo</span>}
+            value={totalCodes}
+            valueStyle={{ color: '#fcbb1d' }}
+          />
+        </Card>
+
+        <Card style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044' }}>
+          <Statistic
+            title={<span style={{ color: '#ffffff' }}>Số mã đã sử dụng</span>}
+            value={usedCodes}
+            valueStyle={{ color: '#52c41a' }}
+          />
+        </Card>
+
+        <Card style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044' }}>
+          <Statistic
+            title={<span style={{ color: '#ffffff' }}>Số mã chưa sử dụng</span>}
+            value={unusedCodes}
+            valueStyle={{ color: '#ff4d4f' }}
+          />
+        </Card>
+
+        <Card style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044' }}>
+          <Statistic
+            title={<span style={{ color: '#ffffff' }}>Tỷ lệ tham gia</span>}
+            value={votingRate.toFixed(1)}
+            suffix="%"
+            valueStyle={{ color: '#fcbb1d' }}
+          />
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card 
+          title={<span style={{ color: '#ffffff' }}>Tiến độ bỏ phiếu</span>}
+          style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044' }}
+        >
+          <Progress
+            percent={votingRate}
+            strokeColor={{
+              '0%': '#fcbb1d',
+              '100%': '#de9e03',
+            }}
+            trailColor="#3a4044"
+            format={(percent) => `${percent?.toFixed(1)}%`}
+            style={{ marginBottom: '20px' }}
+          />
+          
+          <div className="space-y-2">
+            <div className="flex justify-between">
+              <span style={{ color: '#ffffff' }}>Đã bỏ phiếu:</span>
+              <span style={{ color: '#52c41a' }} className="font-bold">{usedCodes} mã</span>
+            </div>
+            <div className="flex justify-between">
+              <span style={{ color: '#ffffff' }}>Chưa bỏ phiếu:</span>
+              <span style={{ color: '#ff4d4f' }} className="font-bold">{unusedCodes} mã</span>
+            </div>
+            <div className="flex justify-between">
+              <span style={{ color: '#ffffff' }}>Tổng cộng:</span>
+              <span style={{ color: '#fcbb1d' }} className="font-bold">{totalCodes} mã</span>
+            </div>
+          </div>
+        </Card>
+
+        <Card 
+          title={<span style={{ color: '#ffffff' }}>Thống kê chi tiết</span>}
+          style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044' }}
+        >
+          <div className="space-y-3">
+            <div className="p-3 rounded" style={{ backgroundColor: '#3a4044' }}>
+              <div className="flex justify-between items-center">
+                <span style={{ color: '#ffffff' }}>Tổng số phiếu bầu:</span>
+                <span style={{ color: '#fcbb1d' }} className="text-xl font-bold">{totalVotesFromResults}</span>
+              </div>
+            </div>
+            
+            <div className="p-3 rounded" style={{ backgroundColor: '#3a4044' }}>
+              <div className="flex justify-between items-center">
+                <span style={{ color: '#ffffff' }}>Số ứng cử viên:</span>
+                <span style={{ color: '#fcbb1d' }} className="text-xl font-bold">{data.length}</span>
+              </div>
+            </div>
+
+            <div className="p-3 rounded" style={{ backgroundColor: '#3a4044' }}>
+              <div className="flex justify-between items-center">
+                <span style={{ color: '#ffffff' }}>Mã được tải xuống:</span>
+                <span style={{ color: '#fcbb1d' }} className="text-xl font-bold">
+                  {codes.reduce((sum: number, code: any) => sum + (code.downloaded || 0), 0)}
+                </span>
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      <div className="mt-6">
+        <Card 
+          title={<span style={{ color: '#ffffff' }}>Trạng thái mã bỏ phiếu</span>}
+          style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044' }}
+        >
+          <div className="flex flex-wrap gap-2">
+            <Tag 
+              className="px-3 py-1 text-sm font-medium border-none"
+              style={{ backgroundColor: '#52c41a', color: '#ffffff' }}
+            >
+              {usedCodes} mã đã sử dụng
+            </Tag>
+            <Tag 
+              className="px-3 py-1 text-sm font-medium border-none"
+              style={{ backgroundColor: '#ff4d4f', color: '#ffffff' }}
+            >
+              {unusedCodes} mã chưa sử dụng
+            </Tag>
+            <Tag 
+              className="px-3 py-1 text-sm font-medium border-none"
+              style={{ backgroundColor: '#fcbb1d', color: '#15181a' }}
+            >
+              {totalCodes} tổng số mã
+            </Tag>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+const ResultComponent = ({ electionId, tabChange }: any) => {
+  const [data, setData] = useState([]);
+  const [election, setElection] = useState({} as any);
+
+  useEffect(() => {
+    getElectionResult(electionId)
+      .then((data) => {
+        const newData = data?.getElectionResult?.map(
+          (election: any, index: number) => ({ index: index + 1, ...election })
+        );
+        setData(newData || []);
+      })
+      .catch((error: Error) => message.error(error.message));
+
+    // Get election details for the filename
+    getElection(electionId)
+      .then((data) => setElection(data?.getElection))
+      .catch((error: Error) => message.error(error.message));
+  }, [tabChange, electionId]);
+
+  const exportResultsToExcel = () => {
+    const workbook = XLSX.utils.book_new();
+    
+    // Sheet 1: Results Summary
+    const resultsData = data.map((candidate: any) => ({
+      'Thứ Hạng': candidate.index,
+      'Tên Ứng Cử Viên': candidate.name,
+      'Số Phiếu Bầu': candidate.totalVotes || 0,
+      'Tổng Số Mã': candidate.totalCodes || 0,
+      'Tỷ Lệ (%)': candidate.totalCodes > 0 ? ((candidate.totalVotes / candidate.totalCodes) * 100).toFixed(1) : '0.0',
+      'Số Lượt Bỏ Phiếu': candidate.votes ? candidate.votes.length : 0
+    }));
+    
+    const resultsSheet = XLSX.utils.json_to_sheet(resultsData);
+    XLSX.utils.book_append_sheet(workbook, resultsSheet, 'Kết Quả Bầu Cử');
+
+    // Sheet 2: Detailed Vote Records
+    const voteRecords: any[] = [];
+    data.forEach((candidate: any) => {
+      if (candidate.votes && candidate.votes.length > 0) {
+        candidate.votes.forEach((vote: any) => {
+          voteRecords.push({
+            'STT': voteRecords.length + 1,
+            'Mã Phiếu': vote.text,
+            'Ứng Cử Viên': candidate.name,
+            'Thời Gian Bỏ Phiếu': new Date(vote.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
+            'Ngày Bỏ Phiếu': new Date(vote.createdAt).toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
+            'Giờ Bỏ Phiếu': new Date(vote.createdAt).toLocaleTimeString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })
+          });
+        });
+      }
+    });
+    
+    const voteRecordsSheet = XLSX.utils.json_to_sheet(voteRecords);
+    XLSX.utils.book_append_sheet(workbook, voteRecordsSheet, 'Chi Tiết Phiếu Bầu');
+
+    const fileName = `KetQua_BauCu_${election.name || electionId}_${new Date().toISOString().split('T')[0]}.xlsx`;
+    XLSX.writeFile(workbook, fileName);
+    
+    message.success('Xuất kết quả bầu cử thành công!');
+  };
 
   return (
     <div key={`result-component-${electionId}`}>
+      <div className="mb-4 flex justify-end">
+        <Button
+          onClick={exportResultsToExcel}
+          style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
+          className="font-bold px-4 rounded"
+        >
+          📊 Xuất Kết Quả
+        </Button>
+      </div>
       <Table columns={resultColumns} dataSource={data} className="result-table dark-pagination"/>
     </div>
   );
