@@ -217,25 +217,43 @@ const ElectionDetailPage: React.FC = () => {
     }
   }, [router.isReady]);
 
+  // Polling for codes and election info
   useEffect(() => {
-    if (electionId) {
-      getCodes(electionId)
-        .then((data) => {
-          const newCodes = (data?.getCodes || []).map(
+    if (!electionId) return;
+    let codesInterval: NodeJS.Timeout;
+    let isFetching = false;
+    const fetchCodesAndElection = () => {
+      if (isFetching) return;
+      isFetching = true;
+      Promise.all([
+        getCodes(electionId),
+        getElection(electionId)
+      ])
+        .then(([codesData, electionData]) => {
+          const newCodes = (codesData?.getCodes || []).map(
             (code: any, index: number) => ({ index: index + 1, ...code })
           );
           setCodes(newCodes);
+          setElection(electionData?.getElection);
         })
-        .catch((error: Error) => message.error(error.message));
+        .catch((error: Error) => message.error(error.message))
+        .finally(() => {
+          isFetching = false;
+        });
+    };
+    fetchCodesAndElection();
+    codesInterval = setInterval(fetchCodesAndElection, 5000);
+    return () => clearInterval(codesInterval);
+  }, [electionId, isLoadCode]);
 
-      getElection(electionId)
-        .then((data) => setElection(data?.getElection))
-        .catch((error: Error) => message.error(error.message));
-    }
-  }, [isLoadCode, electionId]);
-
+  // Polling for candidates
   useEffect(() => {
-    if (electionId) {
+    if (!electionId) return;
+    let candidatesInterval: NodeJS.Timeout;
+    let isFetching = false;
+    const fetchCandidates = () => {
+      if (isFetching) return;
+      isFetching = true;
       getCandidates(electionId)
         .then((data) => {
           const newCandidates = (data?.getCandidates || []).map(
@@ -246,9 +264,15 @@ const ElectionDetailPage: React.FC = () => {
           );
           setCandidates(newCandidates);
         })
-        .catch((error: Error) => message.error(error.message));
-    }
-  }, [isLoadCandidate, electionId, tabChange]);
+        .catch((error: Error) => message.error(error.message))
+        .finally(() => {
+          isFetching = false;
+        });
+    };
+    fetchCandidates();
+    candidatesInterval = setInterval(fetchCandidates, 5000);
+    return () => clearInterval(candidatesInterval);
+  }, [electionId, isLoadCandidate, tabChange]);
 
   const items = [
     {
@@ -748,20 +772,33 @@ const ReportComponent = ({ electionId, codes, tabChange }: any) => {
   const [data, setData] = useState([]);
   const [election, setElection] = useState({} as any);
 
+  // Polling for report data
   useEffect(() => {
-    getElectionResult(electionId)
-      .then((data) => {
-        const newData = data?.getElectionResult?.map(
-          (election: any, index: number) => ({ index: index + 1, ...election })
-        );
-        setData(newData || []);
-      })
-      .catch((error: Error) => message.error(error.message));
-
-    // Get election details for the filename
-    getElection(electionId)
-      .then((data) => setElection(data?.getElection))
-      .catch((error: Error) => message.error(error.message));
+    if (!electionId) return;
+    let reportInterval: NodeJS.Timeout;
+    let isFetching = false;
+    const fetchReport = () => {
+      if (isFetching) return;
+      isFetching = true;
+      Promise.all([
+        getElectionResult(electionId),
+        getElection(electionId)
+      ])
+        .then(([resultData, electionData]) => {
+          const newData = resultData?.getElectionResult?.map(
+            (election: any, index: number) => ({ index: index + 1, ...election })
+          );
+          setData(newData || []);
+          setElection(electionData?.getElection);
+        })
+        .catch((error: Error) => message.error(error.message))
+        .finally(() => {
+          isFetching = false;
+        });
+    };
+    fetchReport();
+    reportInterval = setInterval(fetchReport, 5000);
+    return () => clearInterval(reportInterval);
   }, [tabChange, electionId]);
 
   const totalCodes = codes.length;
@@ -1134,20 +1171,33 @@ const ResultComponent = ({ electionId, tabChange }: any) => {
   const [data, setData] = useState([]);
   const [election, setElection] = useState({} as any);
 
+  // Polling for result data
   useEffect(() => {
-    getElectionResult(electionId)
-      .then((data) => {
-        const newData = data?.getElectionResult?.map(
-          (election: any, index: number) => ({ index: index + 1, ...election })
-        );
-        setData(newData || []);
-      })
-      .catch((error: Error) => message.error(error.message));
-
-    // Get election details for the filename
-    getElection(electionId)
-      .then((data) => setElection(data?.getElection))
-      .catch((error: Error) => message.error(error.message));
+    if (!electionId) return;
+    let resultInterval: NodeJS.Timeout;
+    let isFetching = false;
+    const fetchResult = () => {
+      if (isFetching) return;
+      isFetching = true;
+      Promise.all([
+        getElectionResult(electionId),
+        getElection(electionId)
+      ])
+        .then(([resultData, electionData]) => {
+          const newData = resultData?.getElectionResult?.map(
+            (election: any, index: number) => ({ index: index + 1, ...election })
+          );
+          setData(newData || []);
+          setElection(electionData?.getElection);
+        })
+        .catch((error: Error) => message.error(error.message))
+        .finally(() => {
+          isFetching = false;
+        });
+    };
+    fetchResult();
+    resultInterval = setInterval(fetchResult, 5000);
+    return () => clearInterval(resultInterval);
   }, [tabChange, electionId]);
 
   const exportResultsToExcel = () => {
