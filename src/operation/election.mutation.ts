@@ -61,6 +61,18 @@ export const UPDATE_ELECTION = gql`
   }
 `;
 
+export const STOP_VOTING = gql`
+  mutation stopVoting($electionId: String!) {
+    stopVoting(electionId: $electionId)
+  }
+`;
+
+export const START_VOTING = gql`
+  mutation startVoting($electionId: String!) {
+    startVoting(electionId: $electionId)
+  }
+`;
+
 export const createElection = async (name: string, maxSelected: number) => {
   const result = await apolloClient.mutate({
     mutation: CREATE_ELECTION,
@@ -130,6 +142,32 @@ export const updateElection = async (
   const result = await apolloClient.mutate({
     mutation: UPDATE_ELECTION,
     variables: { electionId, name, maxSelected }
+  });
+
+  if (result?.errors) {
+    throw new Error(result?.errors[0]?.message);
+  }
+
+  return result.data;
+};
+
+export const stopVoting = async (electionId: string) => {
+  const result = await apolloClient.mutate({
+    mutation: STOP_VOTING,
+    variables: { electionId }
+  });
+
+  if (result?.errors) {
+    throw new Error(result?.errors[0]?.message);
+  }
+
+  return result.data;
+};
+
+export const startVoting = async (electionId: string) => {
+  const result = await apolloClient.mutate({
+    mutation: START_VOTING,
+    variables: { electionId }
   });
 
   if (result?.errors) {

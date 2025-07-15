@@ -29,7 +29,9 @@ import { useRouter } from 'next/router';
 import {
   createCandidate,
   deleteCandidate,
-  generateCodes
+  generateCodes,
+  stopVoting,
+  startVoting
 } from '../../operation/election.mutation';
 import axios, { AxiosRequestConfig } from 'axios';
 import { LoadingOutlined } from '@ant-design/icons';
@@ -188,6 +190,26 @@ const ElectionDetailPage: React.FC = () => {
   const [election, setElection] = useState({} as any);
 
   const router = useRouter();
+
+  // Toggle voting state
+  const handleToggleVoting = async () => {
+    try {
+      if (election?.status === 'Active') {
+        await stopVoting(electionId);
+        message.success('Đã dừng bầu cử thành công!');
+      } else {
+        await startVoting(electionId);
+        message.success('Đã mở lại bầu cử thành công!');
+      }
+      // Refresh the codes and election data
+      setIsLoadCode(!isLoadCode);
+      getElection(electionId)
+        .then((data) => setElection(data?.getElection))
+        .catch((error: Error) => message.error(error.message));
+    } catch (error: any) {
+      message.error(error.message || 'Có lỗi xảy ra khi thay đổi trạng thái bầu cử!');
+    }
+  };
 
   useEffect(() => {
     if (router.isReady) {
@@ -387,6 +409,75 @@ const ElectionDetailPage: React.FC = () => {
           }
         `}</style>
         <div className="my-1 text-2xl font-bold text-white" style={{ backgroundColor: '#15181a' }}>{election.name}</div>
+
+        {/* Status bar with live badge and toggle button */}
+        <div className="flex items-center justify-between mb-4 px-2 py-2 rounded" style={{ backgroundColor: '#23272b' }}>
+          <div className="flex items-center gap-3">
+            {election && election.status === 'Active' ? (
+              <span className="flex items-center gap-1">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                </span>
+                <span className="text-green-400 font-bold ml-1">Đang diễn ra</span>
+                <span className="ml-2 px-2 py-0.5 rounded bg-green-900 text-green-300 text-xs font-semibold animate-pulse">LIVE</span>
+              </span>
+            ) : (
+              <span className="flex items-center gap-1">
+                <span className="relative flex h-3 w-3">
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-gray-400"></span>
+                </span>
+                <span className="text-gray-400 font-bold ml-1">Đã đóng</span>
+                <span className="ml-2 px-2 py-0.5 rounded bg-gray-700 text-gray-300 text-xs font-semibold">CLOSED</span>
+              </span>
+            )}
+          </div>
+          <div>
+            {election && election.status === 'Active' && (
+              <Popconfirm
+                title="Bạn chắc chắn muốn dừng bầu cử?"
+                okText="Dừng bầu cử"
+                cancelText="Hủy"
+                onConfirm={handleToggleVoting}
+                overlayClassName="dark-popconfirm"
+                cancelButtonProps={{
+                  className: 'font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a] border-none'
+                }}
+                okButtonProps={{
+                  className: 'font-bold px-4 rounded bg-[#da0e0e] border-none text-[#ffffff] hover:bg-[#da0e0e] hover:bg-opacity-70 hover:text-[#ffffff] focus:bg-[#da0e0e] focus:text-[#ffffff]'
+                }}
+              >
+                <Button
+                  className="font-bold px-4 rounded border-none bg-[#da0e0e] text-[#ffffff] hover:bg-[#da0e0e] hover:bg-opacity-70 hover:text-[#ffffff] focus:bg-[#da0e0e] focus:text-[#ffffff]"
+                >
+                  🛑 Dừng bầu cử
+                </Button>
+              </Popconfirm>
+            )}
+            {election && election.status && election.status !== 'Active' && (
+              <Popconfirm
+                title="Bạn chắc chắn muốn mở lại bầu cử?"
+                okText="Mở lại bầu cử"
+                cancelText="Hủy"
+                onConfirm={handleToggleVoting}
+                overlayClassName="dark-popconfirm"
+                cancelButtonProps={{
+                  className: 'font-bold px-4 rounded bg-[#fcbb1d] border-none text-[#15181a] hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]'
+                }}
+                okButtonProps={{
+                  className: 'font-bold px-4 rounded bg-[#52c41a] border-none text-[#ffffff] hover:bg-[#52c41a] hover:bg-opacity-70 hover:text-[#ffffff] focus:bg-[#52c41a] focus:text-[#ffffff]'
+                }}
+              >
+                <Button
+                  className="font-bold px-4 rounded border-none bg-[#52c41a] text-[#ffffff] hover:bg-[#52c41a] hover:bg-opacity-70 hover:text-[#ffffff] focus:bg-[#52c41a] focus:text-[#ffffff]"
+                >
+                  ✅ Mở lại bầu cử
+                </Button>
+              </Popconfirm>
+            )}
+          </div>
+        </div>
+
         <Tabs items={items} onChange={(activeKey) => setTabChange(activeKey)} className='font-bold' />
       </>
     </AppLayout>

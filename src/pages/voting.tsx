@@ -225,7 +225,7 @@ const VotingPage = () => {
             style={{ marginTop: '-100px' }}
             status="warning"
             className="px-2 lg:px-32 pt-0"
-            title="Mã bầu cử chỉ được dùng 1 lần duy nhất!"
+            title="Mã bầu cử đã được sử dụng, không hợp lệ hoặc bầu cử đã kết thúc."
           />
 
         </div>

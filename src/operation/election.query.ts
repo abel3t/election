@@ -18,6 +18,7 @@ export const GET_ELECTION = gql`
     getElection(electionId: $electionId) {
       id
       name
+      status
     }
   }
 `;
