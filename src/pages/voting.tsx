@@ -66,13 +66,19 @@ const VotingPage = () => {
     );
 
     createVotes(electionId, codeId, selectedCandidateIds)
-      .then(() => {
+      .then((result) => {
+        if (result?.errors && result.errors.length > 0) {
+          message.error('Không thể gửi phiếu bầu cử');
+          setIsSubmitting(false);
+          setIsModalOpen(false);
+          return;
+        }
         setIsSubmitting(false);
         setIsSubmitted(true);
         setIsModalOpen(false);
       })
       .catch((error) => {
-        console.log(error);
+        message.error('Không thể gửi phiếu bầu cử');
         setIsSubmitting(false);
         setIsModalOpen(false);
       });

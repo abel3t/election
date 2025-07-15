@@ -579,7 +579,7 @@ const CandidateComponent = ({
 
   const [form] = Form.useForm();
 
-  const onFinish = ({ name }: any) => {
+  const onFinish = async ({ name }: any) => {
     setIsSubmitting(true);
     const fmData = new FormData();
     const config = {
@@ -587,27 +587,28 @@ const CandidateComponent = ({
     };
 
     fmData.append('file', fileList[0].originFileObj as RcFile);
-    return axios
-      .post(
+    try {
+      const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/election/uploadFile`,
         fmData,
         config
-      )
-      .then((res) => {
-        createCandidate(electionId, name, res.data.link)
-          .then(() => setIsLoadCandidate(!isLoadCandidate))
-          .catch((error: Error) => message.error(error.message));
-
-        setIsModalOpen(false);
+      );
+      const result = await createCandidate(electionId, name, res.data.link);
+      // Check for GraphQL errors in result
+      if (result?.errors && result.errors.length > 0) {
+        message.error('Không thể tạo ứng cử viên');
         setIsSubmitting(false);
-
-        form.resetFields();
-        setFileList([]);
-      })
-      .catch((err) => {
-        const error = new Error('Some error');
-        setIsSubmitting(false);
-      });
+        return;
+      }
+      setIsLoadCandidate(!isLoadCandidate);
+      setIsModalOpen(false);
+      setIsSubmitting(false);
+      form.resetFields();
+      setFileList([]);
+    } catch (error: any) {
+      message.error(error?.message || 'Có lỗi xảy ra khi tạo ứng cử viên!');
+      setIsSubmitting(false);
+    }
   };
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -696,14 +697,21 @@ const CodeComponent = ({
 }: any) => {
   const unUsedCodes = codes.filter((code: any) => !code.isUsed);
   const usedCodes = codes.filter((code: any) => code.isUsed);
-  const handleGenerateCodes = () => {
+  const handleGenerateCodes = async () => {
     const amountText = prompt('Nhập số lượng mã bạn muốn tạo thêm!');
 
     const amount = Number.parseInt(amountText ?? '');
     if (amount) {
-      generateCodes(electionId, amount)
-        .then(() => setIsLoadCode(!isLoadCode))
-        .catch((error: Error) => message.error(error.message));
+      try {
+        const result = await generateCodes(electionId, amount);
+        if (result?.errors && result.errors.length > 0) {
+          message.error('Không thể tạo mã bầu cử');
+          return;
+        }
+        setIsLoadCode(!isLoadCode);
+      } catch (error: any) {
+        message.error(error?.message || 'Có lỗi xảy ra khi tạo mã bầu cử!');
+      }
     } else {
       message.error('Bạn phải nhập vào một số tự nhiên!');
     }
@@ -1275,16 +1283,18 @@ const DeleteComponent = ({
   setIsLoadCandidate,
   isLoadCandidate
 }: any) => {
-  const handleDeleteCandidate = () => {
-    deleteCandidate(record.electionId, record.id)
-      .then(() => {
-        message.success('Xoá ứng cử viên thành công!');
-        setIsLoadCandidate(!isLoadCandidate);
-      })
-      .catch((error: Error) => {
-        console.log(error);
+  const handleDeleteCandidate = async () => {
+    try {
+      const result = await deleteCandidate(record.electionId, record.id);
+      if (result?.errors && result.errors.length > 0) {
         message.error('Xoá ứng cử viên thất bại!');
-      });
+        return;
+      }
+      message.success('Xoá ứng cử viên thành công!');
+      setIsLoadCandidate(!isLoadCandidate);
+    } catch (error) {
+      message.error('Xoá ứng cử viên thất bại!');
+    }
   };
 
   return (
