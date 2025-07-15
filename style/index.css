@@ -75,6 +75,8 @@
 
 .dark-modal .ant-modal-title {
     color: #ffffff;
+    margin-top: 25px !important;
+    font-weight: 600;
 }
 
 .dark-modal .ant-modal-close-icon {
