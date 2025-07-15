@@ -217,13 +217,15 @@ const ElectionDetailPage: React.FC = () => {
     }
   }, [router.isReady]);
 
-  // Polling for codes and election info
+  // Polling for codes and election info with tab visibility check
   useEffect(() => {
     if (!electionId) return;
     let codesInterval: NodeJS.Timeout;
     let isFetching = false;
+    let isTabActive = true;
+
     const fetchCodesAndElection = () => {
-      if (isFetching) return;
+      if (!isTabActive || isFetching) return;
       isFetching = true;
       Promise.all([
         getCodes(electionId),
@@ -241,18 +243,32 @@ const ElectionDetailPage: React.FC = () => {
           isFetching = false;
         });
     };
+
+    const handleVisibilityChange = () => {
+      isTabActive = !document.hidden;
+      if (isTabActive) {
+        fetchCodesAndElection();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     fetchCodesAndElection();
     codesInterval = setInterval(fetchCodesAndElection, 5000);
-    return () => clearInterval(codesInterval);
+    return () => {
+      clearInterval(codesInterval);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [electionId, isLoadCode]);
 
-  // Polling for candidates
+  // Polling for candidates with tab visibility check
   useEffect(() => {
     if (!electionId) return;
     let candidatesInterval: NodeJS.Timeout;
     let isFetching = false;
+    let isTabActive = true;
+
     const fetchCandidates = () => {
-      if (isFetching) return;
+      if (!isTabActive || isFetching) return;
       isFetching = true;
       getCandidates(electionId)
         .then((data) => {
@@ -269,14 +285,26 @@ const ElectionDetailPage: React.FC = () => {
           isFetching = false;
         });
     };
+
+    const handleVisibilityChange = () => {
+      isTabActive = !document.hidden;
+      if (isTabActive) {
+        fetchCandidates();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     fetchCandidates();
     candidatesInterval = setInterval(fetchCandidates, 5000);
-    return () => clearInterval(candidatesInterval);
+    return () => {
+      clearInterval(candidatesInterval);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [electionId, isLoadCandidate, tabChange]);
 
   const items = [
     {
-      label: 'Người ứng cử',
+      label: 'Ứng cử viên',
       key: '1',
       children: (
         <CandidateComponent
@@ -432,7 +460,7 @@ const ElectionDetailPage: React.FC = () => {
             color: #fcbb1d !important;
           }
         `}</style>
-        <div className="my-1 text-2xl font-bold text-white" style={{ backgroundColor: '#15181a' }}>{election.name}</div>
+        <div className="my-2 text-3xl font-bold text-white mt-3 w-full text-center" style={{ backgroundColor: '#15181a' }}>{election.name}</div>
 
         {/* Status bar with live badge and toggle button */}
         <div className="flex items-center justify-between mb-4 px-2 py-2 rounded" style={{ backgroundColor: '#23272b' }}>
@@ -667,10 +695,10 @@ const CandidateComponent = ({
           id="CreateCandidateForm"
           onFinish={onFinish}
         >
-          <Form.Item name="name" label="Họ và tên" rules={[{ required: true }]}>
+          <Form.Item name="name" label="Họ và tên" rules={[{ required: true }]}> 
             <Input />
           </Form.Item>
-          <Form.Item name="image" label="Hình ảnh" rules={[{ required: true }]}>
+          <Form.Item name="image" label="Hình ảnh" rules={[{ required: true }]}> 
             <Upload
               beforeUpload={() => false}
               listType="picture-card"
@@ -684,7 +712,12 @@ const CandidateComponent = ({
         </Form>
       </Modal>
 
-      <Table columns={columns} dataSource={candidates} className="candidate-table dark-pagination" />
+      <Table
+        columns={columns}
+        dataSource={candidates}
+        className="candidate-table dark-pagination"
+        pagination={candidates.length < 10 ? false : undefined}
+      />
     </div>
   );
 };
@@ -770,7 +803,12 @@ const CodeComponent = ({
       )}
 
       <div className='w-full overflow-x-scroll'>
-        <Table columns={codeColumns} dataSource={codes} className="code-table dark-pagination" />
+        <Table
+          columns={codeColumns}
+          dataSource={codes}
+          className="code-table dark-pagination"
+          pagination={codes.length < 10 ? false : undefined}
+        />
       </div>
     </div>
   );
@@ -780,13 +818,15 @@ const ReportComponent = ({ electionId, codes, tabChange }: any) => {
   const [data, setData] = useState([]);
   const [election, setElection] = useState({} as any);
 
-  // Polling for report data
+  // Polling for report data with tab visibility check
   useEffect(() => {
     if (!electionId) return;
     let reportInterval: NodeJS.Timeout;
     let isFetching = false;
+    let isTabActive = true;
+
     const fetchReport = () => {
-      if (isFetching) return;
+      if (!isTabActive || isFetching) return;
       isFetching = true;
       Promise.all([
         getElectionResult(electionId),
@@ -804,9 +844,21 @@ const ReportComponent = ({ electionId, codes, tabChange }: any) => {
           isFetching = false;
         });
     };
+
+    const handleVisibilityChange = () => {
+      isTabActive = !document.hidden;
+      if (isTabActive) {
+        fetchReport();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     fetchReport();
     reportInterval = setInterval(fetchReport, 5000);
-    return () => clearInterval(reportInterval);
+    return () => {
+      clearInterval(reportInterval);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [tabChange, electionId]);
 
   const totalCodes = codes.length;
@@ -1073,13 +1125,13 @@ const ReportComponent = ({ electionId, codes, tabChange }: any) => {
           onClick={exportVotingDataToExcel}
           className="font-bold px-4 rounded bg-[#fcbb1d] text-[#ffffff] border-none hover:bg-[#fcbb1d] hover:bg-opacity-75 hover:opacity-75 hover:text-[#ffffff] focus:bg-[#fcbb1d] focus:text-[#ffffff]"
         >
-          📊 Xuất Báo Cáo Đầy Đủ
+          📊 Xuất báo cáo đầy đủ
         </Button>
         <Button
           onClick={exportVoteRecordsOnly}
           className="font-bold px-4 rounded bg-[#1890ff] text-[#ffffff] border-none hover:bg-[#1890ff] hover:bg-opacity-75 hover:opacity-75 hover:text-[#ffffff] focus:bg-[#1890ff] focus:text-[#ffffff]"
         >
-          📋 Xuất Dữ Liệu Phiếu Bầu
+          📋 Xuất dữ liệu phiếu bầu
         </Button>
       </div>
 
@@ -1179,13 +1231,15 @@ const ResultComponent = ({ electionId, tabChange }: any) => {
   const [data, setData] = useState([]);
   const [election, setElection] = useState({} as any);
 
-  // Polling for result data
+  // Polling for result data with tab visibility check
   useEffect(() => {
     if (!electionId) return;
     let resultInterval: NodeJS.Timeout;
     let isFetching = false;
+    let isTabActive = true;
+
     const fetchResult = () => {
-      if (isFetching) return;
+      if (!isTabActive || isFetching) return;
       isFetching = true;
       Promise.all([
         getElectionResult(electionId),
@@ -1203,9 +1257,21 @@ const ResultComponent = ({ electionId, tabChange }: any) => {
           isFetching = false;
         });
     };
+
+    const handleVisibilityChange = () => {
+      isTabActive = !document.hidden;
+      if (isTabActive) {
+        fetchResult();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     fetchResult();
     resultInterval = setInterval(fetchResult, 5000);
-    return () => clearInterval(resultInterval);
+    return () => {
+      clearInterval(resultInterval);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [tabChange, electionId]);
 
   const exportResultsToExcel = () => {
@@ -1268,11 +1334,16 @@ const ResultComponent = ({ electionId, tabChange }: any) => {
           onClick={exportResultsToExcel}
           className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-75 hover:opacity-75 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
         >
-          📊 Xuất Kết Quả
+          📊 Xuất kết quả
         </Button>
       </div>
       <div className='w-full overflow-x-scroll'>
-        <Table columns={resultColumns} dataSource={data} className="result-table dark-pagination" />
+        <Table
+          columns={resultColumns}
+          dataSource={data}
+          className="result-table dark-pagination"
+          pagination={data.length < 10 ? false : undefined}
+        />
       </div>
     </div>
   );
