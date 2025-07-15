@@ -81,7 +81,7 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
       >
         <Link href={href}>
           <p
-            className="font-bold text-white cursor-pointer w-full py-4 px-2"
+            className="font-bold text-white cursor-pointer w-full py-4 px-2 hover:opacity-75"
             style={{ cursor: 'pointer', fontSize: '1.5em' }}
           >
             {title}
@@ -98,14 +98,14 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
               overlayClassName="dark-popconfirm"
               cancelButtonProps={{
                 style: { backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' },
-                className: 'font-bold px-4 rounded'
+                className: 'font-bold px-4 rounded hover:opacity-75'
               }}
               okButtonProps={{
                 style: { backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' },
-                className: 'font-bold px-4 rounded text-red'
+                className: 'font-bold px-4 rounded text-red hover:opacity-75'
               }}
             >
-              <Button className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none focus:bg-[#fcbb1d] focus:text-[#15181a]">
+              <Button className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none focus:bg-[#fcbb1d] focus:text-[#15181a] hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a]">
                 Sao chép
               </Button>
             </Popconfirm>
@@ -114,8 +114,7 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
           <div className="inline-flex ml-2 items-center text-base font-semibold">
             <Button
               onClick={showModal}
-              style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
-              className="font-bold px-4 rounded"
+              className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none focus:bg-[#fcbb1d] focus:text-[#15181a] hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a]"
             >
               Chỉnh sửa
             </Button>
@@ -137,7 +136,7 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
                 className: 'font-bold px-4 rounded'
               }}
             >
-              <Button style={{ backgroundColor: '#da0e0e', border: 'none' }} className="font-bold px-4 rounded focus:bg-[#da0e0e] focus:text-[#15181a]">
+              <Button className="font-bold px-4 rounded bg-[#da0e0e] text-[#15181a] border-none hover:bg-[#da0e0e] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#da0e0e] focus:text-[#15181a]">
                 Xoá
               </Button>
             </Popconfirm>
@@ -165,8 +164,7 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
             form="UpdateForm" 
             key="submit" 
             htmlType="submit"
-            style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
-            className="font-bold px-4 rounded"
+            className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-75 hover:opacity-75 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
           >
             Sửa
           </Button>

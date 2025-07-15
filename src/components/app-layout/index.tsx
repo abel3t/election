@@ -1,5 +1,6 @@
 import { Button, Layout } from 'antd';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const { Header, Footer } = Layout;
 
@@ -8,10 +9,14 @@ type Props = {
 };
 
 const AppLayout = ({ children }: Props) => {
+  const router = useRouter();
+  
   const handleLogout = () => {
     localStorage.clear(); 
     window.location.href = '/login';
   };
+
+  const isHomepage = router.pathname === '/';
 
   return (
     <Layout>
@@ -20,17 +25,18 @@ const AppLayout = ({ children }: Props) => {
         style={{ justifyContent: 'space-between', paddingTop: '12px' }}
       >
         <Link href="/">
-          <a className="text-white text-3xl">Bầu Cử</a>
+          <a className="text-white text-3xl hover:opacity-70 hover:text-white">Bầu Cử</a>
         </Link>
-        <div>
-          <Button
-            style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
-            className="font-bold px-4 rounded"
-            onClick={handleLogout}
-          >
-            Đăng Xuất
-          </Button>
-        </div>
+        {isHomepage && (
+          <div>
+            <Button
+              className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a]"
+              onClick={handleLogout}
+            >
+              Đăng Xuất
+            </Button>
+          </div>
+        )}
       </Header>
 
       <div className="px-2 lg:px-32 min-h-full text-white" style={{ backgroundColor: '#15181a', minHeight: '84vh' }}>

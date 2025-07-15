@@ -19,12 +19,14 @@ const columns = [
     render: (index: string) => <div className="text-md font-bold" style={{ color: '#ffffff' }}>{index}</div>
   },
   {
-    title: <span className="font-bold">Ảnh</span>,
+    title: <p className="font-bold text-center w-full">Ảnh</p>,
     width: '25%',
     dataIndex: 'imageUrl',
     key: 'imageUrl',
     render: (url: string) => (
-      <Image src={url} alt={'N/A'} width={80} height={80} />
+      <div className='flex justify-center items-center w-full'>
+        <Image src={url} alt={'N/A'} width={80} height={80} />
+      </div>
     )
   },
   {
@@ -206,21 +208,23 @@ const VotingPage = () => {
         }
       `}</style>
       {isSubmitted && isValidPage && (
-        <Result
-          style={{ marginTop: '100px' }}
-          className="px-2 lg:px-32"
-          status="success"
-          title="Bạn đã gửi phiếu bầu thành công!"
-        />
+        <div className='min-h-screen bg-[#15181a] flex items-center justify-center'>
+          <Result
+            style={{ marginTop: '-100px' }}
+            className="px-2 lg:px-32 py-0"
+            status="success"
+            title="Bạn đã gửi phiếu bầu thành công!"
+          />
+        </div>
       )}
 
       {!isValidPage && (
         <div className='min-h-screen bg-[#15181a] flex items-center justify-center'>
 
           <Result
-            style={{ marginTop: '100px' }}
+            style={{ marginTop: '-100px' }}
             status="warning"
-            className="px-2 lg:px-32"
+            className="px-2 lg:px-32 pt-0"
             title="Mã bầu cử chỉ được dùng 1 lần duy nhất!"
           />
 
@@ -273,8 +277,7 @@ const VotingPage = () => {
 
               <div className="flex justify-center items-center my-6">
                 <Button
-                  style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
-                  className="font-bold px-10 py-6 rounded text-xl disabled:opacity-50 flex items-center justify-center"
+                  className="font-bold px-10 py-6 rounded text-xl disabled:opacity-50 flex items-center justify-center bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-75 hover:opacity-75 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
                   onClick={() => showModal()}
                   disabled={selectedRowKeys.length !== maxSelected}
                 >
@@ -305,8 +308,7 @@ const VotingPage = () => {
                 key="submit"
                 htmlType="submit"
                 onClick={handleOk}
-                style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
-                className="font-bold px-4 rounded"
+                className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-75 hover:opacity-75 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
               >
                 {isSubmitting && <Spin indicator={antIcon} />}
                 {!isSubmitting && 'Xác Nhận'}

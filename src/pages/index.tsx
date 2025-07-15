@@ -87,8 +87,7 @@ const App: NextPage = () => {
               <Button
                 type="primary"
                 onClick={showModal}
-                style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
-                className="font-bold px-4 rounded"
+                className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a]"
               >
                 Tạo bầu cử
               </Button>

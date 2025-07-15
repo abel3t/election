@@ -393,6 +393,10 @@
     background: black !important;
 }
 
+.ant-result-title {
+    @apply text-white text-lg md:text-xl;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

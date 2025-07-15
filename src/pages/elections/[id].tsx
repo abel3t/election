@@ -114,12 +114,15 @@ const resultColumns: ColumnsType<ResultDataType> = [
     render: (index) => <div className="font-bold">{index}</div>
   },
   {
-    title: <span className="font-bold">Ảnh</span>,
+    title: <p className="font-bold text-center w-full">Ảnh</p>,
     dataIndex: 'imageUrl',
     width: '20%',
     key: 'imageUrl',
+    align: 'center',
     render: (url: string) => (
-      <img src={url} alt={'N/A'} width={80} height={80}/>
+      <div className="flex justify-center items-center w-full">
+        <img src={url} alt={'N/A'} width={80} height={80} />
+      </div>
     )
   },
   {
@@ -171,7 +174,7 @@ const resultColumns: ColumnsType<ResultDataType> = [
     dataIndex: '',
     key: 'x',
     width: '20%',
-    render: (_, record) => <DetailComponent record={record}/>
+    render: (_, record) => <DetailComponent record={record} />
   }
 ];
 
@@ -265,7 +268,7 @@ const ElectionDetailPage: React.FC = () => {
       label: 'Kết quả',
       key: '4',
       children: (
-        <ResultComponent tabChange={tabChange} electionId={electionId}/>
+        <ResultComponent tabChange={tabChange} electionId={electionId} />
       )
     }
   ];
@@ -384,7 +387,7 @@ const ElectionDetailPage: React.FC = () => {
           }
         `}</style>
         <div className="my-1 text-2xl font-bold text-white" style={{ backgroundColor: '#15181a' }}>{election.name}</div>
-        <Tabs items={items} onChange={(activeKey) => setTabChange(activeKey)} className='font-bold'/>
+        <Tabs items={items} onChange={(activeKey) => setTabChange(activeKey)} className='font-bold' />
       </>
     </AppLayout>
   );
@@ -408,12 +411,14 @@ const CandidateComponent = ({
       key: 'index'
     },
     {
-      title: <span className="font-bold">Ảnh</span>,
+      title: <p className="font-bold text-center w-full">Ảnh</p>,
       width: '20%',
       dataIndex: 'imageUrl',
       key: 'imageUrl',
       render: (url: string) => (
-        <NextImage src={url} alt={'N/A'} width={80} height={80} />
+        <div className='flex justify-center items-center w-full'>
+          <NextImage src={url} alt={'N/A'} width={80} height={80} />
+        </div>
       )
     },
     {
@@ -510,15 +515,14 @@ const CandidateComponent = ({
     const imgWindow = window.open(src);
     imgWindow?.document.write(image.outerHTML);
   };
-  const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin/>;
+  const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin />;
 
   return (
     <div key={`election-component-${electionId}`} style={{ backgroundColor: '#15181a', color: 'white' }}>
       <Button
         type="primary"
         onClick={showModal}
-        style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
-        className="font-bold px-4 rounded mb-2"
+        className="font-bold px-4 rounded mb-2 bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
       >
         Tạo ứng cử viên
       </Button>
@@ -527,16 +531,15 @@ const CandidateComponent = ({
         open={isModalOpen}
         onCancel={handleCancel}
         className={'dark-modal'}
-        style={{ border: '1px solid #3a4044'}}
+        style={{ border: '1px solid #3a4044' }}
         footer={[
           <Button
             form="CreateCandidateForm"
             key="submit"
             htmlType="submit"
-            style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
-            className="font-bold px-4 rounded"
+            className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
           >
-            {isSubmitting && <Spin indicator={antIcon}/>}
+            {isSubmitting && <Spin indicator={antIcon} />}
             {!isSubmitting && 'Gửi'}
           </Button>
         ]}
@@ -549,7 +552,7 @@ const CandidateComponent = ({
           onFinish={onFinish}
         >
           <Form.Item name="name" label="Họ và tên" rules={[{ required: true }]}>
-            <Input/>
+            <Input />
           </Form.Item>
           <Form.Item name="image" label="Hình ảnh" rules={[{ required: true }]}>
             <Upload
@@ -565,7 +568,7 @@ const CandidateComponent = ({
         </Form>
       </Modal>
 
-      <Table columns={columns} dataSource={candidates} className="candidate-table dark-pagination"/>
+      <Table columns={columns} dataSource={candidates} className="candidate-table dark-pagination" />
     </div>
   );
 };
@@ -616,19 +619,17 @@ const CodeComponent = ({
   };
 
   return (
-    <div key={`code-component-${electionId}`}>
+    <div key={`code-component-${electionId}`} >
       <Button
         onClick={handleGenerateCodes}
-        style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
-        className="font-bold px-4 rounded mb-2"
+        className="font-bold px-4 rounded mb-2 bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
       >
         Tạo mã bầu cử
       </Button>
 
       <Button
         onClick={handleDownloadCodes}
-        style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
-        className="font-bold px-4 rounded mb-2 ml-2"
+        className="font-bold px-4 rounded mb-2 ml-2 bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
       >
         Tải xuống
       </Button>
@@ -645,7 +646,9 @@ const CodeComponent = ({
         </Tag>
       )}
 
-      <Table columns={codeColumns} dataSource={codes} className="code-table dark-pagination"/>
+      <div className='w-full overflow-x-scroll'>
+        <Table columns={codeColumns} dataSource={codes} className="code-table dark-pagination" />
+      </div>
     </div>
   );
 };
@@ -683,8 +686,22 @@ const ReportComponent = ({ electionId, codes, tabChange }: any) => {
   // Excel export functions
   const exportVotingDataToExcel = () => {
     const workbook = XLSX.utils.book_new();
-    
-    // Sheet 1: Voting Codes Status
+
+    // Sheet 1: Election Summary
+    const summaryData = [
+      { 'Thông Tin': 'Tổng Số Mã Được Tạo', 'Giá Trị': totalCodes },
+      { 'Thông Tin': 'Số Mã Đã Sử Dụng', 'Giá Trị': usedCodes },
+      { 'Thông Tin': 'Số Mã Chưa Sử Dụng', 'Giá Trị': unusedCodes },
+      { 'Thông Tin': 'Tỷ Lệ Tham Gia (%)', 'Giá Trị': votingRate.toFixed(1) },
+      { 'Thông Tin': 'Tổng Số Phiếu Bầu', 'Giá Trị': totalVotesFromResults },
+      { 'Thông Tin': 'Số Ứng Cử Viên', 'Giá Trị': data.length },
+      { 'Thông Tin': 'Thời Gian Xuất Báo Cáo', 'Giá Trị': new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }) }
+    ];
+
+    const summarySheet = XLSX.utils.json_to_sheet(summaryData);
+    XLSX.utils.book_append_sheet(workbook, summarySheet, 'Tóm Tắt Bầu Cử');
+
+    // Sheet 2: Voting Codes Status
     const codesData = codes.map((code: any, index: number) => ({
       'STT': index + 1,
       'Mã ID': code.id,
@@ -693,91 +710,189 @@ const ReportComponent = ({ electionId, codes, tabChange }: any) => {
       'Lượt Tải Xuống': code.downloaded || 0,
       'Thời Gian Tạo': code.createdAt ? new Date(code.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }) : 'N/A'
     }));
-    
-    const codesSheet = XLSX.utils.json_to_sheet(codesData);
-    XLSX.utils.book_append_sheet(workbook, codesSheet, 'Mã Bầu Cử');
 
-    // Sheet 2: Detailed Vote Records
-    const voteRecords: any[] = [];
-    data.forEach((candidate: any) => {
-      if (candidate.votes && candidate.votes.length > 0) {
-        candidate.votes.forEach((vote: any) => {
-          voteRecords.push({
-            'STT': voteRecords.length + 1,
-            'Mã Phiếu': vote.text,
-            'Ứng Cử Viên': candidate.name,
-            'Thời Gian Bỏ Phiếu': new Date(vote.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
-            'Ngày Bỏ Phiếu': new Date(vote.createdAt).toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
-            'Giờ Bỏ Phiếu': new Date(vote.createdAt).toLocaleTimeString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })
-          });
-        });
-      }
-    });
-    
-    const voteRecordsSheet = XLSX.utils.json_to_sheet(voteRecords);
-    XLSX.utils.book_append_sheet(workbook, voteRecordsSheet, 'Chi Tiết Phiếu Bầu');
+    const codesSheet = XLSX.utils.json_to_sheet(codesData);
+    XLSX.utils.book_append_sheet(workbook, codesSheet, 'Trạng Thái Mã Bầu Cử');
 
     // Sheet 3: Candidates Results
     const candidatesData = data.map((candidate: any) => ({
       'STT': candidate.index,
       'Tên Ứng Cử Viên': candidate.name,
-      'Số Phiếu Bầu': candidate.totalVotes || 0,
-      'Tổng Số Mã': candidate.totalCodes || 0,
-      'Tỷ Lệ (%)': candidate.totalCodes > 0 ? ((candidate.totalVotes / candidate.totalCodes) * 100).toFixed(1) : '0.0',
-      'Số Lượt Bỏ Phiếu': candidate.votes ? candidate.votes.length : 0
+      'Tổng Số Phiếu': candidate.totalCodes || 0,
+      'Số Phiếu Nhận Được': candidate.totalVotes || 0,
+      'Tỷ Lệ (%)': candidate.totalCodes > 0 ? ((candidate.totalVotes / candidate.totalCodes) * 100).toFixed(1) : '0.0'
     }));
-    
+
     const candidatesSheet = XLSX.utils.json_to_sheet(candidatesData);
     XLSX.utils.book_append_sheet(workbook, candidatesSheet, 'Kết Quả Ứng Cử Viên');
 
-    // Sheet 4: Election Summary
-    const summaryData = [
-      { 'Thông Tin': 'Tổng Số Mã Được Tạo', 'Giá Trị': totalCodes },
-      { 'Thông Tin': 'Số Mã Đã Sử Dụng', 'Giá Trị': usedCodes },
-      { 'Thông Tin': 'Số Mã Chưa Sử Dụng', 'Giá Trị': unusedCodes },
-      { 'Thông Tin': 'Tỷ Lệ Tham Gia (%)', 'Giá Trị': votingRate.toFixed(1) },
-      { 'Thông Tin': 'Tổng Số Phiếu Bầu', 'Giá Trị': totalVotesFromResults },
-      { 'Thông Tin': 'Số Ứng Cử Viên', 'Giá Trị': data.length },
-      { 'Thông Tin': 'Tổng Lượt Tải Xuống', 'Giá Trị': codes.reduce((sum: number, code: any) => sum + (code.downloaded || 0), 0) },
-      { 'Thông Tin': 'Thời Gian Xuất Báo Cáo', 'Giá Trị': new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }) }
-    ];
+    // Sheet 4: Vote Overview (Grouped by Vote ID)
+    const votesByCode: { [key: string]: any } = {};
     
-    const summarySheet = XLSX.utils.json_to_sheet(summaryData);
-    XLSX.utils.book_append_sheet(workbook, summarySheet, 'Tóm Tắt Bầu Cử');
-
-    // Export the file
-    const fileName = `BaoCao_BauCu_${election.name || electionId}_${new Date().toISOString().split('T')[0]}.xlsx`;
-    XLSX.writeFile(workbook, fileName);
-    
-    message.success('Xuất file Excel thành công!');
-  };
-
-  const exportVoteRecordsOnly = () => {
-    const voteRecords: any[] = [];
     data.forEach((candidate: any) => {
       if (candidate.votes && candidate.votes.length > 0) {
         candidate.votes.forEach((vote: any) => {
-          voteRecords.push({
-            'STT': voteRecords.length + 1,
-            'Mã Phiếu': vote.text,
-            'Ứng Cử Viên Được Bầu': candidate.name,
-            'Thời Gian Bỏ Phiếu': new Date(vote.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
-            'Ngày': new Date(vote.createdAt).toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
-            'Giờ': new Date(vote.createdAt).toLocaleTimeString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
-            'ID Ứng Cử Viên': candidate.id || 'N/A'
+          const voteId = vote.text;
+          if (!votesByCode[voteId]) {
+            votesByCode[voteId] = {
+              voteId: voteId,
+              timestamp: vote.createdAt,
+              candidates: []
+            };
+          }
+          votesByCode[voteId].candidates.push({
+            name: candidate.name,
+            id: candidate.id || 'N/A'
           });
         });
       }
     });
 
-    const workbook = XLSX.utils.book_new();
-    const worksheet = XLSX.utils.json_to_sheet(voteRecords);
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Dữ Liệu Phiếu Bầu');
+    const groupedRecords: any[] = [];
+    Object.values(votesByCode).forEach((voteGroup: any, index: number) => {
+      groupedRecords.push({
+        'STT': index + 1,
+        'Mã Phiếu': voteGroup.voteId,
+        'Số Ứng Cử Viên Được Bầu': voteGroup.candidates.length,
+        'Thời Gian Bỏ Phiếu': new Date(voteGroup.timestamp).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
+        'Ngày': new Date(voteGroup.timestamp).toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
+        'Giờ': new Date(voteGroup.timestamp).toLocaleTimeString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })
+      });
+    });
 
-    const fileName = `DuLieu_PhieuBau_${election.name || electionId}_${new Date().toISOString().split('T')[0]}.xlsx`;
+    const groupedSheet = XLSX.utils.json_to_sheet(groupedRecords);
+    XLSX.utils.book_append_sheet(workbook, groupedSheet, 'Tổng Quan Phiếu Bầu');
+
+    // Sheet 5: Individual Vote Details
+    const detailedRecords: any[] = [];
+    data.forEach((candidate: any) => {
+      if (candidate.votes && candidate.votes.length > 0) {
+        candidate.votes.forEach((vote: any) => {
+          detailedRecords.push({
+            'STT': detailedRecords.length + 1,
+            'Mã Phiếu': vote.text,
+            'Ứng Cử Viên Được Bầu': candidate.name,
+            'ID Ứng Cử Viên': candidate.id || 'N/A',
+            'Thời Gian Bỏ Phiếu': new Date(vote.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
+            'Ngày': new Date(vote.createdAt).toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
+            'Giờ': new Date(vote.createdAt).toLocaleTimeString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })
+          });
+        });
+      }
+    });
+
+    const detailedSheet = XLSX.utils.json_to_sheet(detailedRecords);
+    XLSX.utils.book_append_sheet(workbook, detailedSheet, 'Chi Tiết Theo Ứng Cử Viên');
+
+    // Sheet 6: Vote Details by Code
+    const summaryRecords: any[] = [];
+    Object.values(votesByCode).forEach((voteGroup: any) => {
+      voteGroup.candidates.forEach((candidate: any, index: number) => {
+        summaryRecords.push({
+          'Mã Phiếu': voteGroup.voteId,
+          'Thứ Tự Trong Phiếu': index + 1,
+          'Ứng Cử Viên': candidate.name,
+          'ID Ứng Cử Viên': candidate.id,
+          'Tổng Số Ứng Cử Viên Trong Phiếu': voteGroup.candidates.length,
+          'Thời Gian Bỏ Phiếu': new Date(voteGroup.timestamp).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })
+        });
+      });
+    });
+
+    const voteDetailSheet = XLSX.utils.json_to_sheet(summaryRecords);
+    XLSX.utils.book_append_sheet(workbook, voteDetailSheet, 'Chi Tiết Theo Mã Phiếu');
+
+    // Export the file
+    const fileName = `BaoCao_BauCu_DayDu_${election.name || electionId}_${new Date().toISOString().split('T')[0]}.xlsx`;
     XLSX.writeFile(workbook, fileName);
+
+    message.success('Xuất file Excel thành công!');
+  };
+
+  const exportVoteRecordsOnly = () => {
+    const workbook = XLSX.utils.book_new();
+
+    // Sheet 1: Grouped by Vote ID (Easy to understand)
+    const votesByCode: { [key: string]: any } = {};
     
-    message.success('Xuất dữ liệu phiếu bầu thành công!');
+    data.forEach((candidate: any) => {
+      if (candidate.votes && candidate.votes.length > 0) {
+        candidate.votes.forEach((vote: any) => {
+          const voteId = vote.text;
+          if (!votesByCode[voteId]) {
+            votesByCode[voteId] = {
+              voteId: voteId,
+              timestamp: vote.createdAt,
+              candidates: []
+            };
+          }
+          votesByCode[voteId].candidates.push({
+            name: candidate.name,
+            id: candidate.id || 'N/A'
+          });
+        });
+      }
+    });
+
+    // Create grouped data sheet
+    const groupedRecords: any[] = [];
+    Object.values(votesByCode).forEach((voteGroup: any, index: number) => {
+      groupedRecords.push({
+        'STT': index + 1,
+        'Mã Phiếu': voteGroup.voteId,
+        'Số Ứng Cử Viên Được Bầu': voteGroup.candidates.length,
+        'Thời Gian Bỏ Phiếu': new Date(voteGroup.timestamp).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
+        'Ngày': new Date(voteGroup.timestamp).toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
+        'Giờ': new Date(voteGroup.timestamp).toLocaleTimeString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })
+      });
+    });
+
+    const groupedSheet = XLSX.utils.json_to_sheet(groupedRecords);
+    XLSX.utils.book_append_sheet(workbook, groupedSheet, 'Tổng Quan Phiếu Bầu');
+
+    // Sheet 2: Individual Vote Records (Detailed)
+    const detailedRecords: any[] = [];
+    data.forEach((candidate: any) => {
+      if (candidate.votes && candidate.votes.length > 0) {
+        candidate.votes.forEach((vote: any) => {
+          detailedRecords.push({
+            'STT': detailedRecords.length + 1,
+            'Mã Phiếu': vote.text,
+            'Ứng Cử Viên Được Bầu': candidate.name,
+            'ID Ứng Cử Viên': candidate.id || 'N/A',
+            'Thời Gian Bỏ Phiếu': new Date(vote.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
+            'Ngày': new Date(vote.createdAt).toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
+            'Giờ': new Date(vote.createdAt).toLocaleTimeString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })
+          });
+        });
+      }
+    });
+
+    const detailedSheet = XLSX.utils.json_to_sheet(detailedRecords);
+    XLSX.utils.book_append_sheet(workbook, detailedSheet, 'Chi Tiết Theo Ứng Cử Viên');
+
+    // Sheet 3: Vote Summary by Code (Shows all candidates for each vote)
+    const summaryRecords: any[] = [];
+    Object.values(votesByCode).forEach((voteGroup: any) => {
+      voteGroup.candidates.forEach((candidate: any, index: number) => {
+        summaryRecords.push({
+          'Mã Phiếu': voteGroup.voteId,
+          'Thứ Tự Trong Phiếu': index + 1,
+          'Ứng Cử Viên': candidate.name,
+          'ID Ứng Cử Viên': candidate.id,
+          'Tổng Số Ứng Cử Viên Trong Phiếu': voteGroup.candidates.length,
+          'Thời Gian Bỏ Phiếu': new Date(voteGroup.timestamp).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })
+        });
+      });
+    });
+
+    const summarySheet = XLSX.utils.json_to_sheet(summaryRecords);
+    XLSX.utils.book_append_sheet(workbook, summarySheet, 'Danh Sách Theo Mã Phiếu');
+
+    const fileName = `DuLieu_PhieuBau_ChiTiet_${election.name || electionId}_${new Date().toISOString().split('T')[0]}.xlsx`;
+    XLSX.writeFile(workbook, fileName);
+
+    message.success('Xuất dữ liệu phiếu bầu chi tiết thành công!');
   };
 
   return (
@@ -786,15 +901,13 @@ const ReportComponent = ({ electionId, codes, tabChange }: any) => {
       <div className="mb-4 flex flex-wrap gap-2">
         <Button
           onClick={exportVotingDataToExcel}
-          style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#ffffff' }}
-          className="font-bold px-4 rounded"
+          className="font-bold px-4 rounded bg-[#fcbb1d] text-[#ffffff] border-none hover:bg-[#fcbb1d] hover:bg-opacity-75 hover:opacity-75 hover:text-[#ffffff] focus:bg-[#fcbb1d] focus:text-[#ffffff]"
         >
           📊 Xuất Báo Cáo Đầy Đủ
         </Button>
         <Button
           onClick={exportVoteRecordsOnly}
-          style={{ backgroundColor: '#1890ff', borderColor: '#1890ff', color: '#ffffff' }}
-          className="font-bold px-4 rounded"
+          className="font-bold px-4 rounded bg-[#1890ff] text-[#ffffff] border-none hover:bg-[#1890ff] hover:bg-opacity-75 hover:opacity-75 hover:text-[#ffffff] focus:bg-[#1890ff] focus:text-[#ffffff]"
         >
           📋 Xuất Dữ Liệu Phiếu Bầu
         </Button>
@@ -805,7 +918,6 @@ const ReportComponent = ({ electionId, codes, tabChange }: any) => {
           <Statistic
             title={<span style={{ color: '#ffffff' }}>Tổng số mã được tạo</span>}
             value={totalCodes}
-            valueStyle={{ color: '#fcbb1d' }}
           />
         </Card>
 
@@ -822,6 +934,7 @@ const ReportComponent = ({ electionId, codes, tabChange }: any) => {
             title={<span style={{ color: '#ffffff' }}>Số mã chưa sử dụng</span>}
             value={unusedCodes}
             valueStyle={{ color: '#ff4d4f' }}
+            className='text-[#ff4d4f]'
           />
         </Card>
 
@@ -836,7 +949,7 @@ const ReportComponent = ({ electionId, codes, tabChange }: any) => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card 
+        <Card
           title={<span style={{ color: '#ffffff' }}>Tiến độ bỏ phiếu</span>}
           style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044' }}
         >
@@ -850,7 +963,7 @@ const ReportComponent = ({ electionId, codes, tabChange }: any) => {
             format={(percent) => `${percent?.toFixed(1)}%`}
             style={{ marginBottom: '20px' }}
           />
-          
+
           <div className="space-y-2">
             <div className="flex justify-between">
               <span style={{ color: '#ffffff' }}>Đã bỏ phiếu:</span>
@@ -867,7 +980,7 @@ const ReportComponent = ({ electionId, codes, tabChange }: any) => {
           </div>
         </Card>
 
-        <Card 
+        <Card
           title={<span style={{ color: '#ffffff' }}>Thống kê chi tiết</span>}
           style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044' }}
         >
@@ -878,50 +991,13 @@ const ReportComponent = ({ electionId, codes, tabChange }: any) => {
                 <span style={{ color: '#fcbb1d' }} className="text-xl font-bold">{totalVotesFromResults}</span>
               </div>
             </div>
-            
+
             <div className="p-3 rounded" style={{ backgroundColor: '#3a4044' }}>
               <div className="flex justify-between items-center">
                 <span style={{ color: '#ffffff' }}>Số ứng cử viên:</span>
                 <span style={{ color: '#fcbb1d' }} className="text-xl font-bold">{data.length}</span>
               </div>
             </div>
-
-            <div className="p-3 rounded" style={{ backgroundColor: '#3a4044' }}>
-              <div className="flex justify-between items-center">
-                <span style={{ color: '#ffffff' }}>Mã được tải xuống:</span>
-                <span style={{ color: '#fcbb1d' }} className="text-xl font-bold">
-                  {codes.reduce((sum: number, code: any) => sum + (code.downloaded || 0), 0)}
-                </span>
-              </div>
-            </div>
-          </div>
-        </Card>
-      </div>
-
-      <div className="mt-6">
-        <Card 
-          title={<span style={{ color: '#ffffff' }}>Trạng thái mã bỏ phiếu</span>}
-          style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044' }}
-        >
-          <div className="flex flex-wrap gap-2">
-            <Tag 
-              className="px-3 py-1 text-sm font-medium border-none"
-              style={{ backgroundColor: '#52c41a', color: '#ffffff' }}
-            >
-              {usedCodes} mã đã sử dụng
-            </Tag>
-            <Tag 
-              className="px-3 py-1 text-sm font-medium border-none"
-              style={{ backgroundColor: '#ff4d4f', color: '#ffffff' }}
-            >
-              {unusedCodes} mã chưa sử dụng
-            </Tag>
-            <Tag 
-              className="px-3 py-1 text-sm font-medium border-none"
-              style={{ backgroundColor: '#fcbb1d', color: '#15181a' }}
-            >
-              {totalCodes} tổng số mã
-            </Tag>
           </div>
         </Card>
       </div>
@@ -951,17 +1027,21 @@ const ResultComponent = ({ electionId, tabChange }: any) => {
 
   const exportResultsToExcel = () => {
     const workbook = XLSX.utils.book_new();
-    
+
     // Sheet 1: Results Summary
     const resultsData = data.map((candidate: any) => ({
       'Thứ Hạng': candidate.index,
       'Tên Ứng Cử Viên': candidate.name,
-      'Số Phiếu Bầu': candidate.totalVotes || 0,
-      'Tổng Số Mã': candidate.totalCodes || 0,
-      'Tỷ Lệ (%)': candidate.totalCodes > 0 ? ((candidate.totalVotes / candidate.totalCodes) * 100).toFixed(1) : '0.0',
-      'Số Lượt Bỏ Phiếu': candidate.votes ? candidate.votes.length : 0
+      'Tổng Số Phiếu': candidate.totalCodes || 0,
+      'Số Phiếu Nhận Được': candidate.totalVotes || 0,
+      'Tỷ Lệ (%)': candidate.totalCodes > 0 ? ((candidate.totalVotes / candidate.totalCodes) * 100).toFixed(1) : '0.0'
     }));
-    
+
+    if (!resultsData || resultsData.length === 0) {
+      message.error('Không có dữ liệu để xuất!');
+      return;
+    }
+
     const resultsSheet = XLSX.utils.json_to_sheet(resultsData);
     XLSX.utils.book_append_sheet(workbook, resultsSheet, 'Kết Quả Bầu Cử');
 
@@ -981,14 +1061,21 @@ const ResultComponent = ({ electionId, tabChange }: any) => {
         });
       }
     });
-    
-    const voteRecordsSheet = XLSX.utils.json_to_sheet(voteRecords);
-    XLSX.utils.book_append_sheet(workbook, voteRecordsSheet, 'Chi Tiết Phiếu Bầu');
+
+    if (voteRecords.length > 0) {
+      const voteRecordsSheet = XLSX.utils.json_to_sheet(voteRecords);
+      XLSX.utils.book_append_sheet(workbook, voteRecordsSheet, 'Chi Tiết Theo Ứng Cử Viên');
+    }
 
     const fileName = `KetQua_BauCu_${election.name || electionId}_${new Date().toISOString().split('T')[0]}.xlsx`;
-    XLSX.writeFile(workbook, fileName);
     
-    message.success('Xuất kết quả bầu cử thành công!');
+    try {
+      XLSX.writeFile(workbook, fileName);
+      message.success('Xuất kết quả bầu cử thành công!');
+    } catch (error) {
+      console.error('Export error:', error);
+      message.error('Lỗi khi xuất file Excel!');
+    }
   };
 
   return (
@@ -996,13 +1083,14 @@ const ResultComponent = ({ electionId, tabChange }: any) => {
       <div className="mb-4 flex justify-end">
         <Button
           onClick={exportResultsToExcel}
-          style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
-          className="font-bold px-4 rounded"
+          className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-75 hover:opacity-75 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
         >
           📊 Xuất Kết Quả
         </Button>
       </div>
-      <Table columns={resultColumns} dataSource={data} className="result-table dark-pagination"/>
+      <div className='w-full overflow-x-scroll'>
+        <Table columns={resultColumns} dataSource={data} className="result-table dark-pagination" />
+      </div>
     </div>
   );
 };
@@ -1070,8 +1158,7 @@ const DetailComponent = ({ record }: any) => {
       <Button
         type="primary"
         onClick={showModal}
-        style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
-        className="font-bold px-4 rounded mb-2"
+        className="font-bold px-4 rounded mb-2 bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
       >
         Chi tiết
       </Button>
@@ -1087,8 +1174,7 @@ const DetailComponent = ({ record }: any) => {
           <Button
             key="submit"
             form="ResultDetail"
-            style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
-            className="font-bold px-4 rounded"
+            className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-75 hover:opacity-75 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
             onClick={() => setIsModalOpen(false)}
           >
             OK

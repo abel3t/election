@@ -30,7 +30,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="container px-6 py-48 h-full" style={{ backgroundColor: '#15181a', minHeight: '100vh' }}>
+    <div className="px-6 py-48 h-full w-full" style={{ backgroundColor: '#15181a', minHeight: '100vh' }}>
       <div className="flex justify-center items-center flex-wrap h-full g-6 text-gray-800">
         <div className="md:w-8/12 lg:w-5/12 lg:ml-20">
           <Form
