@@ -49,6 +49,7 @@ const VotingPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [candidates, setCandidates]: [any, any] = useState([]);
+  const [isLoadingCandidates, setIsLoadingCandidates] = useState(true);
   const [electionTitle, setElectionTitle] = useState('');
 
   const showModal = () => {
@@ -88,7 +89,7 @@ const VotingPage = () => {
     setIsModalOpen(false);
   };
 
-  const antIcon = <LoadingOutlined style={{ fontSize: 18 }} spin />;
+  // Use default 4-dot Spin indicator for loading overlay
 
   useEffect(() => {
     localStorage.setItem('guest', 'true');
@@ -116,6 +117,7 @@ const VotingPage = () => {
 
       setIsValidPage(!!data.checkCode?.isValid);
 
+      setIsLoadingCandidates(true);
       getVotingCandidates(election, code)
         .then((data) => {
           const newCandidates = (data?.getVotingCandidates || []).map(
@@ -130,6 +132,9 @@ const VotingPage = () => {
         .catch((error: Error) => {
           console.log(error);
           setIsValidPage(false);
+        })
+        .finally(() => {
+          setIsLoadingCandidates(false);
         });
 
       getMaxSelectedCandidate(election, code)
@@ -185,8 +190,11 @@ const VotingPage = () => {
 
   const hasSelected = selectedRowKeys.length > 0;
   return (
-    <>
+    <React.Fragment>
       <style jsx global>{`
+        .ant-spin-dot-item {
+          background-color: #fcbb1d !important;
+        }
         .dark-modal .ant-modal-content {
           background-color: #15181a !important;
           border: 1px solid #3a4044 !important;
@@ -238,110 +246,135 @@ const VotingPage = () => {
       )}
 
       {!isSubmitted && isValidPage && (
-        <div className="px-2 lg:px-32 mb-10" style={{ backgroundColor: '#15181a', minHeight: '100vh' }}>
-          <div className="flex flex-col justify-center items-center py-1">
-            {/*<div>*/}
-            {/*  <Image*/}
-            {/*    src="https://election-v1.s3.ap-southeast-1.amazonaws.com/static/LEC_Logo.png"*/}
-            {/*    width={60}*/}
-            {/*    height={60}*/}
-            {/*  />*/}
-            {/*</div>*/}
-
-            {/*<div className="font-bold text-xl mt-2">BẦU CỬ CHẤP SỰ</div>*/}
-            {/*<div className="font-bold text-lg">Nhiệm Kỳ 2023-2025</div>*/}
-            <div className="font-bold text-lg text-white">{electionTitle || 'N/A'}</div>
-          </div>
-
-          <div className="w-fit mt-2">
-            <Alert
-              message={`Bạn có thể chọn tối đa ${maxSelected} ứng cử viên!`}
-              type="warning"
-              showIcon
-              className='font-bold'
-            />
-          </div>
-
-          <div className='py-3'>
-            <Table
-              rowSelection={rowSelection}
-              columns={columns}
-              dataSource={candidates}
-              className="dark-pagination"
-              pagination={candidates.length > 10 ? undefined : false}
-              onRow={(record) => ({
-                onClick: () => handleRowClick(record),
-                style: { cursor: 'pointer' }
-              })}
-            />
-            <div className='mt-3'>
-              <div className="mb-3 flex justify-center">
-                <Tag className="py-1 px-4" style={{ backgroundColor: '#fcbb1d', color: '#15181a', border: 'none' }}>
-                  Bạn đã chọn {selectedRowKeys.length}/{maxSelected} ứng viên
-                </Tag>
-              </div>
-
-              <div className="flex justify-center items-center my-6">
-                <Button
-                  className="font-bold px-10 py-6 rounded text-xl disabled:opacity-50 flex items-center justify-center bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-75 hover:opacity-75 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
-                  onClick={() => showModal()}
-                  disabled={selectedRowKeys.length !== maxSelected}
-                >
-                  GỬI PHIẾU BẦU
-                </Button>
-              </div>
+        <React.Fragment>
+          {isLoadingCandidates && (
+            <div
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100vw',
+                height: '100vh',
+                background: 'rgba(21,24,26,0.85)',
+                zIndex: 9999,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column'
+              }}
+            >
+              <Spin size="large" tip="Đang tải dữ liệu..." />
             </div>
-          </div>
-          <Modal
-            title={<span style={{ color: '#ffffff' }}>Xác nhận gửi phiếu bầu</span>}
-            open={isModalOpen}
-            onOk={handleOk}
-            onCancel={handleCancel}
-            className="dark-modal"
-            style={{
-              border: '1px solid #3a4044'
-            }}
-            bodyStyle={{
-              backgroundColor: '#15181a',
-              color: '#ffffff'
-            }}
-            footer={[
-              <Button key="back" onClick={handleCancel} style={{ backgroundColor: '#3a4044', borderColor: '#3a4044', color: '#ffffff' }}>
-                Trở lại
-              </Button>,
-              <Button
-                form="CreateCandidateForm"
-                key="submit"
-                htmlType="submit"
-                onClick={handleOk}
-                className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-75 hover:opacity-75 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
-              >
-                {isSubmitting && <Spin indicator={antIcon} />}
-                {!isSubmitting && 'Xác Nhận'}
-              </Button>
-            ]}
-          >
-            <div className="text-lg font-bold italic" style={{ color: '#fcbb1d' }}>
-              Bạn sẽ bầu cho các ứng cử viên sau
-            </div>
+          )}
+          <div className="px-2 lg:px-32 mb-10" style={{ backgroundColor: '#15181a', minHeight: '100vh', position: 'relative' }}>
+            {!isLoadingCandidates && (
+              <React.Fragment>
+                <div className="flex flex-col justify-center items-center py-1">
+                  {/*<div>*/}
+                  {/*  <Image*/}
+                  {/*    src="https://election-v1.s3.ap-southeast-1.amazonaws.com/static/LEC_Logo.png"*/}
+                  {/*    width={60}*/}
+                  {/*    height={60}*/}
+                  {/*  />*/}
+                  {/*</div>*/}
 
-            {selectedRowKeys
-              .sort((a, b) => a - b)
-              .map((selectedRow, index) => {
-                return (
-                  <div
-                    className="my-2 font-bold text-lg mt-5"
-                    style={{ color: '#ffffff' }}
-                    key={index}
-                  >
-                    {index + 1}. {candidates[selectedRow]?.name || 'N/A'}
+                  {/*<div className="font-bold text-xl mt-2">BẦU CỬ CHẤP SỰ</div>*/}
+                  {/*<div className="font-bold text-lg">Nhiệm Kỳ 2023-2025</div>*/}
+                  <div className="font-bold text-lg text-white">{electionTitle || 'N/A'}</div>
+                </div>
+
+                <div className="w-fit mt-2">
+                  <Alert
+                    message={`Bạn có thể chọn tối đa ${maxSelected} ứng cử viên!`}
+                    type="warning"
+                    showIcon
+                    className='font-bold'
+                  />
+                </div>
+
+                <div className='py-3'>
+                  <Table
+                    rowSelection={rowSelection}
+                    columns={columns}
+                    dataSource={candidates}
+                    className="dark-pagination"
+                    pagination={candidates.length > 10 ? undefined : false}
+                    onRow={(record) => ({
+                      onClick: () => handleRowClick(record),
+                      style: { cursor: 'pointer' }
+                    })}
+                  />
+                  <div className='mt-3'>
+                    <div className="mb-3 flex justify-center">
+                      <Tag className="py-1 px-4" style={{ backgroundColor: '#fcbb1d', color: '#15181a', border: 'none' }}>
+                        Bạn đã chọn {selectedRowKeys.length}/{maxSelected} ứng viên
+                      </Tag>
+                    </div>
+
+                    <div className="flex justify-center items-center my-6">
+                      <Button
+                        className="font-bold px-10 py-6 rounded text-xl disabled:opacity-50 flex items-center justify-center bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-75 hover:opacity-75 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
+                        onClick={() => showModal()}
+                        disabled={selectedRowKeys.length !== maxSelected}
+                      >
+                        GỬI PHIẾU BẦU
+                      </Button>
+                    </div>
                   </div>
-                );
-              })}
-          </Modal>
-        </div>
+                </div>
+                <Modal
+                  title={<span style={{ color: '#ffffff' }}>Xác nhận gửi phiếu bầu</span>}
+                  open={isModalOpen}
+                  onOk={handleOk}
+                  onCancel={handleCancel}
+                  className="dark-modal"
+                  style={{
+                    border: '1px solid #3a4044'
+                  }}
+                  bodyStyle={{
+                    backgroundColor: '#15181a',
+                    color: '#ffffff'
+                  }}
+                  footer={[
+                    <Button key="back" onClick={handleCancel} style={{ backgroundColor: '#3a4044', borderColor: '#3a4044', color: '#ffffff' }}>
+                      Trở lại
+                    </Button>,
+                    <Button
+                      form="CreateCandidateForm"
+                      key="submit"
+                      htmlType="submit"
+                      onClick={handleOk}
+                      className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-75 hover:opacity-75 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
+                    >
+                      {isSubmitting && <Spin />}
+                      {!isSubmitting && 'Xác Nhận'}
+                    </Button>
+                  ]}
+                >
+                  <div className="text-lg font-bold italic" style={{ color: '#fcbb1d' }}>
+                    Bạn sẽ bầu cho các ứng cử viên sau
+                  </div>
+
+                  {selectedRowKeys
+                    .sort((a, b) => a - b)
+                    .map((selectedRow, index) => {
+                      return (
+                        <div
+                          className="my-2 font-bold text-lg mt-5"
+                          style={{ color: '#ffffff' }}
+                          key={index}
+                        >
+                          {index + 1}. {candidates[selectedRow]?.name || 'N/A'}
+                        </div>
+                      );
+                    })}
+                </Modal>
+              </React.Fragment>
+            )}
+          </div>
+        </React.Fragment>
       )}
-    </>
+    </React.Fragment>
   );
 };
 

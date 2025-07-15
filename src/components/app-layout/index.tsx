@@ -105,7 +105,7 @@ const AppLayout = ({ children }: Props) => {
         </div>
       </Header>
 
-      <div className="px-2 lg:px-32 min-h-full text-white" style={{ backgroundColor: '#15181a', minHeight: '84vh' }}>
+      <div className="px-2 lg:px-32 min-h-full text-white pb-3" style={{ backgroundColor: '#15181a', minHeight: '84vh' }}>
         {children}
       </div>
 

@@ -33,7 +33,8 @@ import {
   stopVoting,
   startVoting
 } from '../../operation/election.mutation';
-import axios, { AxiosRequestConfig } from 'axios';
+import axiosInstance from '../../utils/axiosInstance';
+import type { AxiosRequestConfig } from 'axios';
 import { LoadingOutlined } from '@ant-design/icons';
 import NextImage from 'next/image';
 import * as XLSX from 'xlsx';
@@ -188,6 +189,7 @@ const ElectionDetailPage: React.FC = () => {
   const [isLoadCandidate, setIsLoadCandidate] = useState(true);
   const [tabChange, setTabChange] = useState('1');
   const [election, setElection] = useState({} as any);
+  const [isPageLoading, setIsPageLoading] = useState(true);
 
   const router = useRouter();
 
@@ -211,15 +213,46 @@ const ElectionDetailPage: React.FC = () => {
     }
   };
 
+  // Initial load: fetch all required data, then set isPageLoading to false
   useEffect(() => {
-    if (router.isReady) {
-      setElectionId(router.query?.id as any);
-    }
+    if (!router.isReady) return;
+    setElectionId(router.query?.id as any);
   }, [router.isReady]);
 
-  // Polling for codes and election info with tab visibility check
   useEffect(() => {
     if (!electionId) return;
+    let didCancel = false;
+    setIsPageLoading(true);
+    Promise.all([
+      getCodes(electionId),
+      getElection(electionId),
+      getCandidates(electionId)
+    ])
+      .then(([codesData, electionData, candidatesData]) => {
+        if (didCancel) return;
+        const newCodes = (codesData?.getCodes || []).map(
+          (code: any, index: number) => ({ index: index + 1, ...code })
+        );
+        setCodes(newCodes);
+        setElection(electionData?.getElection);
+        const newCandidates = (candidatesData?.getCandidates || []).map(
+          (candidate: any, index: number) => ({ index: index + 1, ...candidate })
+        );
+        setCandidates(newCandidates);
+        setIsPageLoading(false);
+      })
+      .catch((error: Error) => {
+        if (!didCancel) {
+          message.error(error.message || 'Có lỗi xảy ra khi tải dữ liệu!');
+          setIsPageLoading(false);
+        }
+      });
+    return () => { didCancel = true; };
+  }, [electionId]);
+
+  // Polling for codes and election info with tab visibility check (no spinner)
+  useEffect(() => {
+    if (!electionId || isPageLoading) return;
     let codesInterval: NodeJS.Timeout;
     let isFetching = false;
     let isTabActive = true;
@@ -252,17 +285,16 @@ const ElectionDetailPage: React.FC = () => {
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    fetchCodesAndElection();
     codesInterval = setInterval(fetchCodesAndElection, 5000);
     return () => {
       clearInterval(codesInterval);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [electionId, isLoadCode]);
+  }, [electionId, isLoadCode, isPageLoading]);
 
-  // Polling for candidates with tab visibility check
+  // Polling for candidates with tab visibility check (no spinner)
   useEffect(() => {
-    if (!electionId) return;
+    if (!electionId || isPageLoading) return;
     let candidatesInterval: NodeJS.Timeout;
     let isFetching = false;
     let isTabActive = true;
@@ -294,13 +326,12 @@ const ElectionDetailPage: React.FC = () => {
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    fetchCandidates();
     candidatesInterval = setInterval(fetchCandidates, 5000);
     return () => {
       clearInterval(candidatesInterval);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [electionId, isLoadCandidate, tabChange]);
+  }, [electionId, isLoadCandidate, tabChange, isPageLoading]);
 
   const items = [
     {
@@ -347,10 +378,37 @@ const ElectionDetailPage: React.FC = () => {
     }
   ];
 
+if (isPageLoading) {
   return (
-    <AppLayout>
-      <>
-        <style jsx global>{`
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      background: 'rgba(21,24,26,0.85)',
+      zIndex: 9999,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}>
+      <Spin
+        size="large"
+        tip="Đang tải dữ liệu..."
+      />
+      <style jsx global>{`
+        .ant-spin-dot-item {
+          background-color: #fcbb1d !important;
+        }
+      `}</style>
+    </div>
+  );
+}
+
+return (
+  <AppLayout>
+    <>
+      <style jsx global>{`
           .ant-tabs .ant-tabs-tab {
             color: #ffffff !important;
             background-color: transparent !important;
@@ -616,7 +674,7 @@ const CandidateComponent = ({
 
     fmData.append('file', fileList[0].originFileObj as RcFile);
     try {
-      const res = await axios.post(
+      const res = await axiosInstance.post(
         `${process.env.NEXT_PUBLIC_API_URL}/election/uploadFile`,
         fmData,
         config
@@ -758,7 +816,7 @@ const CodeComponent = ({
   };
 
   const handleDownloadCodes = () => {
-    axios
+    axiosInstance
       .get(
         `${process.env.NEXT_PUBLIC_API_URL}/election/${electionId}/codes/download`,
         config

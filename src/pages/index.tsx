@@ -7,6 +7,7 @@ import {
   Modal
 } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { Spin } from 'antd';
 import AppLayout from '../components/app-layout';
 import ElectionCard from '../components/election-card';
 import PaginationCard from '../components/pagination';
@@ -22,6 +23,7 @@ const App: NextPage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [isLoad, setIsLoad] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isPageLoading, setIsPageLoading] = useState(true);
 
   const itemsPerPage = 10;
 
@@ -34,9 +36,21 @@ const App: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    getElections()
-      .then((data: any) => setElections(data?.getElections || []))
-      .catch((error: Error) => message.error(error?.message));
+    setIsPageLoading(true);
+    // Defensive: Only fetch if window is defined and token is present
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token');
+      if (token) {
+        getElections()
+          .then((data: any) => setElections(data?.getElections || []))
+          .catch((error: Error) => message.error(error?.message))
+          .finally(() => setIsPageLoading(false));
+      } else {
+        setIsPageLoading(false);
+      }
+    } else {
+      setIsPageLoading(false);
+    }
   }, [isLoad]);
 
   useEffect(() => {
@@ -75,6 +89,30 @@ const App: NextPage = () => {
   const handleChangePage = (page: number) => {
     setCurrentPage(page);
   };
+
+  if (isPageLoading) {
+    return (
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        background: 'rgba(21,24,26,0.85)',
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        <Spin size="large" tip="Đang tải dữ liệu..." />
+        <style jsx global>{`
+          .ant-spin-dot-item {
+            background-color: #fcbb1d !important;
+          }
+        `}</style>
+      </div>
+    );
+  }
 
   return (
     <AppLayout>
@@ -155,14 +193,16 @@ const App: NextPage = () => {
           </div>
         </div>
 
-        <div className="mt-5 p-4">
-          <PaginationCard
-            currentPage={currentPage}
-            total={elections.length}
-            itemsPerPage={itemsPerPage}
-            onChange={handleChangePage}
-          />
-        </div>
+        {elections.length >= 10 && (
+          <div className="mt-5 p-4">
+            <PaginationCard
+              currentPage={currentPage}
+              total={elections.length}
+              itemsPerPage={itemsPerPage}
+              onChange={handleChangePage}
+            />
+          </div>
+        )}
       </div>
     </AppLayout>
   );
