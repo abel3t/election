@@ -215,12 +215,16 @@ const VotingPage = () => {
       )}
 
       {!isValidPage && (
-        <Result
-          style={{ marginTop: '100px' }}
-          status="warning"
-          className="px-2 lg:px-32"
-          title="Mã bầu cử chỉ được bầu cử 1 lần duy nhất!"
-        />
+        <div className='min-h-screen bg-[#15181a] flex items-center justify-center'>
+
+          <Result
+            style={{ marginTop: '100px' }}
+            status="warning"
+            className="px-2 lg:px-32"
+            title="Mã bầu cử chỉ được dùng 1 lần duy nhất!"
+          />
+
+        </div>
       )}
 
       {!isSubmitted && isValidPage && (
@@ -244,6 +248,7 @@ const VotingPage = () => {
               message={`Bạn có thể chọn tối đa ${maxSelected} ứng cử viên!`}
               type="warning"
               showIcon
+              className='font-bold'
             />
           </div>
 
@@ -253,12 +258,13 @@ const VotingPage = () => {
               columns={columns}
               dataSource={candidates}
               className="dark-pagination"
+              pagination={candidates.length > 10 ? undefined : false}
               onRow={(record) => ({
                 onClick: () => handleRowClick(record),
                 style: { cursor: 'pointer' }
               })}
             />
-            <div>
+            <div className='mt-3'>
               <div className="mb-3 flex justify-center">
                 <Tag className="py-1 px-4" style={{ backgroundColor: '#fcbb1d', color: '#15181a', border: 'none' }}>
                   Bạn đã chọn {selectedRowKeys.length}/{maxSelected} ứng viên
