@@ -330,7 +330,7 @@ const VotingPage = () => {
               .map((selectedRow, index) => {
                 return (
                   <div
-                    className="my-2 font-bold text-lg"
+                    className="my-2 font-bold text-lg mt-5"
                     style={{ color: '#ffffff' }}
                     key={index}
                   >

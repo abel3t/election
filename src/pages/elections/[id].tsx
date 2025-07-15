@@ -460,7 +460,7 @@ const ElectionDetailPage: React.FC = () => {
             color: #fcbb1d !important;
           }
         `}</style>
-        <div className="my-2 text-3xl font-bold text-white mt-3 w-full text-center" style={{ backgroundColor: '#15181a' }}>{election.name}</div>
+        <div className="my-2 text-3xl font-bold text-white mt-4 w-full text-center" style={{ backgroundColor: '#15181a' }}>{election.name}</div>
 
         {/* Status bar with live badge and toggle button */}
         <div className="flex items-center justify-between mb-4 px-2 py-2 rounded" style={{ backgroundColor: '#23272b' }}>
