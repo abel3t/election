@@ -685,6 +685,17 @@ const ReportComponent = ({ electionId, codes, tabChange }: any) => {
 
   // Excel export functions
   const exportVotingDataToExcel = () => {
+    // Check if there's any meaningful data to export
+    if (!data || data.length === 0) {
+      message.error('Không có dữ liệu ứng cử viên để xuất!');
+      return;
+    }
+
+    if (!codes || codes.length === 0) {
+      message.error('Không có dữ liệu mã bầu cử để xuất!');
+      return;
+    }
+
     const workbook = XLSX.utils.book_new();
 
     // Sheet 1: Election Summary
@@ -728,7 +739,7 @@ const ReportComponent = ({ electionId, codes, tabChange }: any) => {
 
     // Sheet 4: Vote Overview (Grouped by Vote ID)
     const votesByCode: { [key: string]: any } = {};
-    
+
     data.forEach((candidate: any) => {
       if (candidate.votes && candidate.votes.length > 0) {
         candidate.votes.forEach((vote: any) => {
@@ -804,17 +815,35 @@ const ReportComponent = ({ electionId, codes, tabChange }: any) => {
 
     // Export the file
     const fileName = `BaoCao_BauCu_DayDu_${election.name || electionId}_${new Date().toISOString().split('T')[0]}.xlsx`;
-    XLSX.writeFile(workbook, fileName);
-
-    message.success('Xuất file Excel thành công!');
+    
+    try {
+      XLSX.writeFile(workbook, fileName);
+      message.success('Xuất file Excel thành công!');
+    } catch (error) {
+      console.error('Export error:', error);
+      message.error('Lỗi khi xuất file Excel!');
+    }
   };
 
   const exportVoteRecordsOnly = () => {
+    // Check if there's any vote data to export
+    if (!data || data.length === 0) {
+      message.error('Không có dữ liệu ứng cử viên để xuất!');
+      return;
+    }
+
+    // Check if there are any actual votes
+    const hasVotes = data.some((candidate: any) => candidate.votes && candidate.votes.length > 0);
+    if (!hasVotes) {
+      message.error('Không có dữ liệu phiếu bầu để xuất!');
+      return;
+    }
+
     const workbook = XLSX.utils.book_new();
 
     // Sheet 1: Grouped by Vote ID (Easy to understand)
     const votesByCode: { [key: string]: any } = {};
-    
+
     data.forEach((candidate: any) => {
       if (candidate.votes && candidate.votes.length > 0) {
         candidate.votes.forEach((vote: any) => {
@@ -890,9 +919,14 @@ const ReportComponent = ({ electionId, codes, tabChange }: any) => {
     XLSX.utils.book_append_sheet(workbook, summarySheet, 'Danh Sách Theo Mã Phiếu');
 
     const fileName = `DuLieu_PhieuBau_ChiTiet_${election.name || electionId}_${new Date().toISOString().split('T')[0]}.xlsx`;
-    XLSX.writeFile(workbook, fileName);
-
-    message.success('Xuất dữ liệu phiếu bầu chi tiết thành công!');
+    
+    try {
+      XLSX.writeFile(workbook, fileName);
+      message.success('Xuất dữ liệu phiếu bầu chi tiết thành công!');
+    } catch (error) {
+      console.error('Export error:', error);
+      message.error('Lỗi khi xuất file Excel!');
+    }
   };
 
   return (
@@ -1068,7 +1102,7 @@ const ResultComponent = ({ electionId, tabChange }: any) => {
     }
 
     const fileName = `KetQua_BauCu_${election.name || electionId}_${new Date().toISOString().split('T')[0]}.xlsx`;
-    
+
     try {
       XLSX.writeFile(workbook, fileName);
       message.success('Xuất kết quả bầu cử thành công!');
@@ -1168,7 +1202,7 @@ const DetailComponent = ({ record }: any) => {
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
-        className={'dark-modal'}
+        className='dark-modal p-0 rounded-md overfl'
         style={{ border: '1px solid #3a4044' }}
         footer={[
           <Button
@@ -1181,10 +1215,11 @@ const DetailComponent = ({ record }: any) => {
           </Button>
         ]}
       >
-        <Timeline>
-          {!record?.votes?.length && (
-            <div>Chưa có ai bỏ phiếu cho người này</div>
-          )}
+        {!record?.votes?.length && (
+          <div>Chưa có ai bỏ phiếu cho người này</div>
+        )}
+
+        <Timeline className='h-full overflow-y-auto'>
           {!!record?.votes?.length &&
             record?.votes.map((vote: any, index: number) => (
               <Timeline.Item key={index}>

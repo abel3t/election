@@ -53,10 +53,19 @@
     background-color: #15181a !important;
     color: #ffffff !important;
 }
-
 .dark-modal .ant-modal-content {
     background-color: #15181a;
     color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+.dark-modal .ant-modal-content .ant-modal-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    height: 50vh;
 }
 
 .dark-modal .ant-modal-header {
@@ -373,6 +382,19 @@
 
 .ant-result-subtitle {
     color: #808080 !important;
+}
+
+.ant-modal-header {
+    border: #333 !important;
+}
+
+.ant-modal-footer {
+ border: none !important;
+}
+
+.ant-timeline-item-head {
+    background-color: #fcbb1d !important;
+    border-color: #fcbb1d !important;
 }
 
 /* Modal styles */

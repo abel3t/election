@@ -95,7 +95,8 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
               okText="Sao chép"
               cancelText="Trở lại"
               onConfirm={handleCloneElection}
-              overlayClassName="dark-popconfirm"
+              overlayClassName="dark-popconfirm rounded-md overflow-hidden"
+              className='rounded-md overflow-hidden'
               cancelButtonProps={{
                 style: { backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' },
                 className: 'font-bold px-4 rounded hover:opacity-75'
@@ -175,6 +176,9 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
             background-color: #15181a !important;
             border: none !important;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
+            border: 1px solid #3a4044 !important;
+            height: 30vh !important;
+            top: 100px !important;
           }
           .dark-modal .ant-modal-header {
             background-color: #15181a !important;
