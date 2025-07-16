@@ -93,9 +93,9 @@ const codeColumns: ColumnsType<DataType> = [
     render: (isUsed) => (
       <span>
         {isUsed ? (
-          <Tag style={{ backgroundColor: '#da0e0e', color: '#ffffff', border: 'none' }}>Đã sử dụng</Tag>
+          <Tag className='bg-green-500 text-white border-none'>Đã sử dụng</Tag>
         ) : (
-          <Tag style={{ backgroundColor: '#4aa8ff', color: '#15181a', border: 'none' }}>Chưa sử dụng</Tag>
+          <Tag className='bg-yellow-500 text-white border-none'>Chưa sử dụng</Tag>
         )}
       </span>
     )
@@ -873,17 +873,19 @@ const CodeComponent = ({
         Tải xuống
       </Button>
 
+
+      {!!usedCodes?.length && (
+        <Tag className="ml-2 border-none text-white bg-green-500" >
+          Có {usedCodes.length} mã đã sử dụng
+        </Tag>
+      )}
+
       {!!unUsedCodes?.length && (
-        <Tag className="ml-2 border-none" style={{ backgroundColor: '#4aa8ff', color: '#ffffff' }}>
+        <Tag className="ml-2 border-none bg-yellow-500 text-white">
           Có {unUsedCodes.length} mã chưa sử dụng
         </Tag>
       )}
 
-      {!!usedCodes?.length && (
-        <Tag className="ml-2 border-none" style={{ backgroundColor: '#da0e0e', color: '#ffffff' }}>
-          Có {usedCodes.length} mã đã sử dụng
-        </Tag>
-      )}
 
       <div className='w-full overflow-x-scroll'>
         <Table
@@ -1186,7 +1188,7 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
           <Statistic
             title={<span style={{ color: '#ffffff' }}>Số mã đã sử dụng</span>}
             value={usedCodes}
-            valueStyle={{ color: '#52c41a' }}
+            valueStyle={{ color: '#00c951' }}
           />
         </Card>
 
@@ -1194,8 +1196,7 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
           <Statistic
             title={<span style={{ color: '#ffffff' }}>Số mã chưa sử dụng</span>}
             value={unusedCodes}
-            valueStyle={{ color: '#ff4d4f' }}
-            className='text-[#ff4d4f]'
+            valueStyle={{ color: '#efb100' }}
           />
         </Card>
 
