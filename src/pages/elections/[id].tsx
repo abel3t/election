@@ -1167,7 +1167,7 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
         </Button>
         <Button
           onClick={exportVoteRecordsOnly}
-          className="font-bold px-4 rounded bg-[#1890ff] text-[#ffffff] border-none hover:bg-[#1890ff] hover:bg-opacity-75 hover:opacity-75 hover:text-[#ffffff] focus:bg-[#1890ff] focus:text-[#ffffff]"
+          className="font-bold px-4 rounded bg-[#4aa8ff] text-[#ffffff] border-none hover:bg-[#4aa8ff] hover:bg-opacity-75 hover:opacity-75 hover:text-[#ffffff] focus:bg-[#4aa8ff] focus:text-[#ffffff]"
         >
           📋 Xuất dữ liệu phiếu bầu
         </Button>
