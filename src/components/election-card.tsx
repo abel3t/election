@@ -98,15 +98,15 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
               overlayClassName="dark-popconfirm rounded-md overflow-hidden"
               className='rounded-md overflow-hidden'
               cancelButtonProps={{
-                style: { backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' },
+                style: { backgroundColor: '#4aa8ff', borderColor: '#4aa8ff', color: '#15181a' },
                 className: 'font-bold px-4 rounded hover:opacity-75'
               }}
               okButtonProps={{
-                style: { backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' },
+                style: { backgroundColor: '#4aa8ff', borderColor: '#4aa8ff', color: '#15181a' },
                 className: 'font-bold px-4 rounded text-red hover:opacity-75'
               }}
             >
-              <Button className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none focus:bg-[#fcbb1d] focus:text-[#15181a] hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a]">
+              <Button className="font-bold px-4 rounded bg-[#4aa8ff] text-[#15181a] border-none focus:bg-[#4aa8ff] focus:text-[#15181a] hover:bg-[#4aa8ff] hover:bg-opacity-70 hover:text-[#15181a]">
                 Sao chép
               </Button>
             </Popconfirm>
@@ -115,7 +115,7 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
           <div className="inline-flex ml-2 items-center text-base font-semibold">
             <Button
               onClick={showModal}
-              className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none focus:bg-[#fcbb1d] focus:text-[#15181a] hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a]"
+              className="font-bold px-4 rounded bg-[#4aa8ff] text-[#15181a] border-none focus:bg-[#4aa8ff] focus:text-[#15181a] hover:bg-[#4aa8ff] hover:bg-opacity-70 hover:text-[#15181a]"
             >
               Chỉnh sửa
             </Button>
@@ -129,7 +129,7 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
               onConfirm={handleDeleteElection}
               overlayClassName="dark-popconfirm"
               cancelButtonProps={{
-                style: { backgroundColor: '#fcbb1d', border: 'none', color: '#15181a' },
+                style: { backgroundColor: '#4aa8ff', border: 'none', color: '#15181a' },
                 className: 'font-bold px-4 rounded'
               }}
               okButtonProps={{
@@ -165,7 +165,7 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
             form="UpdateForm" 
             key="submit" 
             htmlType="submit"
-            className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-75 hover:opacity-75 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
+            className="font-bold px-4 rounded bg-[#4aa8ff] text-[#15181a] border-none hover:bg-[#4aa8ff] hover:bg-opacity-75 hover:opacity-75 hover:text-[#15181a] focus:bg-[#4aa8ff] focus:text-[#15181a]"
           >
             Sửa
           </Button>
@@ -176,7 +176,7 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
             background-color: #15181a !important;
             border: none !important;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
-            border: 1px solid #3a4044 !important;
+            border: none !important;
             height: 30vh !important;
             top: 100px !important;
           }
@@ -198,7 +198,7 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
             color: #ffffff !important;
           }
           .dark-modal .ant-modal-close:hover {
-            color: #fcbb1d !important;
+            color: #4aa8ff !important;
             background-color: rgba(252, 187, 29, 0.1) !important;
           }
           .dark-modal .ant-form-item-label > label {
@@ -206,12 +206,12 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
           }
           .dark-modal .ant-input:focus,
           .dark-modal .ant-input-focused {
-            border-color: #fcbb1d !important;
+            border-color: #4aa8ff !important;
             box-shadow: 0 0 0 2px rgba(252, 187, 29, 0.2) !important;
           }
           .dark-modal .ant-input-number:focus,
           .dark-modal .ant-input-number-focused {
-            border-color: #fcbb1d !important;
+            border-color: #4aa8ff !important;
             box-shadow: 0 0 0 2px rgba(252, 187, 29, 0.2) !important;
           }
         `}</style>

@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const BackHomeLink = () => (
   <Link href={'/'}>
-    <Button type="primary" style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}>
+    <Button type="primary" style={{ backgroundColor: '#4aa8ff', borderColor: '#4aa8ff', color: '#15181a' }}>
       Trở về trang chính
     </Button>
   </Link>

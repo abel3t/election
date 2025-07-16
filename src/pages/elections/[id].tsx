@@ -95,7 +95,7 @@ const codeColumns: ColumnsType<DataType> = [
         {isUsed ? (
           <Tag style={{ backgroundColor: '#da0e0e', color: '#ffffff', border: 'none' }}>Đã sử dụng</Tag>
         ) : (
-          <Tag style={{ backgroundColor: '#fcbb1d', color: '#15181a', border: 'none' }}>Chưa sử dụng</Tag>
+          <Tag style={{ backgroundColor: '#4aa8ff', color: '#15181a', border: 'none' }}>Chưa sử dụng</Tag>
         )}
       </span>
     )
@@ -124,7 +124,7 @@ const resultColumns: ColumnsType<ResultDataType> = [
     align: 'center',
     render: (url: string) => (
       <div className="flex justify-center items-center w-full">
-        <img src={url} alt={'N/A'} width={80} height={80} />
+        <NextImage src={url} alt={'N/A'} width={80} height={80} />
       </div>
     )
   },
@@ -143,11 +143,11 @@ const resultColumns: ColumnsType<ResultDataType> = [
     key: 'votes-totalCodes',
     render: (_, record) => (
       <p>
-        <span style={{ color: '#fcbb1d' }} className="text-4xl font-bold">
+        <span style={{ color: '#4aa8ff' }} className="text-4xl font-bold">
           {record.totalVotes}
         </span>
         <span className="font-bold">/</span>
-        <span style={{ color: '#de9e03' }} className="text-2xl font-bold">
+        <span style={{ color: '#4aa8ff' }} className="text-2xl font-bold">
           {record.totalCodes}
         </span>
       </p>
@@ -164,7 +164,7 @@ const resultColumns: ColumnsType<ResultDataType> = [
       const percentage = totalCodes > 0 ? ((totalVotes / totalCodes) * 100).toFixed(1) : '0.0';
       return (
         <p>
-          <span style={{ color: '#fcbb1d' }} className="text-3xl font-bold">
+          <span style={{ color: '#4aa8ff' }} className="text-3xl font-bold">
             {percentage}%
           </span>
         </p>
@@ -426,7 +426,7 @@ const ElectionDetailPage: React.FC = () => {
         />
         <style jsx global>{`
         .ant-spin-dot-item {
-          background-color: #fcbb1d !important;
+          background-color: #4aa8ff !important;
         }
       `}</style>
       </div>
@@ -442,16 +442,16 @@ const ElectionDetailPage: React.FC = () => {
             background-color: transparent !important;
           }
           .ant-tabs .ant-tabs-tab:hover {
-            color: #fcbb1d !important;
+            color: #4aa8ff !important;
           }
           .ant-tabs .ant-tabs-tab.ant-tabs-tab-active {
-            color: #fcbb1d !important;
+            color: #4aa8ff !important;
           }
           .ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-            color: #fcbb1d !important;
+            color: #4aa8ff !important;
           }
           .ant-tabs .ant-tabs-ink-bar {
-            background-color: #fcbb1d !important;
+            background-color: #4aa8ff !important;
           }
           .ant-tabs .ant-tabs-nav::before {
             border-bottom: 1px solid #333 !important;
@@ -498,10 +498,10 @@ const ElectionDetailPage: React.FC = () => {
             color: #ffffff !important;
           }
           .ant-select:hover .ant-select-selector {
-            border-color: #fcbb1d !important;
+            border-color: #4aa8ff !important;
           }
           .ant-select-focused .ant-select-selector {
-            border-color: #fcbb1d !important;
+            border-color: #4aa8ff !important;
             box-shadow: 0 0 0 2px rgba(252, 187, 29, 0.2) !important;
           }
           .ant-select-dropdown {
@@ -516,7 +516,7 @@ const ElectionDetailPage: React.FC = () => {
             background-color: #2a2d30 !important;
           }
           .ant-select-item-option-selected {
-            background-color: #fcbb1d !important;
+            background-color: #4aa8ff !important;
             color: #15181a !important;
           }
           /* Card component dark theme */
@@ -576,7 +576,7 @@ const ElectionDetailPage: React.FC = () => {
                 onConfirm={handleToggleVoting}
                 overlayClassName="dark-popconfirm"
                 cancelButtonProps={{
-                  className: 'font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a] border-none'
+                  className: 'font-bold px-4 rounded bg-[#4aa8ff] text-[#15181a] hover:bg-[#4aa8ff] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#4aa8ff] focus:text-[#15181a] border-none'
                 }}
                 okButtonProps={{
                   className: 'font-bold px-4 rounded bg-[#da0e0e] border-none text-[#ffffff] hover:bg-[#da0e0e] hover:bg-opacity-70 hover:text-[#ffffff] focus:bg-[#da0e0e] focus:text-[#ffffff]'
@@ -597,7 +597,7 @@ const ElectionDetailPage: React.FC = () => {
                 onConfirm={handleToggleVoting}
                 overlayClassName="dark-popconfirm"
                 cancelButtonProps={{
-                  className: 'font-bold px-4 rounded bg-[#fcbb1d] border-none text-[#15181a] hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]'
+                  className: 'font-bold px-4 rounded bg-[#4aa8ff] border-none text-[#15181a] hover:bg-[#4aa8ff] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#4aa8ff] focus:text-[#15181a]'
                 }}
                 okButtonProps={{
                   className: 'font-bold px-4 rounded bg-[#52c41a] border-none text-[#ffffff] hover:bg-[#52c41a] hover:bg-opacity-70 hover:text-[#ffffff] focus:bg-[#52c41a] focus:text-[#ffffff]'
@@ -749,7 +749,7 @@ const CandidateComponent = ({
       <Button
         type="primary"
         onClick={showModal}
-        className="font-bold px-4 rounded mb-2 bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
+        className="font-bold px-4 rounded mb-2 bg-[#4aa8ff] text-[#15181a] border-none hover:bg-[#4aa8ff] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#4aa8ff] focus:text-[#15181a]"
       >
         Tạo ứng cử viên
       </Button>
@@ -764,7 +764,7 @@ const CandidateComponent = ({
             form="CreateCandidateForm"
             key="submit"
             htmlType="submit"
-            className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
+            className="font-bold px-4 rounded bg-[#4aa8ff] text-[#15181a] border-none hover:bg-[#4aa8ff] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#4aa8ff] focus:text-[#15181a]"
           >
             {isSubmitting && <Spin indicator={antIcon} />}
             {!isSubmitting && 'Gửi'}
@@ -861,20 +861,20 @@ const CodeComponent = ({
     <div key={`code-component-${electionId}`} >
       <Button
         onClick={handleGenerateCodes}
-        className="font-bold px-4 rounded mb-2 bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
+        className="font-bold px-4 rounded mb-2 bg-[#4aa8ff] text-[#15181a] border-none hover:bg-[#4aa8ff] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#4aa8ff] focus:text-[#15181a]"
       >
         Tạo mã bầu cử
       </Button>
 
       <Button
         onClick={handleDownloadCodes}
-        className="font-bold px-4 rounded mb-2 ml-2 bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
+        className="font-bold px-4 rounded mb-2 ml-2 bg-[#4aa8ff] text-[#15181a] border-none hover:bg-[#4aa8ff] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#4aa8ff] focus:text-[#15181a]"
       >
         Tải xuống
       </Button>
 
       {!!unUsedCodes?.length && (
-        <Tag className="ml-2 border-none" style={{ backgroundColor: '#fcbb1d', color: '#15181a' }}>
+        <Tag className="ml-2 border-none" style={{ backgroundColor: '#4aa8ff', color: '#ffffff' }}>
           Có {unUsedCodes.length} mã chưa sử dụng
         </Tag>
       )}
@@ -1161,7 +1161,7 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
       <div className="mb-4 flex flex-wrap gap-2">
         <Button
           onClick={exportVotingDataToExcel}
-          className="font-bold px-4 rounded bg-[#fcbb1d] text-[#ffffff] border-none hover:bg-[#fcbb1d] hover:bg-opacity-75 hover:opacity-75 hover:text-[#ffffff] focus:bg-[#fcbb1d] focus:text-[#ffffff]"
+          className="font-bold px-4 rounded bg-[#4aa8ff] text-[#ffffff] border-none hover:bg-[#4aa8ff] hover:bg-opacity-75 hover:opacity-75 hover:text-[#ffffff] focus:bg-[#4aa8ff] focus:text-[#ffffff]"
         >
           📊 Xuất báo cáo đầy đủ
         </Button>
@@ -1204,7 +1204,7 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
             title={<span style={{ color: '#ffffff' }}>Tỷ lệ tham gia</span>}
             value={votingRate.toFixed(1)}
             suffix="%"
-            valueStyle={{ color: '#fcbb1d' }}
+            valueStyle={{ color: '#4aa8ff' }}
           />
         </Card>
       </div>
@@ -1217,8 +1217,8 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
           <Progress
             percent={votingRate}
             strokeColor={{
-              '0%': '#fcbb1d',
-              '100%': '#de9e03',
+              '0%': '#4aa8ff',
+              '100%': '#2b7bbd',
             }}
             trailColor="#3a4044"
             format={(percent) => `${percent?.toFixed(1)}%`}
@@ -1236,7 +1236,7 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
             </div>
             <div className="flex justify-between">
               <span style={{ color: '#ffffff' }}>Tổng cộng:</span>
-              <span style={{ color: '#fcbb1d' }} className="font-bold">{totalCodes} mã</span>
+              <span style={{ color: '#4aa8ff' }} className="font-bold">{totalCodes} mã</span>
             </div>
           </div>
         </Card>
@@ -1249,14 +1249,14 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
             <div className="p-3 rounded" style={{ backgroundColor: '#3a4044' }}>
               <div className="flex justify-between items-center">
                 <span style={{ color: '#ffffff' }}>Tổng số phiếu bầu:</span>
-                <span style={{ color: '#fcbb1d' }} className="text-xl font-bold">{totalVotesFromResults}</span>
+                <span style={{ color: '#4aa8ff' }} className="text-xl font-bold">{totalVotesFromResults}</span>
               </div>
             </div>
 
             <div className="p-3 rounded" style={{ backgroundColor: '#3a4044' }}>
               <div className="flex justify-between items-center">
                 <span style={{ color: '#ffffff' }}>Số ứng cử viên:</span>
-                <span style={{ color: '#fcbb1d' }} className="text-xl font-bold">{data.length}</span>
+                <span style={{ color: '#4aa8ff' }} className="text-xl font-bold">{data.length}</span>
               </div>
             </div>
           </div>
@@ -1326,7 +1326,7 @@ const ResultComponent = ({ electionId, data, election }: any) => {
       <div className="mb-4 flex justify-end">
         <Button
           onClick={exportResultsToExcel}
-          className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-75 hover:opacity-75 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
+          className="font-bold px-4 rounded bg-[#4aa8ff] text-[#15181a] border-none hover:bg-[#4aa8ff] hover:bg-opacity-75 hover:opacity-75 hover:text-[#15181a] focus:bg-[#4aa8ff] focus:text-[#15181a]"
         >
           📊 Xuất kết quả
         </Button>
@@ -1371,7 +1371,7 @@ const DeleteComponent = ({
         onConfirm={handleDeleteCandidate}
         overlayClassName="dark-popconfirm"
         cancelButtonProps={{
-          style: { backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' },
+          style: { backgroundColor: '#4aa8ff', borderColor: '#4aa8ff', color: '#15181a' },
           className: 'font-bold px-4 rounded'
         }}
         okButtonProps={{
@@ -1408,7 +1408,7 @@ const DetailComponent = ({ record }: any) => {
       <Button
         type="primary"
         onClick={showModal}
-        className="font-bold px-4 rounded mb-2 bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
+        className="font-bold px-4 rounded mb-2 bg-[#4aa8ff] text-[#15181a] border-none hover:bg-[#4aa8ff] hover:bg-opacity-70 hover:text-[#15181a] focus:bg-[#4aa8ff] focus:text-[#15181a]"
       >
         Chi tiết
       </Button>
@@ -1418,13 +1418,13 @@ const DetailComponent = ({ record }: any) => {
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
-        className='dark-modal p-0 rounded-md overfl'
+        className='dark-modal p-0 rounded-md'
         style={{ border: '1px solid #3a4044' }}
         footer={[
           <Button
             key="submit"
             form="ResultDetail"
-            className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-75 hover:opacity-75 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
+            className="font-bold px-4 rounded bg-[#4aa8ff] text-[#15181a] border-none hover:bg-[#4aa8ff] hover:bg-opacity-75 hover:opacity-75 hover:text-[#15181a] focus:bg-[#4aa8ff] focus:text-[#15181a]"
             onClick={() => setIsModalOpen(false)}
           >
             OK
@@ -1439,7 +1439,7 @@ const DetailComponent = ({ record }: any) => {
           {!!record?.votes?.length &&
             record?.votes.map((vote: any, index: number) => (
               <Timeline.Item key={index}>
-                <span style={{ color: '#fcbb1d' }} className="font-bold text-xl">{vote?.text}</span>
+                <span style={{ color: '#4aa8ff' }} className="font-bold text-xl">{vote?.text}</span>
 
                 <span className="text-lg" style={{ color: '#ffffff' }}>
                   &nbsp;vào lúc&nbsp;{' '}

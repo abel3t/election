@@ -39,5 +39,8 @@
   "resolutions": {
     "styled-components": "^5",
     "@types/react": "18.0.20"
+  },
+  "engines": {
+    "node": "v20.8.1"
   }
 }

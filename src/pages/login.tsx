@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import { useRouter } from 'next/router';
 import { login } from '../operation/auth.mutation';
+import NextImage from 'next/image';
 
 const Login: React.FC = () => {
   const router = useRouter();
@@ -32,8 +33,8 @@ const Login: React.FC = () => {
         className="rounded-xl p-8 bg-[#232526] border border-[#232526] shadow-lg w-full max-w-sm"
       >
         <div className="flex flex-col items-center mb-6">
-          <img src="/favicon.ico" alt="Logo" className="w-12 h-12 mb-2" />
-          <h2 className="text-2xl font-semibold text-[#fcbb1d] mb-1">Đăng nhập</h2>
+          <NextImage src="/favicon.ico" alt="Logo" className="w-12 h-12 mb-2" />
+          <h2 className="text-2xl font-semibold text-[#4aa8ff] mb-1">Đăng nhập</h2>
         </div>
         <Form
           initialValues={{ remember: true }}
@@ -54,7 +55,7 @@ const Login: React.FC = () => {
             <Input
               type="text"
               style={{ backgroundColor: '#232526', color: '#fff', borderColor: '#3a4044', padding: '16px 18px' }}
-              className="w-full rounded focus:outline-none focus:ring-2 focus:ring-[#fcbb1d]"
+              className="w-full rounded focus:outline-none focus:ring-2 focus:ring-[#4aa8ff]"
               placeholder="Nhập email của bạn"
               autoComplete="email"
             />
@@ -72,7 +73,7 @@ const Login: React.FC = () => {
           >
             <Input.Password
               style={{ backgroundColor: '#232526', color: '#fff', borderColor: '#3a4044', padding: '16px 18px' }}
-              className="w-full rounded focus:outline-none focus:ring-2 focus:ring-[#fcbb1d] placeholder-gray-400 my-input focus:border-none mb-1"
+              className="w-full rounded focus:outline-none focus:ring-2 focus:ring-[#4aa8ff] placeholder-gray-400 my-input focus:border-none mb-1"
               placeholder="Nhập mật khẩu"
               autoComplete="false"
             />
@@ -81,7 +82,7 @@ const Login: React.FC = () => {
           <Button
             type="primary"
             htmlType="submit"
-            style={{ background: '#fcbb1d', border: 'none', color: '#3a4044', fontWeight: 600 }}
+            style={{ background: '#4aa8ff', border: 'none', color: '#3a4044', fontWeight: 600 }}
             className="w-full py-6 rounded text-base flex items-center justify-center mt-10"
           >
             <span>Đăng nhập</span>

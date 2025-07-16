@@ -107,7 +107,7 @@ const App: NextPage = () => {
         <Spin size="large" tip="Đang tải dữ liệu..." />
         <style jsx global>{`
           .ant-spin-dot-item {
-            background-color: #fcbb1d !important;
+            background-color: #4aa8ff !important;
           }
         `}</style>
       </div>
@@ -125,7 +125,7 @@ const App: NextPage = () => {
               <Button
                 type="primary"
                 onClick={showModal}
-                className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-70 hover:text-[#15181a]"
+                className="font-bold px-4 rounded bg-[#4aa8ff] text-[#15181a] border-none hover:bg-[#4aa8ff] hover:bg-opacity-70 hover:text-[#15181a]"
               >
                 Tạo bầu cử
               </Button>
@@ -141,7 +141,7 @@ const App: NextPage = () => {
                   form="CreateForm"
                   key="submit"
                   htmlType="submit"
-                  style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
+                  style={{ backgroundColor: '#4aa8ff', borderColor: '#4aa8ff', color: '#15181a' }}
                   className="font-bold px-4 rounded"
                 >
                   Tạo bầu cử

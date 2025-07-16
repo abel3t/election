@@ -48,7 +48,7 @@ const AppLayout = ({ children }: Props) => {
           {!isHomepage ? (
             <Link href="/" passHref>
               <button
-                className="rounded-full bg-[#23272f] hover:bg-[#fcbb1d] hover:bg-opacity-90 transition-colors shadow-md flex items-center justify-center border border-[#23272f] hover:border-[#fcbb1d]"
+                className="rounded-full bg-[#23272f] hover:bg-[#4aa8ff] hover:bg-opacity-90 transition-colors shadow-md flex items-center justify-center border border-[#23272f] hover:border-[#4aa8ff]"
                 style={{ width: 40, height: 40, transition: 'border 0.2s, background 0.2s', padding: 0 }}
                 aria-label="Trang chủ"
               >
@@ -92,7 +92,7 @@ const AppLayout = ({ children }: Props) => {
           >
             <div className='hover:opacity-75' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 40, width: 40 }}>
               <Avatar
-                style={{ backgroundColor: '#fcbb1d', color: '#15181a', cursor: 'pointer', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px 0 rgba(252,187,29,0.15)' }}
+                style={{ backgroundColor: '#4aa8ff', color: '#15181a', cursor: 'pointer', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px 0 rgba(252,187,29,0.15)' }}
                 size={40}
               >
                 {/* Modern user icon SVG, now 24x24 */}

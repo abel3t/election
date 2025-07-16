@@ -193,7 +193,7 @@ const VotingPage = () => {
     <React.Fragment>
       <style jsx global>{`
         .ant-spin-dot-item {
-          background-color: #fcbb1d !important;
+          background-color: #4aa8ff !important;
         }
         .dark-modal .ant-modal-content {
           background-color: #15181a !important;
@@ -212,7 +212,7 @@ const VotingPage = () => {
         }
         .dark-modal .ant-modal-footer {
           background-color: #15181a !important;
-          border-top: 1px solid #3a4044 !important;
+          border-top: none !important;
         }
         .dark-modal .ant-modal-close-x {
           color: #ffffff !important;
@@ -306,14 +306,14 @@ const VotingPage = () => {
                   />
                   <div className='mt-3'>
                     <div className="mb-3 flex justify-center">
-                      <Tag className="py-1 px-4" style={{ backgroundColor: '#fcbb1d', color: '#15181a', border: 'none' }}>
+                      <Tag className="py-1 px-4" style={{ backgroundColor: '#4aa8ff', color: '#ffffff', border: 'none' }}>
                         Bạn đã chọn {selectedRowKeys.length}/{maxSelected} ứng viên
                       </Tag>
                     </div>
 
                     <div className="flex justify-center items-center my-6">
                       <Button
-                        className="font-bold px-10 py-6 rounded text-xl disabled:opacity-50 flex items-center justify-center bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-75 hover:opacity-75 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
+                        className="font-bold px-10 py-6 rounded text-xl disabled:opacity-50 disabled:text-gray-500 disabled:bg-slate-600 focus:bg-[#4aa8ff] disabled:focus:bg-slate-600  disabled:hover:bg-slate-600 disabled:hover:opacity-45 flex items-center justify-center bg-[#4aa8ff] text-gray border-none hover:bg-[#4aa8ff] hover:opacity-75 hover:text-[#15181a]"
                         onClick={() => showModal()}
                         disabled={selectedRowKeys.length !== maxSelected}
                       >
@@ -327,7 +327,7 @@ const VotingPage = () => {
                   open={isModalOpen}
                   onOk={handleOk}
                   onCancel={handleCancel}
-                  className="dark-modal"
+                  className='dark-modal p-0 rounded-md'
                   style={{
                     border: '1px solid #3a4044'
                   }}
@@ -344,14 +344,14 @@ const VotingPage = () => {
                       key="submit"
                       htmlType="submit"
                       onClick={handleOk}
-                      className="font-bold px-4 rounded bg-[#fcbb1d] text-[#15181a] border-none hover:bg-[#fcbb1d] hover:bg-opacity-75 hover:opacity-75 hover:text-[#15181a] focus:bg-[#fcbb1d] focus:text-[#15181a]"
+                      className="font-bold px-4 rounded bg-[#4aa8ff] text-[#15181a] border-none hover:bg-[#4aa8ff] hover:bg-opacity-75 hover:opacity-75 hover:text-[#15181a] focus:bg-[#4aa8ff] focus:text-[#15181a]"
                     >
                       {isSubmitting && <Spin />}
                       {!isSubmitting && 'Xác Nhận'}
                     </Button>
                   ]}
                 >
-                  <div className="text-lg font-bold italic" style={{ color: '#fcbb1d' }}>
+                  <div className="text-lg font-bold italic" style={{ color: '#4aa8ff' }}>
                     Bạn sẽ bầu cho các ứng cử viên sau
                   </div>
 
