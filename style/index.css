@@ -429,6 +429,31 @@
     @apply text-white text-lg md:text-xl;
 }
 
+.my-input input {
+    background-color: #232526;
+    color: #ffffff;
+    border: 1px solid #3a4044;
+    padding: 16px 18px;
+    border: none !important;
+}
+
+.my-input {
+    background-color: #232526;
+    color: #ffffff;
+    border: 1px solid #3a4044;
+    padding: 16px 18px;
+    border: none !important;
+}
+
+.my-input .ant-input-password-icon {
+    color: #ffffff
+}
+
+.my-input .ant-input-password-icon:hover {
+    color: #ffffff;
+    opacity: 0.8;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

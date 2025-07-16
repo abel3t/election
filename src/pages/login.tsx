@@ -15,13 +15,10 @@ const Login: React.FC = () => {
       .then((data) => {
         localStorage.setItem('token', data.login?.token);
         localStorage.setItem('refreshToken', data.login?.refreshToken);
-
         const date = new Date();
-
         date.setHours(date.getHours() + 23);
         localStorage.setItem('expiredTime', date.toISOString());
         localStorage.removeItem('logIn');
-
         router.push('/');
       })
       .catch((error: Error) =>
@@ -30,65 +27,69 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="px-6 py-48 h-full w-full" style={{ backgroundColor: '#15181a', minHeight: '100vh' }}>
-      <div className="flex justify-center items-center flex-wrap h-full g-6 text-gray-800">
-        <div className="md:w-8/12 lg:w-5/12 lg:ml-20">
-          <Form
-            initialValues={{
-              remember: true
-            }}
-            onFinish={onFinish}
-          >
-            <Form.Item
-              className="mb-6"
-              name="email"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your Username!'
-                }
-              ]}
-            >
-              <Input
-                type="text"
-                style={{ backgroundColor: '#15181a', color: '#ffffff', borderColor: '#3a4044' }}
-                className="form-control block w-full px-4 py-2 text-xl font-normal rounded transition ease-in-out m-0 focus:outline-none"
-                placeholder="Email address"
-              />
-            </Form.Item>
-            <Form.Item
-              className="mb-6"
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input your Password!'
-                }
-              ]}
-            >
-              <Input
-                type="password"
-                style={{ backgroundColor: '#15181a', color: '#ffffff', borderColor: '#3a4044' }}
-                className="form-control block w-full px-4 py-2 text-xl font-normal rounded transition ease-in-out m-0 focus:outline-none"
-                placeholder="Password"
-              />
-            </Form.Item>
-
-            <Button
-              type="primary"
-              htmlType="submit"
-              style={{ backgroundColor: '#fcbb1d', borderColor: '#fcbb1d', color: '#15181a' }}
-              className="inline-block px-7 font-medium text-sm leading-snug uppercase rounded shadow-md transition duration-150 ease-in-out w-full"
-              data-mdb-ripple="true"
-              data-mdb-ripple-color="light"
-            >
-              Log in
-            </Button>
-          </Form>
+    <div className="min-h-screen flex items-center justify-center bg-[#181c20]">
+      <div
+        className="rounded-xl p-8 bg-[#232526] border border-[#232526] shadow-lg w-full max-w-sm"
+      >
+        <div className="flex flex-col items-center mb-6">
+          <img src="/favicon.ico" alt="Logo" className="w-12 h-12 mb-2" />
+          <h2 className="text-2xl font-semibold text-[#fcbb1d] mb-1">Đăng nhập</h2>
         </div>
+        <Form
+          initialValues={{ remember: true }}
+          onFinish={onFinish}
+          layout="vertical"
+        >
+          <Form.Item
+            label={<span className="text-gray-300">Email</span>}
+            name="email"
+            className="mb-4"
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng nhập Email!'
+              }
+            ]}
+          >
+            <Input
+              type="text"
+              style={{ backgroundColor: '#232526', color: '#fff', borderColor: '#3a4044', padding: '16px 18px' }}
+              className="w-full rounded focus:outline-none focus:ring-2 focus:ring-[#fcbb1d]"
+              placeholder="Nhập email của bạn"
+              autoComplete="email"
+            />
+          </Form.Item>
+          <Form.Item
+            label={<span className="text-gray-300">Mật khẩu</span>}
+            name="password"
+            className="mb-6"
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng nhập mật khẩu!'
+              }
+            ]}
+          >
+            <Input.Password
+              style={{ backgroundColor: '#232526', color: '#fff', borderColor: '#3a4044', padding: '16px 18px' }}
+              className="w-full rounded focus:outline-none focus:ring-2 focus:ring-[#fcbb1d] placeholder-gray-400 my-input focus:border-none mb-1"
+              placeholder="Nhập mật khẩu"
+              autoComplete="false"
+            />
+          </Form.Item>
+
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{ background: '#fcbb1d', border: 'none', color: '#3a4044', fontWeight: 600 }}
+            className="w-full py-3 rounded text-base flex items-center justify-center mt-10"
+          >
+            Đăng nhập
+          </Button>
+        </Form>
       </div>
     </div>
   );
-};
+}
 
 export default Login;
