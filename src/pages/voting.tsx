@@ -197,7 +197,7 @@ const VotingPage = () => {
         }
         .dark-modal .ant-modal-content {
           background-color: #15181a !important;
-          border: 1px solid #3a4044 !important;
+          border: none !important;
         }
         .dark-modal .ant-modal-header {
           background-color: #15181a !important;
