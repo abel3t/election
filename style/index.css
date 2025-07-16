@@ -404,9 +404,17 @@
     background-color: rgba(21, 24, 26, 0.8) !important;
 }
 
+.dark-popconfirm .ant-popover-content{
+    border-radius: 8px !important;
+    overflow: hidden !important;
+}
+
 .dark-popconfirm .ant-popover-inner-content {
     background-color: black !important;
     color: #ffffff !important;
+    border: 1px solid #3a4044 !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
 }
 
 .dark-popconfirm .ant-popover-message-title {

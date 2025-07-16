@@ -406,37 +406,37 @@ const ElectionDetailPage: React.FC = () => {
     }
   ];
 
-if (isPageLoading) {
-  return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      background: 'rgba(21,24,26,0.85)',
-      zIndex: 9999,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}>
-      <Spin
-        size="large"
-        tip="Đang tải dữ liệu..."
-      />
-      <style jsx global>{`
+  if (isPageLoading) {
+    return (
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        background: '#15181a',
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        <Spin
+          size="large"
+          tip="Đang tải dữ liệu..."
+        />
+        <style jsx global>{`
         .ant-spin-dot-item {
           background-color: #fcbb1d !important;
         }
       `}</style>
-    </div>
-  );
-}
+      </div>
+    );
+  }
 
-return (
-  <AppLayout>
-    <>
-      <style jsx global>{`
+  return (
+    <AppLayout>
+      <>
+        <style jsx global>{`
           .ant-tabs .ant-tabs-tab {
             color: #ffffff !important;
             background-color: transparent !important;
@@ -541,9 +541,6 @@ return (
           /* Statistic component dark theme */
           .ant-statistic-title {
             color: #ffffff !important;
-          }
-          .ant-statistic-content {
-            color: #fcbb1d !important;
           }
         `}</style>
         <div className="my-2 text-3xl font-bold text-white mt-4 w-full text-center" style={{ backgroundColor: '#15181a' }}>{election.name}</div>
@@ -781,10 +778,10 @@ const CandidateComponent = ({
           id="CreateCandidateForm"
           onFinish={onFinish}
         >
-          <Form.Item name="name" label="Họ và tên" rules={[{ required: true }]}> 
+          <Form.Item name="name" label="Họ và tên" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="image" label="Hình ảnh" rules={[{ required: true }]}> 
+          <Form.Item name="image" label="Hình ảnh" rules={[{ required: true }]}>
             <Upload
               beforeUpload={() => false}
               listType="picture-card"
@@ -1044,7 +1041,7 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
 
     // Export the file
     const fileName = `BaoCao_BauCu_DayDu_${election.name || electionId}_${new Date().toISOString().split('T')[0]}.xlsx`;
-    
+
     try {
       XLSX.writeFile(workbook, fileName);
       message.success('Xuất file Excel thành công!');
@@ -1148,7 +1145,7 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
     XLSX.utils.book_append_sheet(workbook, summarySheet, 'Danh Sách Theo Mã Phiếu');
 
     const fileName = `DuLieu_PhieuBau_ChiTiet_${election.name || electionId}_${new Date().toISOString().split('T')[0]}.xlsx`;
-    
+
     try {
       XLSX.writeFile(workbook, fileName);
       message.success('Xuất dữ liệu phiếu bầu chi tiết thành công!');
@@ -1177,14 +1174,15 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <Card style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044' }}>
+        <Card style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044', borderRadius: '8px', overflow: 'hidden' }}>
           <Statistic
             title={<span style={{ color: '#ffffff' }}>Tổng số mã được tạo</span>}
+            valueStyle={{ color: '#ffffff' }}
             value={totalCodes}
           />
         </Card>
 
-        <Card style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044' }}>
+        <Card style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044', borderRadius: '8px', overflow: 'hidden' }}>
           <Statistic
             title={<span style={{ color: '#ffffff' }}>Số mã đã sử dụng</span>}
             value={usedCodes}
@@ -1192,7 +1190,7 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
           />
         </Card>
 
-        <Card style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044' }}>
+        <Card style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044', borderRadius: '8px', overflow: 'hidden' }}>
           <Statistic
             title={<span style={{ color: '#ffffff' }}>Số mã chưa sử dụng</span>}
             value={unusedCodes}
@@ -1201,7 +1199,7 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
           />
         </Card>
 
-        <Card style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044' }}>
+        <Card style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044', borderRadius: '8px', overflow: 'hidden' }}>
           <Statistic
             title={<span style={{ color: '#ffffff' }}>Tỷ lệ tham gia</span>}
             value={votingRate.toFixed(1)}
@@ -1214,7 +1212,7 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card
           title={<span style={{ color: '#ffffff' }}>Tiến độ bỏ phiếu</span>}
-          style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044' }}
+          style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044', borderRadius: '8px', overflow: 'hidden' }}
         >
           <Progress
             percent={votingRate}
@@ -1245,7 +1243,7 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
 
         <Card
           title={<span style={{ color: '#ffffff' }}>Thống kê chi tiết</span>}
-          style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044' }}
+          style={{ backgroundColor: '#2a2d30', borderColor: '#3a4044', borderRadius: '8px', overflow: 'hidden' }}
         >
           <div className="space-y-3">
             <div className="p-3 rounded" style={{ backgroundColor: '#3a4044' }}>

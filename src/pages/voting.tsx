@@ -255,7 +255,7 @@ const VotingPage = () => {
                 left: 0,
                 width: '100vw',
                 height: '100vh',
-                background: 'rgba(21,24,26,0.85)',
+                background: '#15181a',
                 zIndex: 9999,
                 display: 'flex',
                 alignItems: 'center',
