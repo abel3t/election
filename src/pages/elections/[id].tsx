@@ -1229,15 +1229,15 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
           <div className="space-y-2">
             <div className="flex justify-between">
               <span style={{ color: '#ffffff' }}>Đã bỏ phiếu:</span>
-              <span style={{ color: '#52c41a' }} className="font-bold">{usedCodes} mã</span>
+              <span style={{ color: '#ffffff' }} className="font-bold">{usedCodes} mã</span>
             </div>
             <div className="flex justify-between">
               <span style={{ color: '#ffffff' }}>Chưa bỏ phiếu:</span>
-              <span style={{ color: '#ff4d4f' }} className="font-bold">{unusedCodes} mã</span>
+              <span style={{ color: '#ffffff' }} className="font-bold">{unusedCodes} mã</span>
             </div>
             <div className="flex justify-between">
               <span style={{ color: '#ffffff' }}>Tổng cộng:</span>
-              <span style={{ color: '#4aa8ff' }} className="font-bold">{totalCodes} mã</span>
+              <span style={{ color: '#ffffff' }} className="font-bold">{totalCodes} mã</span>
             </div>
           </div>
         </Card>
