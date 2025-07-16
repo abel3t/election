@@ -205,6 +205,7 @@ const ElectionDetailPage: React.FC = () => {
       }
       // Refresh the codes and election data
       setIsLoadCode(!isLoadCode);
+      // Refetch election info after voting state change
       getElection(electionId)
         .then((data) => setElection(data?.getElection))
         .catch((error: Error) => message.error(error.message));
@@ -250,69 +251,43 @@ const ElectionDetailPage: React.FC = () => {
     return () => { didCancel = true; };
   }, [electionId]);
 
-  // Polling for codes and election info with tab visibility check (no spinner)
+  // Fetch codes when tab changes to '2' (Mã bầu cử) or on demand, but do NOT fetch election info again
   useEffect(() => {
     if (!electionId || isPageLoading) return;
-    let codesInterval: NodeJS.Timeout;
-    let isFetching = false;
-    let isTabActive = true;
-
-    const fetchCodesAndElection = () => {
-      if (!isTabActive || isFetching) return;
-      isFetching = true;
-      Promise.all([
-        getCodes(electionId),
-        getElection(electionId)
-      ])
-        .then(([codesData, electionData]) => {
+    if (tabChange === '2') {
+      getCodes(electionId)
+        .then((codesData) => {
           const newCodes = (codesData?.getCodes || []).map(
             (code: any, index: number) => ({ index: index + 1, ...code })
           );
           setCodes(newCodes);
-          setElection(electionData?.getElection);
         })
-        .catch((error: Error) => message.error(error.message))
-        .finally(() => {
-          isFetching = false;
-        });
-    };
+        .catch((error: Error) => message.error(error.message));
+    }
+  }, [tabChange, electionId, isLoadCode, isPageLoading]);
 
-    const handleVisibilityChange = () => {
-      isTabActive = !document.hidden;
-      if (isTabActive) {
-        fetchCodesAndElection();
-      }
-    };
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    codesInterval = setInterval(fetchCodesAndElection, 5000);
-    return () => {
-      clearInterval(codesInterval);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, [electionId, isLoadCode, isPageLoading]);
-
-  // Polling for candidates with tab visibility check (no spinner)
+  // Fetch result data with interval only when tab is '4' (Kết quả), do NOT fetch election info again
+  const [resultData, setResultData] = useState([]);
+  const [resultElection, setResultElection] = useState({} as any);
   useEffect(() => {
-    if (!electionId || isPageLoading) return;
-    let candidatesInterval: NodeJS.Timeout;
+    if (!electionId || tabChange !== '4') return;
+    let resultInterval: NodeJS.Timeout;
     let isFetching = false;
     let isTabActive = true;
+    let didCancel = false;
 
-    const fetchCandidates = () => {
+    const fetchResult = () => {
       if (!isTabActive || isFetching) return;
       isFetching = true;
-      getCandidates(electionId)
-        .then((data) => {
-          const newCandidates = (data?.getCandidates || []).map(
-            (candidate: any, index: number) => ({
-              index: index + 1,
-              ...candidate
-            })
+      getElectionResult(electionId)
+        .then((resultData) => {
+          if (didCancel) return;
+          const newData = resultData?.getElectionResult?.map(
+            (election: any, index: number) => ({ index: index + 1, ...election })
           );
-          setCandidates(newCandidates);
+          setResultData(newData || []);
         })
-        .catch((error: Error) => message.error(error.message))
+        .catch((error: Error) => { if (!didCancel) message.error(error.message); })
         .finally(() => {
           isFetching = false;
         });
@@ -321,17 +296,58 @@ const ElectionDetailPage: React.FC = () => {
     const handleVisibilityChange = () => {
       isTabActive = !document.hidden;
       if (isTabActive) {
-        fetchCandidates();
+        fetchResult();
       }
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    candidatesInterval = setInterval(fetchCandidates, 5000);
+    fetchResult();
+    resultInterval = setInterval(fetchResult, 5000);
     return () => {
-      clearInterval(candidatesInterval);
+      didCancel = true;
+      clearInterval(resultInterval);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [electionId, isLoadCandidate, tabChange, isPageLoading]);
+  }, [tabChange, electionId]);
+
+  // Fetch result data once when tab changes to '3' (Báo cáo), do NOT fetch election info again
+  useEffect(() => {
+    if (!electionId || tabChange !== '3') return;
+    let didCancel = false;
+    getElectionResult(electionId)
+      .then((resultData) => {
+        if (didCancel) return;
+        const newData = resultData?.getElectionResult?.map(
+          (election: any, index: number) => ({ index: index + 1, ...election })
+        );
+        setResultData(newData || []);
+      })
+      .catch((error: Error) => { if (!didCancel) message.error(error.message); });
+    return () => { didCancel = true; };
+  }, [tabChange, electionId]);
+
+  // Only fetch candidates on initial load or when isLoadCandidate changes
+  useEffect(() => {
+    if (!electionId || isPageLoading) return;
+    let didCancel = false;
+    getCandidates(electionId)
+      .then((data) => {
+        if (didCancel) return;
+        const newCandidates = (data?.getCandidates || []).map(
+          (candidate: any, index: number) => ({
+            index: index + 1,
+            ...candidate
+          })
+        );
+        setCandidates(newCandidates);
+      })
+      .catch((error: Error) => {
+        if (!didCancel) {
+          message.error(error.message || 'Có lỗi xảy ra khi tải ứng cử viên!');
+        }
+      });
+    return () => { didCancel = true; };
+  }, [electionId, isLoadCandidate, isPageLoading]);
 
   const items = [
     {
@@ -365,7 +381,8 @@ const ElectionDetailPage: React.FC = () => {
         <ReportComponent
           electionId={electionId}
           codes={codes}
-          tabChange={tabChange}
+          data={resultData}
+          election={resultElection}
         />
       )
     },
@@ -373,7 +390,11 @@ const ElectionDetailPage: React.FC = () => {
       label: 'Kết quả',
       key: '4',
       children: (
-        <ResultComponent tabChange={tabChange} electionId={electionId} />
+        <ResultComponent
+          electionId={electionId}
+          data={resultData}
+          election={resultElection}
+        />
       )
     }
   ];
@@ -872,52 +893,7 @@ const CodeComponent = ({
   );
 };
 
-const ReportComponent = ({ electionId, codes, tabChange }: any) => {
-  const [data, setData] = useState([]);
-  const [election, setElection] = useState({} as any);
-
-  // Polling for report data with tab visibility check
-  useEffect(() => {
-    if (!electionId) return;
-    let reportInterval: NodeJS.Timeout;
-    let isFetching = false;
-    let isTabActive = true;
-
-    const fetchReport = () => {
-      if (!isTabActive || isFetching) return;
-      isFetching = true;
-      Promise.all([
-        getElectionResult(electionId),
-        getElection(electionId)
-      ])
-        .then(([resultData, electionData]) => {
-          const newData = resultData?.getElectionResult?.map(
-            (election: any, index: number) => ({ index: index + 1, ...election })
-          );
-          setData(newData || []);
-          setElection(electionData?.getElection);
-        })
-        .catch((error: Error) => message.error(error.message))
-        .finally(() => {
-          isFetching = false;
-        });
-    };
-
-    const handleVisibilityChange = () => {
-      isTabActive = !document.hidden;
-      if (isTabActive) {
-        fetchReport();
-      }
-    };
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    fetchReport();
-    reportInterval = setInterval(fetchReport, 5000);
-    return () => {
-      clearInterval(reportInterval);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, [tabChange, electionId]);
+const ReportComponent = ({ electionId, codes, data, election }: any) => {
 
   const totalCodes = codes.length;
   const usedCodes = codes.filter((code: any) => code.isUsed).length;
@@ -1285,52 +1261,7 @@ const ReportComponent = ({ electionId, codes, tabChange }: any) => {
   );
 };
 
-const ResultComponent = ({ electionId, tabChange }: any) => {
-  const [data, setData] = useState([]);
-  const [election, setElection] = useState({} as any);
-
-  // Polling for result data with tab visibility check
-  useEffect(() => {
-    if (!electionId) return;
-    let resultInterval: NodeJS.Timeout;
-    let isFetching = false;
-    let isTabActive = true;
-
-    const fetchResult = () => {
-      if (!isTabActive || isFetching) return;
-      isFetching = true;
-      Promise.all([
-        getElectionResult(electionId),
-        getElection(electionId)
-      ])
-        .then(([resultData, electionData]) => {
-          const newData = resultData?.getElectionResult?.map(
-            (election: any, index: number) => ({ index: index + 1, ...election })
-          );
-          setData(newData || []);
-          setElection(electionData?.getElection);
-        })
-        .catch((error: Error) => message.error(error.message))
-        .finally(() => {
-          isFetching = false;
-        });
-    };
-
-    const handleVisibilityChange = () => {
-      isTabActive = !document.hidden;
-      if (isTabActive) {
-        fetchResult();
-      }
-    };
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    fetchResult();
-    resultInterval = setInterval(fetchResult, 5000);
-    return () => {
-      clearInterval(resultInterval);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, [tabChange, electionId]);
+const ResultComponent = ({ electionId, data, election }: any) => {
 
   const exportResultsToExcel = () => {
     const workbook = XLSX.utils.book_new();
