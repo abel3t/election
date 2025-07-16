@@ -176,9 +176,10 @@ const ElectionCard = ({ isLoad, setIsLoad, election }: any) => {
             background-color: #15181a !important;
             border: none !important;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
-            border: none !important;
+            border: 1px solid #3a4044 !important;
             height: 30vh !important;
             top: 100px !important;
+            overflow: hidden !important;
           }
           .dark-modal .ant-modal-header {
             background-color: #15181a !important;

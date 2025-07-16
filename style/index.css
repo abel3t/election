@@ -60,6 +60,7 @@
     flex-direction: column;
     overflow: hidden;
     position: relative;
+    border-radius: 8px !important;
 }
 
 .dark-modal .ant-modal-content .ant-modal-body {

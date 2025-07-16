@@ -33,7 +33,7 @@ const Login: React.FC = () => {
         className="rounded-xl p-8 bg-[#232526] border border-[#232526] shadow-lg w-full max-w-sm"
       >
         <div className="flex flex-col items-center mb-6">
-          <NextImage src="/favicon.ico" alt="Logo" className="w-12 h-12 mb-2" />
+          <NextImage src="/favicon.ico" alt="Logo" className="w-12 h-12 mb-2" width={48} height={48} />
           <h2 className="text-2xl font-semibold text-[#4aa8ff] mb-1">Đăng nhập</h2>
         </div>
         <Form
