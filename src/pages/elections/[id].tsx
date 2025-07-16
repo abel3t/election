@@ -310,14 +310,21 @@ const ElectionDetailPage: React.FC = () => {
     };
   }, [tabChange, electionId]);
 
-  // Fetch result data once when tab changes to '3' (Báo cáo), do NOT fetch election info again
+  // Fetch codes and result data once when tab changes to '3' (Báo cáo), do NOT fetch election info again
   useEffect(() => {
     if (!electionId || tabChange !== '3') return;
     let didCancel = false;
-    getElectionResult(electionId)
-      .then((resultData) => {
+    Promise.all([
+      getCodes(electionId),
+      getElectionResult(electionId)
+    ])
+      .then(([codesData, resultDataRes]) => {
         if (didCancel) return;
-        const newData = resultData?.getElectionResult?.map(
+        const newCodes = (codesData?.getCodes || []).map(
+          (code: any, index: number) => ({ index: index + 1, ...code })
+        );
+        setCodes(newCodes);
+        const newData = resultDataRes?.getElectionResult?.map(
           (election: any, index: number) => ({ index: index + 1, ...election })
         );
         setResultData(newData || []);
