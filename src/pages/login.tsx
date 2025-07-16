@@ -82,9 +82,9 @@ const Login: React.FC = () => {
             type="primary"
             htmlType="submit"
             style={{ background: '#fcbb1d', border: 'none', color: '#3a4044', fontWeight: 600 }}
-            className="w-full py-3 rounded text-base flex items-center justify-center mt-10"
+            className="w-full py-6 rounded text-base flex items-center justify-center mt-10"
           >
-            Đăng nhập
+            <span>Đăng nhập</span>
           </Button>
         </Form>
       </div>

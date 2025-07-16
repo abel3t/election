@@ -433,16 +433,12 @@
     background-color: #232526;
     color: #ffffff;
     border: 1px solid #3a4044;
-    padding: 16px 18px;
     border: none !important;
 }
 
 .my-input {
     background-color: #232526;
     color: #ffffff;
-    border: 1px solid #3a4044;
-    padding: 16px 18px;
-    border: none !important;
 }
 
 .my-input .ant-input-password-icon {
@@ -452,6 +448,15 @@
 .my-input .ant-input-password-icon:hover {
     color: #ffffff;
     opacity: 0.8;
+}
+
+.ant-input-affix-wrapper-status-success {
+    border: 2px solid #fcbb1d !important;
+}
+
+.ant-input-affix-wrapper-focused {
+    border: 2px solid #fcbb1d !important;
+    box-shadow: none !important;
 }
 
 @tailwind base;
