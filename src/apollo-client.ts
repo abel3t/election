@@ -58,7 +58,7 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
     // Try to refresh token
     const refreshToken = typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : null;
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    let email = null;
+    let email: string | null = null;
     if (token) {
       try {
         const decoded: any = jwtDecode(token);
@@ -67,9 +67,9 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
         email = null;
       }
     }
-    if (email && refreshToken) {
+    if (email !== null && refreshToken !== null) {
       return new Observable(observer => {
-        callRefreshToken(email, refreshToken)
+        callRefreshToken(email as string, refreshToken as string)
           .then((data) => {
             const newToken = data?.refreshToken?.token || data?.refreshToken?.accessToken || data?.refreshToken?.refreshToken;
             const newRefreshToken = data?.refreshToken?.refreshToken;
