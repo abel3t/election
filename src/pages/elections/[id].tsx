@@ -268,7 +268,6 @@ const ElectionDetailPage: React.FC = () => {
 
   // Fetch result data with interval only when tab is '4' (Kết quả), do NOT fetch election info again
   const [resultData, setResultData] = useState([]);
-  const [resultElection, setResultElection] = useState({} as any);
   useEffect(() => {
     if (!electionId || tabChange !== '4') return;
     let resultInterval: NodeJS.Timeout;
@@ -389,7 +388,7 @@ const ElectionDetailPage: React.FC = () => {
           electionId={electionId}
           codes={codes}
           data={resultData}
-          election={resultElection}
+          election={election}
         />
       )
     },
@@ -400,7 +399,7 @@ const ElectionDetailPage: React.FC = () => {
         <ResultComponent
           electionId={electionId}
           data={resultData}
-          election={resultElection}
+          election={election}
         />
       )
     }
@@ -899,6 +898,23 @@ const CodeComponent = ({
   );
 };
 
+const removeVietnameseTones = (str: string) => {
+  str = str.toLowerCase();
+
+  str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+  str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+  str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+  str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+  str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+  str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+  str = str.replace(/đ/g, "d");
+
+  // Remove extra characters
+  str = str.replace(/[^a-z0-9\s]/g, ""); // remove punctuation
+  str = str.replace(/\s+/g, "_"); // replace spaces with underscore
+  return str.charAt(0).toUpperCase() + str.slice(1); // Capitalize first letter if needed
+}
+
 const ReportComponent = ({ electionId, codes, data, election }: any) => {
 
   const totalCodes = codes.length;
@@ -911,7 +927,6 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
     return sum + (candidate.totalVotes || 0);
   }, 0);
 
-  // Excel export functions
   const exportVotingDataToExcel = () => {
     // Check if there's any meaningful data to export
     if (!data || data.length === 0) {
@@ -1042,7 +1057,7 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
     XLSX.utils.book_append_sheet(workbook, voteDetailSheet, 'Chi Tiết Theo Mã Phiếu');
 
     // Export the file
-    const fileName = `BaoCao_BauCu_DayDu_${election.name || electionId}_${new Date().toISOString().split('T')[0]}.xlsx`;
+    const fileName = `BaoCao_BauCu_DayDu_${removeVietnameseTones(election.name || '')}_${new Date().toISOString().split('T')[0]}.xlsx`;
 
     try {
       XLSX.writeFile(workbook, fileName);
@@ -1146,7 +1161,7 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
     const summarySheet = XLSX.utils.json_to_sheet(summaryRecords);
     XLSX.utils.book_append_sheet(workbook, summarySheet, 'Danh Sách Theo Mã Phiếu');
 
-    const fileName = `DuLieu_PhieuBau_ChiTiet_${election.name || electionId}_${new Date().toISOString().split('T')[0]}.xlsx`;
+    const fileName = `DuLieu_PhieuBau_ChiTiet_${removeVietnameseTones(election.name || '')}_${new Date().toISOString().split('T')[0]}.xlsx`;
 
     try {
       XLSX.writeFile(workbook, fileName);
@@ -1268,7 +1283,6 @@ const ReportComponent = ({ electionId, codes, data, election }: any) => {
 };
 
 const ResultComponent = ({ electionId, data, election }: any) => {
-
   const exportResultsToExcel = () => {
     const workbook = XLSX.utils.book_new();
 
@@ -1311,7 +1325,7 @@ const ResultComponent = ({ electionId, data, election }: any) => {
       XLSX.utils.book_append_sheet(workbook, voteRecordsSheet, 'Chi Tiết Theo Ứng Cử Viên');
     }
 
-    const fileName = `KetQua_BauCu_${election.name || electionId}_${new Date().toISOString().split('T')[0]}.xlsx`;
+    const fileName = `KetQua_BauCu_${removeVietnameseTones(election.name || electionId)}_${new Date().toISOString().split('T')[0]}.xlsx`;
 
     try {
       XLSX.writeFile(workbook, fileName);
@@ -1392,7 +1406,6 @@ const DetailComponent = ({ record }: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
-    console.log(record);
     setIsModalOpen(true);
   };
 

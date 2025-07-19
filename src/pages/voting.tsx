@@ -239,7 +239,12 @@ const VotingPage = () => {
             style={{ marginTop: '-100px' }}
             status="warning"
             className="px-2 lg:px-32 pt-0"
-            title="Mã bầu cử đã được sử dụng, không hợp lệ hoặc bầu cử đã kết thúc."
+            title={
+              <div style={{ textAlign: 'center', fontSize: '1.1em', lineHeight: '1.5' }}>
+                <div>Mã bầu cử đã được sử dụng.</div>
+                <div>Hoặc phiên bầu cử chưa mở hoặc đã kết thúc.</div>
+              </div>
+            }
           />
 
         </div>
